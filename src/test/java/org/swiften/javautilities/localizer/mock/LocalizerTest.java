@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 /**
  * Created by haipham on 3/26/17.
  */
-public class LocalizerTest implements LocalizeErrorType {
+public final class LocalizerTest implements LocalizeErrorType {
     @NotNull private final Localizer LOC;
     @NotNull private final String[] STR;
 
@@ -67,7 +67,7 @@ public class LocalizerTest implements LocalizeErrorType {
         // Setup
         int times = (int)(Math.pow(BUNDLE_COUNT, 2) * STR.length);
 
-        doReturn("")
+        doThrow(new MissingResourceException("", "", ""))
             .when(LOC)
             .getString(any(ResourceBundle.class), anyString());
 
@@ -95,6 +95,7 @@ public class LocalizerTest implements LocalizeErrorType {
         subscriber.assertNoErrors();
         subscriber.assertComplete();
         verify(LOC, times(times)).getString(any(ResourceBundle.class), anyString());
+        verify(LOC, times(times)).rxGetString(any(ResourceBundle.class), anyString());
         verify(LOC, times(STR.length)).rxLocalize(anyString());
         verify(LOC, times(STR.length)).bundles();
         verify(LOC, times(STR.length)).locales();
@@ -136,6 +137,7 @@ public class LocalizerTest implements LocalizeErrorType {
         subscriber.assertNoErrors();
         subscriber.assertComplete();
         verify(LOC, times(STR.length)).getString(any(ResourceBundle.class), anyString());
+        verify(LOC, times(STR.length)).rxGetString(any(ResourceBundle.class), anyString());
         verify(LOC, times(STR.length)).rxLocalize(anyString());
         verify(LOC, times(STR.length)).bundles();
         verify(LOC, times(STR.length)).locales();
@@ -147,7 +149,7 @@ public class LocalizerTest implements LocalizeErrorType {
         // Setup
         int times = (int)(Math.pow(BUNDLE_COUNT, 2) * STR.length);
 
-        doReturn("")
+        doThrow(new MissingResourceException("", "", ""))
             .when(LOC)
             .getString(any(ResourceBundle.class), anyString());
 
@@ -159,6 +161,7 @@ public class LocalizerTest implements LocalizeErrorType {
 
         // Then
         verify(LOC, times(times)).getString(any(ResourceBundle.class), anyString());
+        verify(LOC, times(times)).rxGetString(any(ResourceBundle.class), anyString());
         verify(LOC, times(STR.length)).localize(anyString());
         verify(LOC, times(STR.length)).rxLocalize(anyString());
         verify(LOC, times(STR.length)).bundles();
@@ -183,6 +186,7 @@ public class LocalizerTest implements LocalizeErrorType {
 
         // Then
         verify(LOC, times(STR.length)).getString(any(ResourceBundle.class), anyString());
+        verify(LOC, times(STR.length)).rxGetString(any(ResourceBundle.class), anyString());
         verify(LOC, times(STR.length)).localize(anyString());
         verify(LOC, times(STR.length)).rxLocalize(anyString());
         verify(LOC, times(STR.length)).bundles();

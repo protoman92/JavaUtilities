@@ -1,5 +1,6 @@
 package org.swiften.javautilities.localizer;
 
+import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.object.ObjectUtil;
 import org.swiften.javautilities.string.StringUtil;
 import io.reactivex.Flowable;
@@ -66,13 +67,12 @@ public class Localizer implements LocalizerType {
                     Locale.setDefault(LOCALES.get(INDEX));
 
                     return Flowable.fromIterable(BUNDLES)
-                        .map(new Function<ResourceBundle,String>() {
+                        .flatMap(new Function<ResourceBundle,Flowable<String>>() {
                             @NonNull
                             @Override
-                            public String apply(@NonNull ResourceBundle bundle)
-                                throws Exception
-                            {
-                                return getString(bundle, TEXT);
+                            public Flowable<String>
+                            apply(@NonNull ResourceBundle bundle) throws Exception {
+                                return rxGetString(bundle, TEXT);
                             }
                         })
                         .filter(new Predicate<String>() {
@@ -112,6 +112,30 @@ public class Localizer implements LocalizerType {
         return StringUtil.isNotNullOrEmpty(result) ? result : text;
     }
 
+    /**
+     * Acquire a localized text reactively. Return an empty {@link Flowable}
+     * if an {@link Exception} is thrown.
+     * @param bundle A {@link ResourceBundle} instance.
+     * @param text A {@link String} value to be localized.
+     * @return A {@link Flowable} instance.
+     */
+    @NotNull
+    public Flowable<String> rxGetString(@NotNull ResourceBundle bundle,
+                                        @NotNull String text) {
+        try {
+            String string = getString(bundle, text);
+            return Flowable.just(string);
+        } catch (Exception e) {
+            return Flowable.empty();
+        }
+    }
+
+    /**
+     * Acquire a localized text from a {@link ResourceBundle} instance.
+     * @param bundle A {@link ResourceBundle} instance.
+     * @param text A {@link String} value to be localized.
+     * @return A {@link String} value.
+     */
     @NotNull
     public String getString(@NotNull ResourceBundle bundle, @NotNull String text) {
         return bundle.getString(text);

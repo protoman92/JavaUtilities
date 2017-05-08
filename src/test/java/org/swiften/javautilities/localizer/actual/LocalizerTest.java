@@ -2,6 +2,7 @@ package org.swiften.javautilities.localizer.actual;
 
 import org.swiften.javautilities.localizer.LocalizeErrorType;
 import org.swiften.javautilities.localizer.Localizer;
+import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.string.StringUtil;
 import org.swiften.javautilities.rx.CustomTestSubscriber;
 import io.reactivex.Flowable;
@@ -36,6 +37,7 @@ public final class LocalizerTest implements LocalizeErrorType {
             "auth_title_email",
             "auth_title_password",
             "auth_title_signInOrRegister",
+            "non_localizable_text"
         };
     }
 
@@ -51,6 +53,12 @@ public final class LocalizerTest implements LocalizeErrorType {
                 @Override
                 public Publisher<String> apply(@NonNull String s) throws Exception {
                     return LOCALIZER.rxLocalize(s);
+                }
+            })
+            .doOnNext(new Consumer<String>() {
+                @Override
+                public void accept(@NonNull String s) throws Exception {
+                    LogUtil.println(s);
                 }
             })
             .doOnNext(new Consumer<String>() {
