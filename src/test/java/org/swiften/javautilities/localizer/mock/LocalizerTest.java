@@ -1,6 +1,6 @@
 package org.swiften.javautilities.localizer.mock;
 
-import org.swiften.javautilities.localizer.LocalizeErrorProtocol;
+import org.swiften.javautilities.localizer.LocalizeErrorType;
 import org.swiften.javautilities.localizer.Localizer;
 import org.swiften.javautilities.rx.CustomTestSubscriber;
 import io.reactivex.Flowable;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 /**
  * Created by haipham on 3/26/17.
  */
-public class LocalizerTest implements LocalizeErrorProtocol {
+public class LocalizerTest implements LocalizeErrorType {
     @NotNull private final Localizer LOC;
     @NotNull private final String[] STR;
 

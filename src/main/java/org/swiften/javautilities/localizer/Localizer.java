@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * Created by haipham on 3/25/17.
  */
-public class Localizer implements LocalizeErrorProtocol {
+public class Localizer implements LocalizerType {
     @NotNull
     public static Builder builder() {
         return new Builder();

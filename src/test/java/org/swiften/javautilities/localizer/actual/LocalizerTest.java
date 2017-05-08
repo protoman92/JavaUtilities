@@ -1,6 +1,6 @@
 package org.swiften.javautilities.localizer.actual;
 
-import org.swiften.javautilities.localizer.LocalizeErrorProtocol;
+import org.swiften.javautilities.localizer.LocalizeErrorType;
 import org.swiften.javautilities.localizer.Localizer;
 import org.swiften.javautilities.string.StringUtil;
 import org.swiften.javautilities.rx.CustomTestSubscriber;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.spy;
 /**
  * Created by haipham on 3/26/17.
  */
-public final class LocalizerTest implements LocalizeErrorProtocol {
+public final class LocalizerTest implements LocalizeErrorType {
     @NotNull private final Localizer LOCALIZER;
     @NotNull private final String[] STRINGS;
 
