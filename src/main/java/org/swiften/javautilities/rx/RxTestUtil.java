@@ -57,4 +57,6 @@ public final class RxTestUtil {
     public static <T> T getFirstNextEvent(@NotNull TestSubscriber subscriber) {
         return (T)getFirstNextEvent(subscriber.getEvents());
     }
+
+    private RxTestUtil() {}
 }

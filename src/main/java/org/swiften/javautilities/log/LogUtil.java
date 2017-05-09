@@ -73,4 +73,6 @@ public final class LogUtil {
             println(String.format(format, object));
         }
     }
+
+    private LogUtil() {}
 }

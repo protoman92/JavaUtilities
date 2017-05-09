@@ -23,4 +23,6 @@ public final class ObjectUtil {
     public static boolean isNull(@Nullable Object object) {
         return object == null;
     }
+
+    private ObjectUtil() {}
 }

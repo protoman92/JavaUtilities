@@ -11,6 +11,7 @@ import org.reactivestreams.Publisher;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.Callable;
 
 /**
  * Created by haipham on 3/31/17.
@@ -77,4 +78,18 @@ public final class RxUtil {
     public static <T> Flowable<Index<T>> from(@NotNull T...objects) {
         return from(Arrays.asList(objects));
     }
+
+    /**
+     * Produce an error {@link Flowable} with an error message.
+     * @param error A {@link String} value.
+     * @param <T> Generics parameter.
+     * @return A {@link Flowable} instance.
+     * @see Flowable#error(Throwable)
+     */
+    @NotNull
+    public static <T> Flowable<T> error(@NotNull String error) {
+        return Flowable.error(new RuntimeException(error));
+    }
+
+    private RxUtil() {}
 }

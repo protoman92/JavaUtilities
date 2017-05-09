@@ -15,4 +15,6 @@ public final class NumberTestUtil {
     public static int randomBetween(int from, int to) {
         return new Random().nextInt(to - from) + from;
     }
+
+    private NumberTestUtil() {}
 }

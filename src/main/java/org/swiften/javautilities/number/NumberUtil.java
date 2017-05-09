@@ -22,4 +22,6 @@ public final class NumberUtil {
     public static boolean isOdd(int number) {
         return !isEven(number);
     }
+
+    private NumberUtil() {}
 }

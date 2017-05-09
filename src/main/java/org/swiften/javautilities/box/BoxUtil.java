@@ -22,4 +22,6 @@ public final class BoxUtil {
 
         return boxed;
     }
+
+    private BoxUtil() {}
 }

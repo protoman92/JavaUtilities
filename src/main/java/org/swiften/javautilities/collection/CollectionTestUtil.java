@@ -49,4 +49,6 @@ public final class CollectionTestUtil {
             throw new RuntimeException("List/Array cannot be empty");
         }
     }
+
+    private CollectionTestUtil() {}
 }

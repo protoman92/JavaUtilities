@@ -41,4 +41,6 @@ public final class BooleanUtil {
     public static boolean isFalse(@NotNull Object object) {
         return object instanceof Boolean && !Boolean.class.cast(object);
     }
+
+    private BooleanUtil() {}
 }

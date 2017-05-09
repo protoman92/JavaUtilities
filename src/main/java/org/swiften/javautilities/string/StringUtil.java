@@ -15,4 +15,6 @@ public final class StringUtil {
     public static boolean isNotNullOrEmpty(@Nullable String text) {
         return ObjectUtil.nonNull(text) && !text.isEmpty();
     }
+
+    private StringUtil() {}
 }

@@ -83,4 +83,6 @@ public class CollectionUtil {
             return Arrays.asList(objects);
         }
     }
+
+    private CollectionUtil() {}
 }
