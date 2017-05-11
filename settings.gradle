@@ -1,7 +1,7 @@
 rootProject.name = 'JavaUtilities'
 gradle.ext.PROJECT_GROUP = 'org.swiften'
 gradle.ext.PROJECT_NAME = 'JavaUtilities'
-gradle.ext.PROJECT_VERSION = '1.0.5-SNAPSHOT'
+gradle.ext.PROJECT_VERSION = '1.0.6-SNAPSHOT'
 gradle.ext.PROJECT_DESCRIPTION = 'A collection of Java utilities for personal use'
 gradle.ext.PROJECT_URL = 'https://github.com/protoman92/JavaUtilities.git'
 gradle.ext.SCM_URL = 'scm:git:git://github.com:protoman92/JavaUtilities.git'

@@ -50,8 +50,8 @@ public class CollectionUtil {
      * @return A {@link Collection} of {@link Zipped}.
      */
     @NotNull
-    public static <A,B> List<Zipped> zip(@NotNull List<A> a, @NotNull List<B> b) {
-        List<Zipped> zList = new LinkedList<Zipped>();
+    public static <A,B> List<Zipped<A,B>> zip(@NotNull List<A> a, @NotNull List<B> b) {
+        List<Zipped<A,B>> zList = new LinkedList<Zipped<A,B>>();
         int aLength = a.size();
         int bLength = b.size();
         int zLength = Math.min(aLength, bLength);
