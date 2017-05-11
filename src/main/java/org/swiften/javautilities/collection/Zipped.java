@@ -14,8 +14,8 @@ import java.util.Collection;
  * @param <B> Generics parameter.
  */
 public final class Zipped<A,B> {
-    @Nullable final A FIRST;
-    @Nullable final B SECOND;
+    @Nullable public final A FIRST;
+    @Nullable public final B SECOND;
 
     public Zipped(@Nullable A a, @Nullable B b) {
         FIRST = a;
