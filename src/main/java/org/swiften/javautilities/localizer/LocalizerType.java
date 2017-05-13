@@ -6,6 +6,9 @@ package org.swiften.javautilities.localizer;
 
 import io.reactivex.Flowable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Locale;
 
 /**
  * This interface provides localization capabilities.
@@ -14,16 +17,19 @@ public interface LocalizerType extends LocalizeErrorType {
     /**
      * Localize a {@link String} reactively.
      * @param text A {@link String} value to be localized.
+     * @param locale A {@link Locale} instance.
      * @return A {@link Flowable} instance.
      */
     @NotNull
-    Flowable<String> rxLocalize(@NotNull String text);
+    Flowable<String> rxLocalizeText(@NotNull String text,
+                                    @Nullable Locale locale);
 
     /**
      * Localize a {@link String}.
      * @param text A {@link String} value to be localized.
+     * @param locale A {@link Locale} instance.
      * @return A {@link String} value.
      */
     @NotNull
-    String localize(@NotNull String text);
+    String localizeText(@NotNull String text, @NotNull Locale locale);
 }

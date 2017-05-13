@@ -1,7 +1,5 @@
-package org.swiften.javautilities.localizer.actual;
+package org.swiften.javautilities.localizer;
 
-import org.swiften.javautilities.localizer.LocalizeErrorType;
-import org.swiften.javautilities.localizer.Localizer;
 import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.string.StringUtil;
 import org.swiften.javautilities.rx.CustomTestSubscriber;
@@ -22,7 +20,7 @@ import static org.mockito.Mockito.spy;
 /**
  * Created by haipham on 3/26/17.
  */
-public final class LocalizerTest implements LocalizeErrorType {
+public final class ActualLocalizerTest implements LocalizeErrorType {
     @NotNull private final Localizer LOCALIZER;
     @NotNull private final String[] STRINGS;
 
@@ -31,6 +29,7 @@ public final class LocalizerTest implements LocalizeErrorType {
     {
         LOCALIZER = spy(Localizer.builder()
             .addBundle("Strings", Locale.US)
+            .addBundle("Strings", new Locale("vi_VN"))
             .build());
 
         STRINGS = new String[] {
@@ -52,7 +51,7 @@ public final class LocalizerTest implements LocalizeErrorType {
             .flatMap(new Function<String,Publisher<String>>() {
                 @Override
                 public Publisher<String> apply(@NonNull String s) throws Exception {
-                    return LOCALIZER.rxLocalize(s);
+                    return LOCALIZER.rxLocalizeText(s, null);
                 }
             })
             .doOnNext(new Consumer<String>() {

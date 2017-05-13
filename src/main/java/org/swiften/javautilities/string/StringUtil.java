@@ -16,5 +16,14 @@ public final class StringUtil {
         return ObjectUtil.nonNull(text) && !text.isEmpty();
     }
 
+    /**
+     * Check if a {@link String} is either null or empty.
+     * @param text A {@link String} value.
+     * @return A {@link Boolean} value.
+     */
+    public static boolean isNullOrEmpty(@Nullable String text) {
+        return ObjectUtil.isNull(text) || text.isEmpty();
+    }
+
     private StringUtil() {}
 }

@@ -2,10 +2,6 @@ package org.swiften.javautilities.rx;
 
 import org.swiften.javautilities.collection.Zipped;
 import io.reactivex.subscribers.TestSubscriber;
-import org.swiften.javautilities.rx.CustomTestSubscriber;
-import org.swiften.javautilities.rx.Index;
-import org.swiften.javautilities.rx.RxTestUtil;
-import org.swiften.javautilities.rx.RxUtil;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -28,7 +24,7 @@ public final class RxTest {
         observer.awaitTerminalEvent();
 
         // Then
-        List nextEvents = RxTestUtil.getNextEvents(observer);
+        List nextEvents = RxTestUtil.nextEvents(observer);
         Assert.assertEquals(collection.size(), nextEvents.size());
 
         for (int i = 0, length = collection.size(); i < length; i++) {

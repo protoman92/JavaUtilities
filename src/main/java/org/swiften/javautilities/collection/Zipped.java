@@ -2,6 +2,7 @@ package org.swiften.javautilities.collection;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.Collection;
 
 /**
@@ -20,6 +21,11 @@ public final class Zipped<A,B> {
     public Zipped(@Nullable A a, @Nullable B b) {
         FIRST = a;
         SECOND = b;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("First: %s, Second: %s", FIRST, SECOND);
     }
 
     @Override
