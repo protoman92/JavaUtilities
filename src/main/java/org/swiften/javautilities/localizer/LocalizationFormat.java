@@ -23,6 +23,15 @@ public class LocalizationFormat {
     }
 
     /**
+     * Return an empty {@link LocalizationFormat}.
+     * @return A {@link LocalizationFormat} instance.
+     */
+    @NotNull
+    public static LocalizationFormat empty() {
+        return new LocalizationFormat();
+    }
+
+    /**
      * This variable should be the key identifier that can be used by a
      * {@link java.util.ResourceBundle} to get a value. This value will then
      * be used by {@link java.text.MessageFormat#applyPattern(String)} to

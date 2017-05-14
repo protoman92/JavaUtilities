@@ -208,11 +208,11 @@ public class Localizer implements LocalizerType {
      * @return A {@link Flowable} instance.
      * @see #rxGetString(ResourceBundle, String)
      * @see StringUtil#isNotNullOrEmpty(String)
+     * @see #rxLocalize(LocalizationFormat, Locale)
      */
     @NotNull
     public Flowable<String> rxLocalize(@NotNull final LocalizationFormat FORMAT,
                                        @Nullable final Locale LOCALE) {
-        LogUtil.println(FORMAT, LOCALE);
         return rxResources(LOCALE)
             .flatMap(new Function<ResourceBundle,Publisher<String>>() {
                 @NonNull
@@ -229,7 +229,7 @@ public class Localizer implements LocalizerType {
             })
             .firstElement()
             .toFlowable()
-            .defaultIfEmpty(FORMAT.pattern());
+            .switchIfEmpty(rxLocalize(FORMAT.pattern(), LOCALE));
     }
 
     /**
