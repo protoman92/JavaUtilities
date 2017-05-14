@@ -1,5 +1,7 @@
 package org.swiften.javautilities.localizer;
 
+import com.sun.jdi.connect.IllegalConnectorArgumentsException;
+import org.jetbrains.annotations.Nullable;
 import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.string.StringUtil;
 import org.swiften.javautilities.rx.CustomTestSubscriber;
@@ -11,8 +13,12 @@ import io.reactivex.subscribers.TestSubscriber;
 import org.jetbrains.annotations.NotNull;
 import org.reactivestreams.Publisher;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 import static org.mockito.Mockito.spy;
@@ -58,9 +64,22 @@ public final class ActualLocalizerTest implements LocalizeErrorType {
         };
     }
 
-    @Test
+    @NotNull
+    @DataProvider
+    public Iterator<Object[]> localeProvider() {
+        List<Locale> locales = LOCALIZER.locales();
+        List<Object[]> data = new LinkedList<Object[]>();
+
+        for (Locale locale : locales) {
+            data.add(new Object[] { locale });
+        }
+
+        return data.iterator();
+    }
+
     @SuppressWarnings("unchecked")
-    public void test_rxLocalizeText_shouldSucceed() {
+    @Test(dataProvider = "localeProvider")
+    public void test_rxLocalizeText_shouldSucceed(@Nullable final Locale LOCALE) {
         // Setup
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
@@ -69,7 +88,7 @@ public final class ActualLocalizerTest implements LocalizeErrorType {
             .flatMap(new Function<String,Publisher<String>>() {
                 @Override
                 public Publisher<String> apply(@NonNull String s) throws Exception {
-                    return LOCALIZER.rxLocalize(s, null);
+                    return LOCALIZER.rxLocalize(s, LOCALE);
                 }
             })
             .doOnNext(new Consumer<String>() {
@@ -94,9 +113,9 @@ public final class ActualLocalizerTest implements LocalizeErrorType {
         subscriber.assertComplete();
     }
 
-    @Test
     @SuppressWarnings("unchecked")
-    public void test_rxLocalizeWithFormat_shouldSucceed() {
+    @Test(dataProvider = "localeProvider")
+    public void test_rxLocalizeWithFormat_shouldSucceed(@Nullable final Locale LOCALE) {
         // Setup
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
@@ -108,7 +127,7 @@ public final class ActualLocalizerTest implements LocalizeErrorType {
                 public Publisher<String> apply(
                     @NonNull LocalizationFormat format
                 ) throws Exception {
-                    return LOCALIZER.rxLocalize(format, new Locale("vi_VN"));
+                    return LOCALIZER.rxLocalize(format, LOCALE);
                 }
             })
             .doOnNext(new Consumer<String>() {

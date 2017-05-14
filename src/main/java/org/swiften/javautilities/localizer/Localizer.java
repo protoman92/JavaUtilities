@@ -5,6 +5,7 @@ import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
 import org.swiften.javautilities.collection.CollectionUtil;
 import org.swiften.javautilities.collection.Zipped;
 import org.swiften.javautilities.log.LogUtil;
@@ -29,11 +30,9 @@ public class Localizer implements LocalizerType {
     }
 
     @NotNull private final List<ResourceBundle> BUNDLES;
-    @NotNull private final List<Locale> LOCALES;
 
     Localizer() {
         BUNDLES = new ArrayList<ResourceBundle>();
-        LOCALES = new ArrayList<Locale>();
     }
 
     //region Getters
@@ -48,90 +47,71 @@ public class Localizer implements LocalizerType {
     }
 
     /**
-     * Get {@link #LOCALES}.
+     * Get a {@link List} of {@link Locale} from {@link #bundles()}.
      * @return A {@link List} of {@link Locale}.
-     * @see #LOCALES
+     * @see #bundles()
+     * @see ObjectUtil#nonNull(Object)
      */
     @NotNull
     List<Locale> locales() {
-        return LOCALES;
+        List<ResourceBundle> bundles = bundles();
+        List<Locale> locales = new LinkedList<Locale>();
+
+        for (ResourceBundle bundle : bundles) {
+            Locale locale;
+
+            if (ObjectUtil.nonNull(bundle, (locale = bundle.getLocale()))) {
+                locales.add(locale);
+            }
+        }
+
+        return locales;
     }
     //endregion
 
     /**
-     * Get a {@link Flowable} that only emits {@link Zipped} instance of
-     * {@link ResourceBundle} and {@link Locale} which matches a specified
-     * {@link Locale} instance.
+     * Get a {@link Flowable} that emits {@link ResourceBundle} which match a
+     * specific {@link Locale} instance.
      * @param FILTER A {@link Locale} instance.
      * @return A {@link Flowable} instance.
      * @see #bundles()
-     * @see #locales()
      */
     @NotNull
-    Flowable<Zipped<ResourceBundle,Locale>> rxResources(@Nullable final Locale FILTER) {
-        List<Locale> locales = locales();
-        final List<ResourceBundle> BUNDLES = bundles();
-
-        return Flowable.fromIterable(locales)
-            .filter(new Predicate<Locale>() {
+    Flowable<ResourceBundle> rxResources(@Nullable final Locale FILTER) {
+        return Flowable.fromIterable(bundles())
+            .filter(new Predicate<ResourceBundle>() {
                 @Override
-                public boolean test(@NotNull Locale locale) throws Exception {
-                    return ObjectUtil.isNull(FILTER) || FILTER.equals(locale);
-                }
-            })
-            .flatMap(new Function<Locale,Publisher<Zipped<ResourceBundle,Locale>>>() {
-                @NotNull
-                @Override
-                public Publisher<Zipped<ResourceBundle,Locale>> apply(
-                    @NotNull final Locale LOCALE
-                ) throws Exception {
-                    return Flowable.fromIterable(BUNDLES)
-                        .filter(new Predicate<ResourceBundle>() {
-                            @Override
-                            public boolean test(@NonNull ResourceBundle bundle)
-                                throws Exception
-                            {
-                                return
-                                    ObjectUtil.isNull(FILTER) ||
-                                    bundle.getLocale().equals(FILTER);
-                            }
-                        })
-                        .map(new Function<ResourceBundle,Zipped<ResourceBundle,Locale>>() {
-                            @NotNull
-                            @Override
-                            public Zipped<ResourceBundle,Locale> apply(
-                                @NotNull ResourceBundle bundle
-                            ) throws Exception {
-                                return new Zipped<ResourceBundle,Locale>(bundle, LOCALE);
-                            }
-                        });
+                public boolean test(@NonNull ResourceBundle bundle) throws Exception {
+                    Locale locale = bundle.getLocale();
+                    return ObjectUtil.isNull(FILTER, locale) || locale.equals(FILTER);
                 }
             });
     }
 
     //region Simple localization
     /**
-     * Localize a text with the specified {@link #BUNDLES} and
-     * {@link #LOCALES}. We can also specify a {@link Locale} to filter out
-     * unnecessary {@link Locale}.
+     * Localize a text with the specified {@link #BUNDLES}.
+     * We can also specify a {@link Locale} to filter out unnecessary
+     * {@link ResourceBundle}.
      * @param TEXT The {@link String} to be localized.
      * @param locale A {@link Locale} instance.
      * @return A {@link Flowable} instance.
      * @see LocalizerType#rxLocalize(String, Locale)
      * @see #rxResources(Locale)
-     * @see #rxGetString(ResourceBundle, Locale, String)
+     * @see #rxGetString(ResourceBundle, String)
      * @see StringUtil#isNotNullOrEmpty(String)
      */
     @NotNull
     public Flowable<String> rxLocalize(@NotNull final String TEXT,
                                        @Nullable Locale locale) {
         return rxResources(locale)
-            .flatMap(new Function<Zipped<ResourceBundle,Locale>,Publisher<String>>() {
+            .flatMap(new Function<ResourceBundle,Publisher<String>>() {
+                @NonNull
                 @Override
-                public Publisher<String> apply(
-                    @NotNull Zipped<ResourceBundle,Locale> zipped
-                ) throws Exception {
-                    return rxGetString(zipped.FIRST, zipped.SECOND, TEXT);
+                public Publisher<String> apply(@NotNull ResourceBundle bundle)
+                    throws Exception
+                {
+                    return rxGetString(bundle, TEXT);
                 }
             })
             .filter(new Predicate<String>() {
@@ -185,31 +165,26 @@ public class Localizer implements LocalizerType {
      * Acquire a localized text reactively. Return an empty {@link Flowable}
      * if an {@link Exception} is thrown.
      * @param bundle A {@link ResourceBundle} instance.
-     * @param locale A {@link Locale} instance.
      * @param text A {@link String} value to be localized.
      * @return A {@link Flowable} instance.
-     * @see #getString(ResourceBundle, Locale, String)
+     * @see #getString(MessageFormat, Object[])
      * @see ObjectUtil#nonNull(Object...)
      */
     @NotNull
-    @SuppressWarnings("all")
-    Flowable<String> rxGetString(@Nullable ResourceBundle bundle,
-                                 @Nullable Locale locale,
+    @SuppressWarnings("WeakerAccess")
+    Flowable<String> rxGetString(@NotNull ResourceBundle bundle,
                                  @NotNull String text) {
-        if (ObjectUtil.nonNull(bundle, locale)) {
-            try {
-                String string = getString(bundle, locale, text);
-                return Flowable.just(string);
-            } catch (Exception e) {}
+        try {
+            String string = getString(bundle, text);
+            return Flowable.just(string);
+        } catch (Exception e) {
+            return Flowable.empty();
         }
-
-        return Flowable.empty();
     }
 
     /**
      * Acquire a localized text from a {@link ResourceBundle} instance.
      * @param bundle A {@link ResourceBundle} instance.
-     * @param locale A {@link Locale} instance.
      * @param text A {@link String} value to be localized.
      * @return A {@link String} value.
      * @see ResourceBundle#getString(String)
@@ -217,9 +192,8 @@ public class Localizer implements LocalizerType {
      * {@link ResourceBundle#getString(String)} fails.
      */
     @NotNull
-    String getString(@NotNull ResourceBundle bundle,
-                     @NotNull Locale locale,
-                     @NotNull String text) {
+    @SuppressWarnings("WeakerAccess")
+    String getString(@NotNull ResourceBundle bundle, @NotNull String text) {
         return bundle.getString(text);
     }
     //endregion
@@ -229,23 +203,22 @@ public class Localizer implements LocalizerType {
      * Localize reactively with a {@link LocalizationFormat} and a
      * {@link Locale}. This method involves {@link MessageFormat} and works
      * best for format-based localization.
-     * @param format A {@link LocalizationFormat} instance.
-     * @param locale A {@link Locale} instance.
+     * @param FORMAT A {@link LocalizationFormat} instance.
+     * @param LOCALE A {@link Locale} instance.
      * @return A {@link Flowable} instance.
-     * @see #rxGetString(ResourceBundle, Locale, LocalizationFormat)
+     * @see #rxGetString(ResourceBundle, String)
      * @see StringUtil#isNotNullOrEmpty(String)
      */
     @NotNull
-    public Flowable<String> rxLocalize(@NotNull final LocalizationFormat format,
-                                       @Nullable final Locale locale) {
-        return rxResources(locale)
-            .flatMap(new Function<Zipped<ResourceBundle,Locale>,Publisher<String>>() {
+    public Flowable<String> rxLocalize(@NotNull final LocalizationFormat FORMAT,
+                                       @Nullable final Locale LOCALE) {
+        LogUtil.println(FORMAT, LOCALE);
+        return rxResources(LOCALE)
+            .flatMap(new Function<ResourceBundle,Publisher<String>>() {
                 @NonNull
                 @Override
-                public Publisher<String> apply(
-                    @NonNull Zipped<ResourceBundle,Locale> zipped
-                ) throws Exception {
-                    return rxGetString(zipped.FIRST, zipped.SECOND, format);
+                public Publisher<String> apply(@NonNull ResourceBundle bundle) throws Exception {
+                    return rxGetString(bundle, FORMAT);
                 }
             })
             .filter(new Predicate<String>() {
@@ -256,7 +229,7 @@ public class Localizer implements LocalizerType {
             })
             .firstElement()
             .toFlowable()
-            .defaultIfEmpty(format.pattern());
+            .defaultIfEmpty(FORMAT.pattern());
     }
 
     /**
@@ -297,49 +270,76 @@ public class Localizer implements LocalizerType {
 
     /**
      * Get a localized {@link String} using a {@link LocalizationFormat}.
-     * @param bundle A {@link ResourceBundle} instance.
-     * @param LOCALE A {@link Locale} instance.
-     * @param format A {@link LocalizationFormat} instance.
+     * @param BUNDLE A {@link ResourceBundle} instance.
+     * @param FORMAT A {@link LocalizationFormat} instance.
      * @return A {@link Flowable} instance.
      * @see ResourceBundle#getString(String)
      * @see MessageFormat#setLocale(Locale)
      * @see MessageFormat#applyPattern(String)
      * @see MessageFormat#format(Object)
-     * @see #rxGetString(ResourceBundle, Locale, String)
+     * @see #rxGetString(ResourceBundle, String)
      * @see #getString(MessageFormat, Object[])
      */
     @NotNull
-    @SuppressWarnings("all")
-    Flowable<String> rxGetString(@Nullable ResourceBundle bundle,
-                                 @Nullable final Locale LOCALE,
-                                 @NotNull LocalizationFormat format) {
-        if (ObjectUtil.nonNull(bundle, LOCALE)) {
-            return rxGetString(bundle, LOCALE, format.pattern())
-                .map(new Function<String,MessageFormat>() {
-                    @NonNull
-                    @Override
-                    public MessageFormat apply(@NonNull String s) throws Exception {
-                        MessageFormat mf = new MessageFormat("");
-                        mf.setLocale(LOCALE);
-                        mf.applyPattern(s);
-                        return mf;
-                    }
-                })
-                .zipWith(rxFormatArguments(LOCALE, format),
-                    new BiFunction<MessageFormat, Object[], String>() {
+    @SuppressWarnings("WeakerAccess")
+    Flowable<String> rxGetString(@NotNull final ResourceBundle BUNDLE,
+                                 @NotNull final LocalizationFormat FORMAT) {
+        final Locale LOCALE = BUNDLE.getLocale();
+
+        return rxFormatArguments(LOCALE, FORMAT).flatMap(new Function<Object[],Publisher<String>>() {
+            @NonNull
+            @Override
+            public Publisher<String> apply(@NonNull final Object[] ARGS) throws Exception {
+                return rxGetTemplate(BUNDLE, FORMAT.pattern())
+                    .map(new Function<String, MessageFormat>() {
+                        @NonNull
                         @Override
-                        public String apply(@NonNull MessageFormat message,
-                                            @NonNull Object[] objects)
-                            throws Exception
-                        {
-                            try {
-                                return message.format(objects);
-                            } catch (MissingResourceException e) {
-                                return "";
-                            }
+                        public MessageFormat apply(@NonNull String s) throws Exception {
+                            return new MessageFormat(s, LOCALE);
+                        }
+                    })
+                    .flatMap(new Function<MessageFormat,Publisher<String>>() {
+                        @NonNull
+                        @Override
+                        public Publisher<String> apply(@NonNull MessageFormat mf) throws Exception {
+                            return rxGetString(mf, ARGS);
                         }
                     });
-        } else {
+            }
+        });
+    }
+
+    /**
+     * Get the template pattern to be used with
+     * {@link MessageFormat#applyPattern(String)}.
+     * @param bundle A {@link ResourceBundle} instance.
+     * @param pattern A {@link String} value.
+     * @return A {@link Flowable} instance.
+     * @see MessageFormat#applyPattern(String)
+     * @see #rxGetString(ResourceBundle, String)
+     */
+    @NotNull
+    Flowable<String> rxGetTemplate(@NotNull ResourceBundle bundle,
+                                   @NotNull String pattern) {
+        return rxGetString(bundle, pattern);
+    }
+
+    /**
+     * Get a localized {@link String} using an Array of {@link Object}
+     * arguments.
+     * @param format A {@link LocalizationFormat} instance.
+     * @param args A Array of {@link Object}.
+     * @return A {@link Flowable} instance.
+     * @see #getString(MessageFormat, Object[])
+     */
+    @NotNull
+    @SuppressWarnings("WeakerAccess")
+    Flowable<String> rxGetString(@NotNull MessageFormat format,
+                                 @NotNull Object[] args) {
+        try {
+            String localized = getString(format, args);
+            return Flowable.just(localized);
+        } catch (MissingResourceException e) {
             return Flowable.empty();
         }
     }
@@ -382,13 +382,13 @@ public class Localizer implements LocalizerType {
                 }
             })
             .toList()
+            .toFlowable()
             .map(new Function<List<Object>,Object[]>() {
                 @Override
                 public Object[] apply(@NonNull List<Object> o) throws Exception {
                     return CollectionUtil.toArray(o);
                 }
-            })
-            .toFlowable();
+            });
     }
 
     /**
@@ -439,7 +439,6 @@ public class Localizer implements LocalizerType {
 
             if (ObjectUtil.nonNull(bundle)) {
                 LOCALIZER.BUNDLES.add(bundle);
-                LOCALIZER.LOCALES.add(locale);
             }
 
             return this;

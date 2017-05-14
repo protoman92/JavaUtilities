@@ -59,16 +59,16 @@ public final class ObjectUtil {
      * @param objects An {@link Iterable} of {@link T}.
      * @param <T> Generics parameter.
      * @return A {@link Boolean} value.
-     * @see #isNull(Object)
+     * @see #nonNull(Object)
      */
     public static <T> boolean isNull(@NotNull Iterable<T> objects) {
         for (Object object : objects) {
-            if (!isNull(object)) {
-                return false;
+            if (isNull(object)) {
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     /**
@@ -78,7 +78,7 @@ public final class ObjectUtil {
      * @see #isNull(Iterable)
      */
     public static boolean isNull(@NotNull Object...objects) {
-        return nonNull(Arrays.asList(objects));
+        return isNull(Arrays.asList(objects));
     }
 
     private ObjectUtil() {}

@@ -2,9 +2,7 @@ package org.swiften.javautilities.localizer;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by haipham on 5/14/17.
@@ -44,6 +42,14 @@ public class LocalizationFormat {
     LocalizationFormat() {
         ARGUMENTS = new LinkedList<Object>();
         pattern = "";
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "Pattern: %s, arguments: %s",
+            pattern(),
+            Arrays.toString(arguments()));
     }
 
     //region Getters
@@ -97,10 +103,23 @@ public class LocalizationFormat {
          * {@link LocalizationFormat}, it will also be localized.
          * @param object An {@link Object} instance.
          * @return The current {@link Builder} instance.
+         * @see Collection#add(Object)
          */
         @NotNull
         public Builder addArgument(@NotNull Object object) {
             FORMAT.ARGUMENTS.add(object);
+            return this;
+        }
+
+        /**
+         * Add a {@link Collection} of {@link Object} to {@link #ARGUMENTS}.
+         * @param args An {@link Collection} of {@link Object}.
+         * @return The current {@link Builder} instance.
+         * @see Collection#addAll(Collection)
+         */
+        @NotNull
+        public Builder addArguments(@NotNull Collection<Object> args) {
+            FORMAT.ARGUMENTS.addAll(args);
             return this;
         }
 
