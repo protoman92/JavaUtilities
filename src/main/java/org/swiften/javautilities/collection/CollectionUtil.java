@@ -84,5 +84,16 @@ public class CollectionUtil {
         }
     }
 
+    /**
+     * Create an {@link Object} Array from a {@link Collection}.
+     * @param collection A {@link Collection} of {@link Object}
+     * @return A {@link Object} Array.
+     */
+    @NotNull
+    public static Object[] toArray(@NotNull Collection<?> collection) {
+        int length = collection.size();
+        return collection.toArray(new Object[length]);
+    }
+
     private CollectionUtil() {}
 }

@@ -23,8 +23,7 @@ import static org.mockito.Mockito.spy;
 public final class ActualLocalizerTest implements LocalizeErrorType {
     @NotNull private final Localizer LOCALIZER;
     @NotNull private final String[] STRINGS;
-
-    private int BUNDLE_COUNT = 3;
+    @NotNull private final LocalizationFormat[] FORMATS;
 
     {
         LOCALIZER = spy(Localizer.builder()
@@ -37,6 +36,25 @@ public final class ActualLocalizerTest implements LocalizeErrorType {
             "auth_title_password",
             "auth_title_signInOrRegister",
             "non_localizable_text"
+        };
+
+        FORMATS = new LocalizationFormat[] {
+            LocalizationFormat.builder()
+                .withPattern("format_pattern_1")
+                .addArgument(2)
+                .addArgument("localizable_cake")
+                .addArgument("localizable_table")
+                .build(),
+
+            LocalizationFormat.builder()
+                .withPattern("format_pattern_2")
+                .addArgument("localizable_game")
+                .addArgument(LocalizationFormat.builder()
+                    .withPattern("nested_format_pattern")
+                    .addArgument("localizable_addition")
+                    .addArgument("localizable_collection")
+                    .build())
+                .build()
         };
     }
 
@@ -51,7 +69,7 @@ public final class ActualLocalizerTest implements LocalizeErrorType {
             .flatMap(new Function<String,Publisher<String>>() {
                 @Override
                 public Publisher<String> apply(@NonNull String s) throws Exception {
-                    return LOCALIZER.rxLocalizeText(s, null);
+                    return LOCALIZER.rxLocalize(s, null);
                 }
             })
             .doOnNext(new Consumer<String>() {
@@ -72,5 +90,40 @@ public final class ActualLocalizerTest implements LocalizeErrorType {
 
         // Then
         subscriber.assertSubscribed();
+        subscriber.assertNoErrors();
+        subscriber.assertComplete();
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void test_rxLocalizeWithFormat_shouldSucceed() {
+        // Setup
+        TestSubscriber subscriber = CustomTestSubscriber.create();
+
+        // When
+        Flowable.fromArray(FORMATS)
+            .flatMap(new Function<LocalizationFormat,Publisher<String>>() {
+                @NonNull
+                @Override
+                public Publisher<String> apply(
+                    @NonNull LocalizationFormat format
+                ) throws Exception {
+                    return LOCALIZER.rxLocalize(format, new Locale("vi_VN"));
+                }
+            })
+            .doOnNext(new Consumer<String>() {
+                @Override
+                public void accept(@NonNull String s) throws Exception {
+                    LogUtil.println(s);
+                }
+            })
+            .subscribe(subscriber);
+
+        subscriber.awaitTerminalEvent();
+
+        // Then
+        subscriber.assertSubscribed();
+        subscriber.assertNoErrors();
+        subscriber.assertComplete();
     }
 }
