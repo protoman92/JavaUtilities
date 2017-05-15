@@ -91,5 +91,16 @@ public final class RxUtil {
         return Flowable.error(new RuntimeException(error));
     }
 
+    /**
+     * Produce an error {@link Flowable} with a blank message.
+     * @param <T> Generics parameter.
+     * @return A {@link Flowable} instance.
+     * @see #error(String)
+     */
+    @NotNull
+    public static <T> Flowable<T> error() {
+        return error("");
+    }
+
     private RxUtil() {}
 }
