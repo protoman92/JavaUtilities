@@ -1,14 +1,9 @@
 package org.swiften.javautilities.localizer;
 
 import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.BiFunction;
-import io.reactivex.functions.Consumer;
 import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
-import org.reactivestreams.Subscriber;
 import org.swiften.javautilities.collection.CollectionUtil;
-import org.swiften.javautilities.collection.Zipped;
-import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.object.ObjectUtil;
 import org.swiften.javautilities.string.StringUtil;
 import io.reactivex.Flowable;
@@ -200,18 +195,18 @@ public class Localizer implements LocalizerType {
 
     //region Complex localization
     /**
-     * Localize reactively with a {@link LocalizationFormat} and a
+     * Localize reactively with a {@link LCFormat} and a
      * {@link Locale}. This method involves {@link MessageFormat} and works
      * best for format-based localization.
-     * @param FORMAT A {@link LocalizationFormat} instance.
+     * @param FORMAT A {@link LCFormat} instance.
      * @param LOCALE A {@link Locale} instance.
      * @return A {@link Flowable} instance.
      * @see #rxGetString(ResourceBundle, String)
      * @see StringUtil#isNotNullOrEmpty(String)
-     * @see #rxLocalize(LocalizationFormat, Locale)
+     * @see #rxLocalize(LCFormat, Locale)
      */
     @NotNull
-    public Flowable<String> rxLocalize(@NotNull final LocalizationFormat FORMAT,
+    public Flowable<String> rxLocalize(@NotNull final LCFormat FORMAT,
                                        @Nullable final Locale LOCALE) {
         return rxResources(LOCALE)
             .flatMap(new Function<ResourceBundle,Publisher<String>>() {
@@ -234,24 +229,24 @@ public class Localizer implements LocalizerType {
 
     /**
      * Same as above, but uses a default {@link Locale} instance.
-     * @param format A {@link LocalizationFormat} instance.
+     * @param format A {@link LCFormat} instance.
      * @return A {@link Flowable} instance.
-     * @see #rxLocalize(LocalizationFormat, Locale)
+     * @see #rxLocalize(LCFormat, Locale)
      */
     @NotNull
-    public Flowable<String> rxLocalize(@NotNull LocalizationFormat format) {
+    public Flowable<String> rxLocalize(@NotNull LCFormat format) {
         return rxLocalize(format, null);
     }
 
     /**
-     * Localize a {@link String} using a {@link LocalizationFormat} instance.
-     * @param format A {@link LocalizationFormat} instance.
+     * Localize a {@link String} using a {@link LCFormat} instance.
+     * @param format A {@link LCFormat} instance.
      * @param locale A {@link Locale} instance.
      * @return A {@link String} value.
-     * @see #rxLocalize(LocalizationFormat, Locale)
+     * @see #rxLocalize(LCFormat, Locale)
      */
     @NotNull
-    public String localize(@NotNull LocalizationFormat format,
+    public String localize(@NotNull LCFormat format,
                            @Nullable Locale locale) {
         String result = rxLocalize(format, locale).blockingFirst();
         return StringUtil.isNotNullOrEmpty(result) ? result : format.pattern();
@@ -259,19 +254,19 @@ public class Localizer implements LocalizerType {
 
     /**
      * Same as above, but uses a default {@link Locale}.
-     * @param format A {@link LocalizationFormat} instance.
+     * @param format A {@link LCFormat} instance.
      * @return A {@link String} value.
-     * @see #localize(LocalizationFormat, Locale)
+     * @see #localize(LCFormat, Locale)
      */
     @NotNull
-    public String localize(@NotNull LocalizationFormat format) {
+    public String localize(@NotNull LCFormat format) {
         return localize(format, null);
     }
 
     /**
-     * Get a localized {@link String} using a {@link LocalizationFormat}.
+     * Get a localized {@link String} using a {@link LCFormat}.
      * @param BUNDLE A {@link ResourceBundle} instance.
-     * @param FORMAT A {@link LocalizationFormat} instance.
+     * @param FORMAT A {@link LCFormat} instance.
      * @return A {@link Flowable} instance.
      * @see ResourceBundle#getString(String)
      * @see MessageFormat#setLocale(Locale)
@@ -283,7 +278,7 @@ public class Localizer implements LocalizerType {
     @NotNull
     @SuppressWarnings("WeakerAccess")
     Flowable<String> rxGetString(@NotNull final ResourceBundle BUNDLE,
-                                 @NotNull final LocalizationFormat FORMAT) {
+                                 @NotNull final LCFormat FORMAT) {
         final Locale LOCALE = BUNDLE.getLocale();
 
         return rxFormatArguments(LOCALE, FORMAT).flatMap(new Function<Object[],Publisher<String>>() {
@@ -327,7 +322,7 @@ public class Localizer implements LocalizerType {
     /**
      * Get a localized {@link String} using an Array of {@link Object}
      * arguments.
-     * @param format A {@link LocalizationFormat} instance.
+     * @param format A {@link LCFormat} instance.
      * @param args A Array of {@link Object}.
      * @return A {@link Flowable} instance.
      * @see #getString(MessageFormat, Object[])
@@ -347,7 +342,7 @@ public class Localizer implements LocalizerType {
     /**
      * Get a localized {@link String} using an Array of {@link Object}
      * arguments.
-     * @param format A {@link LocalizationFormat} instance.
+     * @param format A {@link LCFormat} instance.
      * @param args A Array of {@link Object}.
      * @return A {@link String} value.
      * @throws MissingResourceException This is thrown if
@@ -360,12 +355,12 @@ public class Localizer implements LocalizerType {
     }
 
     /**
-     * Get the localization arguments from a {@link LocalizationFormat}. We
+     * Get the localization arguments from a {@link LCFormat}. We
      * need to individual prepare each {@link Object} argument in case it
      * is a {@link String} that needs localization, or a nested
-     * {@link LocalizationFormat}.
+     * {@link LCFormat}.
      * @param LOCALE A {@link Locale} instance.
-     * @param format A {@link LocalizationFormat} instance.
+     * @param format A {@link LCFormat} instance.
      * @return A {@link Flowable} instance.
      * @see #rxPrepareArgument(Locale, Object)
      * @see CollectionUtil#toArray(Collection)
@@ -373,7 +368,7 @@ public class Localizer implements LocalizerType {
     @NotNull
     @SuppressWarnings("WeakerAccess")
     Flowable<Object[]> rxFormatArguments(@NonNull final Locale LOCALE,
-                                         @NotNull LocalizationFormat format) {
+                                         @NotNull LCFormat format) {
         return Flowable.fromArray(format.arguments())
             .flatMap(new Function<Object,Publisher<?>>() {
                 @Override
@@ -393,19 +388,19 @@ public class Localizer implements LocalizerType {
 
     /**
      * Individually prepare each {@link Object} argument to take care of
-     * {@link String} values or {@link LocalizationFormat} instances that
+     * {@link String} values or {@link LCFormat} instances that
      * need to be localized as well.
      * @param locale A {@link Locale} instance.
      * @param argument An {@link Object} instance.
      * @return A {@link Flowable} instance.
-     * @see #rxLocalize(LocalizationFormat, Locale)
+     * @see #rxLocalize(LCFormat, Locale)
      * @see #rxLocalize(String, Locale)
      */
     @NotNull
     @SuppressWarnings("WeakerAccess")
     Flowable<?> rxPrepareArgument(@NonNull Locale locale, @NotNull Object argument) {
-        if (argument instanceof LocalizationFormat) {
-            return rxLocalize((LocalizationFormat)argument, locale);
+        if (argument instanceof LCFormat) {
+            return rxLocalize((LCFormat)argument, locale);
         } else if (argument instanceof String) {
             return rxLocalize((String)argument, locale);
         } else {

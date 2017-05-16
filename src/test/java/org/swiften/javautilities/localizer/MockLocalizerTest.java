@@ -2,9 +2,6 @@ package org.swiften.javautilities.localizer;
 
 import org.jetbrains.annotations.Nullable;
 import org.swiften.javautilities.collection.CollectionTestUtil;
-import org.swiften.javautilities.collection.CollectionUtil;
-import org.swiften.javautilities.collection.Zipped;
-import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.object.ObjectUtil;
 import org.swiften.javautilities.rx.CustomTestSubscriber;
 import io.reactivex.Flowable;
@@ -12,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.subscribers.TestSubscriber;
-import org.jetbrains.annotations.NotNull;
 
 import org.reactivestreams.Publisher;
 import org.swiften.javautilities.rx.RxTestUtil;
@@ -22,7 +18,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.text.MessageFormat;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -35,7 +30,7 @@ import static org.mockito.Mockito.*;
 public final class MockLocalizerTest implements LocalizeErrorType {
     @NotNull private final Localizer LC;
     @NotNull private final List<String> STR;
-    @NotNull private final List<LocalizationFormat> FMT;
+    @NotNull private final List<LCFormat> FMT;
     @NotNull private final List<ResourceBundle> BUNDLES;
     @NotNull private final List<Locale> LOCALES;
 
@@ -47,13 +42,13 @@ public final class MockLocalizerTest implements LocalizeErrorType {
         LOCALES.add(Locale.US);
         LOCALES.add(Locale.ENGLISH);
         STR = new LinkedList<String>();
-        FMT = new LinkedList<LocalizationFormat>();
+        FMT = new LinkedList<LCFormat>();
     }
 
     @BeforeMethod
     public void beforeMethod() {
         Collections.addAll(STR, "helloworld");
-        Collections.addAll(FMT, mock(LocalizationFormat.class));
+        Collections.addAll(FMT, mock(LCFormat.class));
 
         for (int i = 0, count = 2; i < count; i++) {
             BUNDLES.add(mock(ResourceBundle.class));
@@ -64,7 +59,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
             doReturn(locale).when(bundle).getLocale();
         }
 
-        for (LocalizationFormat format : FMT) {
+        for (LCFormat format : FMT) {
             doReturn("pattern1").when(format).pattern();
             doReturn(new Object[0]).when(format).arguments();
         }
@@ -275,9 +270,9 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 
         // When
         Flowable.fromIterable(FMT)
-            .flatMap(new Function<LocalizationFormat,Publisher<String>>() {
+            .flatMap(new Function<LCFormat,Publisher<String>>() {
                 @Override
-                public Publisher<String> apply(@NotNull LocalizationFormat format) throws Exception {
+                public Publisher<String> apply(@NotNull LCFormat format) throws Exception {
                     return LC.rxLocalize(format, LOCALE);
                 }
             })
@@ -291,10 +286,10 @@ public final class MockLocalizerTest implements LocalizeErrorType {
         subscriber.assertComplete();
         verify(LC, times(FMT.size())).bundles();
         verify(LC, times(FMT.size())).rxResources(eq(LOCALE));
-        verify(LC, times(FMT.size())).rxLocalize(any(LocalizationFormat.class), eq(LOCALE));
-        verify(LC, times(times)).rxGetString(any(ResourceBundle.class), any(LocalizationFormat.class));
+        verify(LC, times(FMT.size())).rxLocalize(any(LCFormat.class), eq(LOCALE));
+        verify(LC, times(times)).rxGetString(any(ResourceBundle.class), any(LCFormat.class));
         verify(LC, times(times)).rxGetTemplate(any(ResourceBundle.class), anyString());
-        verify(LC, times(times)).rxFormatArguments(any(Locale.class), any(LocalizationFormat.class));
+        verify(LC, times(times)).rxFormatArguments(any(Locale.class), any(LCFormat.class));
         verifyNoMoreInteractions(LC);
     }
 
@@ -314,11 +309,11 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 //        doReturn(Flowable.just("Template")).when(LC).rxGetTemplate(any(ResourceBundle.class), anyString());
 //        doThrow(mre()).when(LC).getString(any(MessageFormat.class), any(Object[].class));
 //
-//        for (LocalizationFormat format : FMT) {
+//        for (LCFormat format : FMT) {
 //            List<Object> arguments = new ArrayList<Object>();
 //
 //            for (int i = 0; i < nestedFormatCount; i++) {
-//                LocalizationFormat nested = mock(LocalizationFormat.class);
+//                LCFormat nested = mock(LCFormat.class);
 //                doReturn("template2").when(nested).pattern();
 //                doReturn(new Object[0]).when(nested).arguments();
 //                arguments.add(nested);
@@ -337,9 +332,9 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 //
 //        // When
 //        Flowable.fromIterable(FMT)
-//            .flatMap(new Function<LocalizationFormat,Publisher<String>>() {
+//            .flatMap(new Function<LCFormat,Publisher<String>>() {
 //                @Override
-//                public Publisher<String> apply(@NotNull LocalizationFormat format) throws Exception {
+//                public Publisher<String> apply(@NotNull LCFormat format) throws Exception {
 //                    return LC.rxLocalize(format, LOCALE);
 //                }
 //            })
@@ -354,12 +349,12 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 //        LogUtil.println(RxTestUtil.firstNextEvent(subscriber));
 //        verify(LC, times(totalNestedCount)).bundles();
 //        verify(LC, times(FMT.size())).rxResources(eq(LOCALE));
-//        verify(LC, times(FMT.size())).rxLocalize(any(LocalizationFormat.class), eq(LOCALE));
+//        verify(LC, times(FMT.size())).rxLocalize(any(LCFormat.class), eq(LOCALE));
 //        verify(LC, times(totalNestedFormatCount)).rxGetTemplate(any(ResourceBundle.class), anyString());
-//        verify(LC, times(totalNestedFormatCount)).rxGetString(any(ResourceBundle.class), any(LocalizationFormat.class));
+//        verify(LC, times(totalNestedFormatCount)).rxGetString(any(ResourceBundle.class), any(LCFormat.class));
 //        verify(LC, times(totalGetStringCount)).rxGetString(any(ResourceBundle.class), anyString());
 //        verify(LC, times(totalGetStringCount)).getString(any(ResourceBundle.class), anyString());
-//        verify(LC, times(totalNestedFormatCount)).rxFormatArguments(any(Locale.class), any(LocalizationFormat.class));
+//        verify(LC, times(totalNestedFormatCount)).rxFormatArguments(any(Locale.class), any(LCFormat.class));
 //        verify(LC, times(totalNestedFormatCount)).rxPrepareArgument(any(Locale.class), any());
 //        verifyNoMoreInteractions(LC);
 //    }

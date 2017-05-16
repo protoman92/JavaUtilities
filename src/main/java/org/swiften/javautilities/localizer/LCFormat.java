@@ -10,9 +10,9 @@ import java.util.*;
 
 /**
  * Use this class to implement localization with {@link String} formats, to
- * be used with {@link LocalizerType#rxLocalize(LocalizationFormat, Locale)}.
+ * be used with {@link LocalizerType#rxLocalize(LCFormat, Locale)}.
  */
-public class LocalizationFormat {
+public class LCFormat {
     /**
      * Get a {@link Builder} instance.
      * @return A {@link Builder} instance.
@@ -23,12 +23,12 @@ public class LocalizationFormat {
     }
 
     /**
-     * Return an empty {@link LocalizationFormat}.
-     * @return A {@link LocalizationFormat} instance.
+     * Return an empty {@link LCFormat}.
+     * @return A {@link LCFormat} instance.
      */
     @NotNull
-    public static LocalizationFormat empty() {
-        return new LocalizationFormat();
+    public static LCFormat empty() {
+        return new LCFormat();
     }
 
     /**
@@ -48,7 +48,7 @@ public class LocalizationFormat {
      */
     @NotNull final List<Object> ARGUMENTS;
 
-    LocalizationFormat() {
+    LCFormat() {
         ARGUMENTS = new LinkedList<Object>();
         pattern = "";
     }
@@ -86,13 +86,13 @@ public class LocalizationFormat {
 
     //region Builder
     /**
-     * Builder class for {@link LocalizationFormat}.
+     * Builder class for {@link LCFormat}.
      */
     public static final class Builder {
-        @NotNull private final LocalizationFormat FORMAT;
+        @NotNull private final LCFormat FORMAT;
 
         Builder() {
-            FORMAT = new LocalizationFormat();
+            FORMAT = new LCFormat();
         }
 
         /**
@@ -109,7 +109,7 @@ public class LocalizationFormat {
         /**
          * Add an {@link Object} argument to {@link #ARGUMENTS}. Note that
          * if this argument is a {@link String} or another
-         * {@link LocalizationFormat}, it will also be localized.
+         * {@link LCFormat}, it will also be localized.
          * @param object An {@link Object} instance.
          * @return The current {@link Builder} instance.
          * @see Collection#add(Object)
@@ -133,7 +133,7 @@ public class LocalizationFormat {
         }
 
         @NotNull
-        public LocalizationFormat build() {
+        public LCFormat build() {
             return FORMAT;
         }
     }

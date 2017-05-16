@@ -1,6 +1,5 @@
 package org.swiften.javautilities.localizer;
 
-import com.sun.jdi.connect.IllegalConnectorArgumentsException;
 import org.jetbrains.annotations.Nullable;
 import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.string.StringUtil;
@@ -29,7 +28,7 @@ import static org.mockito.Mockito.spy;
 public final class ActualLocalizerTest implements LocalizeErrorType {
     @NotNull private final Localizer LOCALIZER;
     @NotNull private final String[] STRINGS;
-    @NotNull private final LocalizationFormat[] FORMATS;
+    @NotNull private final LCFormat[] FORMATS;
 
     {
         LOCALIZER = spy(Localizer.builder()
@@ -44,18 +43,18 @@ public final class ActualLocalizerTest implements LocalizeErrorType {
             "non_localizable_text"
         };
 
-        FORMATS = new LocalizationFormat[] {
-            LocalizationFormat.builder()
+        FORMATS = new LCFormat[] {
+            LCFormat.builder()
                 .withPattern("format_pattern_1")
                 .addArgument(2)
                 .addArgument("localizable_cake")
                 .addArgument("localizable_table")
                 .build(),
 
-            LocalizationFormat.builder()
+            LCFormat.builder()
                 .withPattern("format_pattern_2")
                 .addArgument("localizable_game")
-                .addArgument(LocalizationFormat.builder()
+                .addArgument(LCFormat.builder()
                     .withPattern("nested_format_pattern")
                     .addArgument("localizable_addition")
                     .addArgument("localizable_collection")
@@ -121,11 +120,11 @@ public final class ActualLocalizerTest implements LocalizeErrorType {
 
         // When
         Flowable.fromArray(FORMATS)
-            .flatMap(new Function<LocalizationFormat,Publisher<String>>() {
+            .flatMap(new Function<LCFormat,Publisher<String>>() {
                 @NonNull
                 @Override
                 public Publisher<String> apply(
-                    @NonNull LocalizationFormat format
+                    @NonNull LCFormat format
                 ) throws Exception {
                     return LOCALIZER.rxLocalize(format, LOCALE);
                 }

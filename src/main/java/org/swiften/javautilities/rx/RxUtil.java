@@ -7,7 +7,9 @@ import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
+import org.swiften.javautilities.object.ObjectUtil;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -85,10 +87,15 @@ public final class RxUtil {
      * @param <T> Generics parameter.
      * @return A {@link Flowable} instance.
      * @see Flowable#error(Throwable)
+     * @see #error()
      */
     @NotNull
-    public static <T> Flowable<T> error(@NotNull String error) {
-        return Flowable.error(new RuntimeException(error));
+    public static <T> Flowable<T> error(@Nullable String error) {
+        if (ObjectUtil.nonNull(error)) {
+            return Flowable.error(new RuntimeException(error));
+        } else {
+            return error();
+        }
     }
 
     /**

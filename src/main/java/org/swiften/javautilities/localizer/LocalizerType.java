@@ -51,41 +51,41 @@ public interface LocalizerType extends LocalizeErrorType {
     String localize(@NotNull String text);
 
     /**
-     * Localize with format, using a {@link LocalizationFormat} instance.
-     * @param format A {@link LocalizationFormat} instance.
+     * Localize with format, using a {@link LCFormat} instance.
+     * @param format A {@link LCFormat} instance.
      * @param locale A {@link Locale} instance.
      * @return A {@link Flowable} instance.
      */
     @NotNull
-    Flowable<String> rxLocalize(@NotNull LocalizationFormat format,
+    Flowable<String> rxLocalize(@NotNull LCFormat format,
                                 @Nullable Locale locale);
 
     /**
      * Localize with format without using a {@link Locale}.
-     * @param format A {@link LocalizationFormat} instance.
+     * @param format A {@link LCFormat} instance.
      * @return A {@link Flowable} instance.
-     * @see #rxLocalize(LocalizationFormat, Locale)
+     * @see #rxLocalize(LCFormat, Locale)
      */
     @NotNull
-    Flowable<String> rxLocalize(@NotNull LocalizationFormat format);
+    Flowable<String> rxLocalize(@NotNull LCFormat format);
 
     /**
-     * Locale a {@link String} with format, using a {@link LocalizationFormat}
+     * Locale a {@link String} with format, using a {@link LCFormat}
      * instance.
-     * @param format A {@link LocalizationFormat} instance.
+     * @param format A {@link LCFormat} instance.
      * @param locale A {@link Locale} instance.
      * @return A {@link String} value.
-     * @see #rxLocalize(LocalizationFormat, Locale)
+     * @see #rxLocalize(LCFormat, Locale)
      */
     @NotNull
-    String localize(@NotNull LocalizationFormat format, @Nullable Locale locale);
+    String localize(@NotNull LCFormat format, @Nullable Locale locale);
 
     /**
      * Localize a {@link String} without using a {@link Locale}.
-     * @param format A {@link LocalizationFormat} instance.
+     * @param format A {@link LCFormat} instance.
      * @return A {@link Locale} instance.
-     * @see #localize(LocalizationFormat, Locale)
+     * @see #localize(LCFormat, Locale)
      */
     @NotNull
-    String localize(@NotNull LocalizationFormat format);
+    String localize(@NotNull LCFormat format);
 }
