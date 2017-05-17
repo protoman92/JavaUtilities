@@ -99,6 +99,20 @@ public final class RxUtil {
     }
 
     /**
+     * Produce an error with a formatted {@link String} message.
+     * @param format A {@link String} value.
+     * @param args A varargs of {@link Object}.
+     * @param <T> Generics paramter.
+     * @return A {@link Flowable} instance.
+     * @see #error(String)
+     */
+    @NotNull
+    public static <T> Flowable<T> errorF(@NotNull String format,
+                                         @NotNull Object...args) {
+        return error(String.format(format, args));
+    }
+
+    /**
      * Produce an error {@link Flowable} with a blank message.
      * @param <T> Generics parameter.
      * @return A {@link Flowable} instance.
