@@ -2,7 +2,6 @@ package org.swiften.javautilities.collection;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.util.Collection;
 
 /**
@@ -14,27 +13,27 @@ import java.util.Collection;
  * @param <A> Generics parameter.
  * @param <B> Generics parameter.
  */
-public final class Zipped<A,B> {
-    @Nullable public final A FIRST;
-    @Nullable public final B SECOND;
+public final class Pair<A,B> {
+    @Nullable public final A A;
+    @Nullable public final B B;
 
-    public Zipped(@Nullable A a, @Nullable B b) {
-        FIRST = a;
-        SECOND = b;
+    public Pair(@Nullable A a, @Nullable B b) {
+        A = a;
+        B = b;
     }
 
     @Override
     public String toString() {
-        return String.format("First: %s, Second: %s", FIRST, SECOND);
+        return String.format("First: %s, Second: %s", A, B);
     }
 
     @Override
     public boolean equals(@Nullable Object o) {
-        if (o instanceof Zipped) {
-            Zipped z = (Zipped)o;
+        if (o instanceof Pair) {
+            Pair z = (Pair)o;
 
-            if (FIRST != null && SECOND != null) {
-                return FIRST.equals(z.FIRST) && SECOND.equals(z.SECOND);
+            if (A != null && B != null) {
+                return A.equals(z.A) && B.equals(z.B);
             } else {
                 return false;
             }

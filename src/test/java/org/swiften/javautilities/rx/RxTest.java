@@ -3,13 +3,11 @@ package org.swiften.javautilities.rx;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
-import io.reactivex.Scheduler;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import org.jetbrains.annotations.NotNull;
-import org.swiften.javautilities.collection.Zipped;
+import org.swiften.javautilities.collection.Pair;
 import io.reactivex.subscribers.TestSubscriber;
 import org.swiften.javautilities.log.LogUtil;
 import org.testng.Assert;
@@ -40,8 +38,8 @@ public final class RxTest {
 
         for (int i = 0, length = collection.size(); i < length; i++) {
             Index index = (Index)nextEvents.get(i);
-            Zipped zipped = new Zipped(i, collection.get(i));
-            Assert.assertEquals(index.toZipped(), zipped);
+            Pair pair = new Pair(i, collection.get(i));
+            Assert.assertEquals(index.toZipped(), pair);
         }
     }
 

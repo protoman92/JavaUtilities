@@ -25,6 +25,6 @@ public class CustomTestSubscriber<T> extends TestSubscriber<T> {
     @Override
     public void onError(@NotNull Throwable t) {
         super.onError(t);
-        LogUtil.printf("Error encountered: %s", t.getMessage());
+        LogUtil.printfThread("Error encountered: %s", t.getMessage());
     }
 }

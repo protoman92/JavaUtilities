@@ -42,16 +42,16 @@ public class CollectionUtil {
     }
 
     /**
-     * Zip two {@link Collection} and produce a {@link List} of {@link Zipped}.
+     * Zip two {@link Collection} and produce a {@link List} of {@link Pair}.
      * @param a An {@link A} object.
      * @param b A {@link B} object.
      * @param <A> Generics parameter.
      * @param <B> Generics parameter.
-     * @return A {@link Collection} of {@link Zipped}.
+     * @return A {@link Collection} of {@link Pair}.
      */
     @NotNull
-    public static <A,B> List<Zipped<A,B>> zip(@NotNull List<A> a, @NotNull List<B> b) {
-        List<Zipped<A,B>> zList = new LinkedList<Zipped<A,B>>();
+    public static <A,B> List<Pair<A,B>> zip(@NotNull List<A> a, @NotNull List<B> b) {
+        List<Pair<A,B>> zList = new LinkedList<Pair<A,B>>();
         int aLength = a.size();
         int bLength = b.size();
         int zLength = Math.min(aLength, bLength);
@@ -59,7 +59,7 @@ public class CollectionUtil {
         for (int i = 0; i < zLength; i++) {
             A aItem = a.get(i);
             B bItem = b.get(i);
-            zList.add(new Zipped<A,B>(aItem, bItem));
+            zList.add(new Pair<A,B>(aItem, bItem));
         }
 
         return zList;
@@ -93,6 +93,31 @@ public class CollectionUtil {
     public static Object[] toArray(@NotNull Collection<?> collection) {
         int length = collection.size();
         return collection.toArray(new Object[length]);
+    }
+
+    /**
+     * Get a sublist that do not throw {@link IndexOutOfBoundsException}.
+     * @param original The original {@link List}.
+     * @param from Inclusive starting index.
+     * @param to Exclusive ending index.
+     * @param <T> Generics parameter.
+     * @return A {@link List} of {@link T}.
+     * @see List#subList(int, int)
+     * @see Collections#emptyList()
+     */
+    @NotNull
+    public static <T> List<T> subList(@NotNull List<T> original, int from, int to) {
+        int size = original.size();
+
+        if (from > -1 && to < size) {
+            return original.subList(from, to);
+        } else if (from <= -1) {
+            return Collections.emptyList();
+        } else if (to >= size) {
+            return original.subList(from, size);
+        } else {
+            return original.subList(0, size);
+        }
     }
 
     private CollectionUtil() {}
