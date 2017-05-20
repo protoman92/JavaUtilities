@@ -6,8 +6,8 @@ package org.swiften.javautilities.number;
 public final class NumberUtil {
     /**
      * Check if a number is even.
-     * @param number An {@link Integer} value.
-     * @return A {@link Boolean} value.
+     * @param number {@link Integer} value.
+     * @return {@link Boolean} value.
      */
     public static boolean isEven(int number) {
         return number % 2 == 0;
@@ -15,8 +15,8 @@ public final class NumberUtil {
 
     /**
      * Check if a number is odd.
-     * @param number An {@link Integer} value.
-     * @return A {@link Boolean} value.
+     * @param number {@link Integer} value.
+     * @return {@link Boolean} value.
      * @see #isEven(int)
      */
     public static boolean isOdd(int number) {

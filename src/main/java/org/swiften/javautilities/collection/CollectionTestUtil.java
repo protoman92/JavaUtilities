@@ -15,7 +15,7 @@ public final class CollectionTestUtil {
      * @param elements The Array of {@link T} from which the element will be
      *                 produced.
      * @param <T> Generics.
-     * @return A {@link T} element.
+     * @return {@link T} element.
      * @throws RuntimeException If the produced element is null, or the
      * Array is empty.
      * @see CollectionTestUtil#randomElement(List)
@@ -26,11 +26,11 @@ public final class CollectionTestUtil {
     }
 
     /**
-     * Produce a random {@link T} from a {@link List} of {@link T}.
+     * Produce a random {@link T} from {@link List} of {@link T}.
      * @param elements The {@link List} of {@link T} from which the element
      *                 will be produce.
      * @param <T> Generics.
-     * @return A {@link T} element.
+     * @return {@link T} element.
      * @throws RuntimeException If the produced element is null, or the
      * {@link List} is empty.
      */

@@ -21,7 +21,7 @@ public enum DateFormat {
 
     /**
      * Get the associated {@link String} format.
-     * @return A {@link String} value.
+     * @return {@link String} value.
      */
     @NotNull
     public String format() {

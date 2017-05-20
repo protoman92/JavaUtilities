@@ -46,7 +46,7 @@ public final class Index<T> {
      * Produce a
      * {@link Zipped}
      * from {@link #INDEX} and {@link #OBJECT}.
-     * @return A {@link Zipped}
+     * @return {@link Zipped}
      * instance.
      */
     @NotNull

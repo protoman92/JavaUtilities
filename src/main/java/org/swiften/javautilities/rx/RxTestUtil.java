@@ -10,10 +10,10 @@ import java.util.List;
  */
 public final class RxTestUtil {
     /**
-     * Get next events from a {@link List} of {@link Object}.
-     * @param events A {@link List} of all rx events.
+     * Get next events from {@link List} of {@link Object}.
+     * @param events {@link List} of all rx events.
      * @param <T> Generics parameter.
-     * @return A {@link List} of {@link T}.
+     * @return {@link List} of {@link T}.
      */
     @NotNull
     @SuppressWarnings("unchecked")
@@ -22,9 +22,9 @@ public final class RxTestUtil {
     }
 
     /**
-     * Get next events from a {@link TestSubscriber}.
-     * @param subscriber A {@link TestSubscriber} instance.
-     * @return A {@link List} instance.
+     * Get next events from {@link TestSubscriber}.
+     * @param subscriber {@link TestSubscriber} instance.
+     * @return {@link List} instance.
      */
     @NotNull
     @SuppressWarnings("unchecked")
@@ -33,9 +33,9 @@ public final class RxTestUtil {
     }
 
     /**
-     * Get the number of next events from a {@link List} of {@link Object}.
-     * @param events A {@link List} of {@link Object}.
-     * @return An {@link Integer} value.
+     * Get the number of next events from {@link List} of {@link Object}.
+     * @param events {@link List} of {@link Object}.
+     * @return {@link Integer} value.
      * @see #nextEvents(List)
      */
     public static int nextEventsCount(@NotNull List<Object> events) {
@@ -43,9 +43,9 @@ public final class RxTestUtil {
     }
 
     /**
-     * Get the number of next events from a {@link TestSubscriber}.
-     * @param subscriber A {@link TestSubscriber} instance.
-     * @return An {@link Integer} value.
+     * Get the number of next events from {@link TestSubscriber}.
+     * @param subscriber {@link TestSubscriber} instance.
+     * @return {@link Integer} value.
      * @see #nextEvents(TestSubscriber)
      */
     public static int nextEventsCount(@NotNull TestSubscriber subscriber) {
@@ -53,11 +53,11 @@ public final class RxTestUtil {
     }
 
     /**
-     * Get the first next event from a {@link List} of {@link Object}. This
-     * can throw a {@link IndexOutOfBoundsException}.
-     * @param events A {@link List} of all rx events.
+     * Get the first next event from {@link List} of {@link Object}. This
+     * can throw {@link IndexOutOfBoundsException}.
+     * @param events {@link List} of all rx events.
      * @param <T> Generics parameter.
-     * @return A {@link T} instance.
+     * @return {@link T} instance.
      * @see #nextEvents(List)
      */
     @NotNull
@@ -67,11 +67,11 @@ public final class RxTestUtil {
     }
 
     /**
-     * Get the first next event from a {@link TestSubscriber}. This can throw
-     * a {@link IndexOutOfBoundsException}.
-     * @param subscriber A {@link TestSubscriber} instance.
+     * Get the first next event from {@link TestSubscriber}. This can throw
+     * {@link IndexOutOfBoundsException}.
+     * @param subscriber {@link TestSubscriber} instance.
      * @param <T> Generics parameter.
-     * @return A {@link T} instance.
+     * @return {@link T} instance.
      * @see #nextEvents(TestSubscriber)
      */
     @NotNull

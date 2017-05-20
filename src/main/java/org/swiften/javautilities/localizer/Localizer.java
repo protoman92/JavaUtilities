@@ -33,7 +33,7 @@ public class Localizer implements LocalizerType {
     //region Getters
     /**
      * Get {@link #BUNDLES}.
-     * @return A {@link List} of {@link ResourceBundle}.
+     * @return {@link List} of {@link ResourceBundle}.
      * @see #BUNDLES
      */
     @NotNull
@@ -42,8 +42,8 @@ public class Localizer implements LocalizerType {
     }
 
     /**
-     * Get a {@link List} of {@link Locale} from {@link #bundles()}.
-     * @return A {@link List} of {@link Locale}.
+     * Get {@link List} of {@link Locale} from {@link #bundles()}.
+     * @return {@link List} of {@link Locale}.
      * @see #bundles()
      * @see ObjectUtil#nonNull(Object)
      */
@@ -65,10 +65,10 @@ public class Localizer implements LocalizerType {
     //endregion
 
     /**
-     * Get a {@link Flowable} that emits {@link ResourceBundle} which match a
+     * Get {@link Flowable} that emits {@link ResourceBundle} which match a
      * specific {@link Locale} instance.
-     * @param FILTER A {@link Locale} instance.
-     * @return A {@link Flowable} instance.
+     * @param FILTER {@link Locale} instance.
+     * @return {@link Flowable} instance.
      * @see #bundles()
      */
     @NotNull
@@ -86,11 +86,11 @@ public class Localizer implements LocalizerType {
     //region Simple localization
     /**
      * Localize a text with the specified {@link #BUNDLES}.
-     * We can also specify a {@link Locale} to filter out unnecessary
+     * We can also specify {@link Locale} to filter out unnecessary
      * {@link ResourceBundle}.
      * @param TEXT The {@link String} to be localized.
-     * @param locale A {@link Locale} instance.
-     * @return A {@link Flowable} instance.
+     * @param locale {@link Locale} instance.
+     * @return {@link Flowable} instance.
      * @see LocalizerType#rxLocalize(String, Locale)
      * @see #rxResources(Locale)
      * @see #rxGetString(ResourceBundle, String)
@@ -121,9 +121,9 @@ public class Localizer implements LocalizerType {
     }
 
     /**
-     * Localize a {@link String} with a default {@link Locale}.
-     * @param text A {@link String} value to be localized.
-     * @return A {@link Flowable} instance.
+     * Localize {@link String} with a default {@link Locale}.
+     * @param text {@link String} value to be localized.
+     * @return {@link Flowable} instance.
      * @see #rxLocalize(String, Locale)
      */
     @NotNull
@@ -134,8 +134,8 @@ public class Localizer implements LocalizerType {
     /**
      * Same as above, but blocks.
      * @param text The {@link String} to be localized.
-     * @param locale A {@link Locale} instance.
-     * @return A {@link String} value.
+     * @param locale {@link Locale} instance.
+     * @return {@link String} value.
      * @see #rxLocalize(String, Locale)
      * @see StringUtil#isNotNullOrEmpty(String)
      */
@@ -147,8 +147,8 @@ public class Localizer implements LocalizerType {
 
     /**
      * Same as above, but uses a default {@link Locale}.
-     * @param text A {@link String} value to be localized.
-     * @return A {@link String} value.
+     * @param text {@link String} value to be localized.
+     * @return {@link String} value.
      * @see #localize(String, Locale)
      */
     @NotNull
@@ -158,10 +158,10 @@ public class Localizer implements LocalizerType {
 
     /**
      * Acquire a localized text reactively. Return an empty {@link Flowable}
-     * if an {@link Exception} is thrown.
-     * @param bundle A {@link ResourceBundle} instance.
-     * @param text A {@link String} value to be localized.
-     * @return A {@link Flowable} instance.
+     * if {@link Exception} is thrown.
+     * @param bundle {@link ResourceBundle} instance.
+     * @param text {@link String} value to be localized.
+     * @return {@link Flowable} instance.
      * @see #getString(MessageFormat, Object[])
      * @see ObjectUtil#nonNull(Object...)
      */
@@ -178,10 +178,10 @@ public class Localizer implements LocalizerType {
     }
 
     /**
-     * Acquire a localized text from a {@link ResourceBundle} instance.
-     * @param bundle A {@link ResourceBundle} instance.
-     * @param text A {@link String} value to be localized.
-     * @return A {@link String} value.
+     * Acquire a localized text from {@link ResourceBundle} instance.
+     * @param bundle {@link ResourceBundle} instance.
+     * @param text {@link String} value to be localized.
+     * @return {@link String} value.
      * @see ResourceBundle#getString(String)
      * @throws MissingResourceException This is thrown if
      * {@link ResourceBundle#getString(String)} fails.
@@ -195,12 +195,12 @@ public class Localizer implements LocalizerType {
 
     //region Complex localization
     /**
-     * Localize reactively with a {@link LCFormat} and a
+     * Localize reactively with {@link LCFormat} and a
      * {@link Locale}. This method involves {@link MessageFormat} and works
      * best for format-based localization.
-     * @param FORMAT A {@link LCFormat} instance.
-     * @param LOCALE A {@link Locale} instance.
-     * @return A {@link Flowable} instance.
+     * @param FORMAT {@link LCFormat} instance.
+     * @param LOCALE {@link Locale} instance.
+     * @return {@link Flowable} instance.
      * @see #rxGetString(ResourceBundle, String)
      * @see StringUtil#isNotNullOrEmpty(String)
      * @see #rxLocalize(LCFormat, Locale)
@@ -229,8 +229,8 @@ public class Localizer implements LocalizerType {
 
     /**
      * Same as above, but uses a default {@link Locale} instance.
-     * @param format A {@link LCFormat} instance.
-     * @return A {@link Flowable} instance.
+     * @param format {@link LCFormat} instance.
+     * @return {@link Flowable} instance.
      * @see #rxLocalize(LCFormat, Locale)
      */
     @NotNull
@@ -239,10 +239,10 @@ public class Localizer implements LocalizerType {
     }
 
     /**
-     * Localize a {@link String} using a {@link LCFormat} instance.
-     * @param format A {@link LCFormat} instance.
-     * @param locale A {@link Locale} instance.
-     * @return A {@link String} value.
+     * Localize {@link String} using {@link LCFormat} instance.
+     * @param format {@link LCFormat} instance.
+     * @param locale {@link Locale} instance.
+     * @return {@link String} value.
      * @see #rxLocalize(LCFormat, Locale)
      */
     @NotNull
@@ -254,8 +254,8 @@ public class Localizer implements LocalizerType {
 
     /**
      * Same as above, but uses a default {@link Locale}.
-     * @param format A {@link LCFormat} instance.
-     * @return A {@link String} value.
+     * @param format {@link LCFormat} instance.
+     * @return {@link String} value.
      * @see #localize(LCFormat, Locale)
      */
     @NotNull
@@ -264,10 +264,10 @@ public class Localizer implements LocalizerType {
     }
 
     /**
-     * Get a localized {@link String} using a {@link LCFormat}.
-     * @param BUNDLE A {@link ResourceBundle} instance.
-     * @param FORMAT A {@link LCFormat} instance.
-     * @return A {@link Flowable} instance.
+     * Get a localized {@link String} using {@link LCFormat}.
+     * @param BUNDLE {@link ResourceBundle} instance.
+     * @param FORMAT {@link LCFormat} instance.
+     * @return {@link Flowable} instance.
      * @see ResourceBundle#getString(String)
      * @see MessageFormat#setLocale(Locale)
      * @see MessageFormat#applyPattern(String)
@@ -307,9 +307,9 @@ public class Localizer implements LocalizerType {
     /**
      * Get the template pattern to be used with
      * {@link MessageFormat#applyPattern(String)}.
-     * @param bundle A {@link ResourceBundle} instance.
-     * @param pattern A {@link String} value.
-     * @return A {@link Flowable} instance.
+     * @param bundle {@link ResourceBundle} instance.
+     * @param pattern {@link String} value.
+     * @return {@link Flowable} instance.
      * @see MessageFormat#applyPattern(String)
      * @see #rxGetString(ResourceBundle, String)
      */
@@ -322,9 +322,9 @@ public class Localizer implements LocalizerType {
     /**
      * Get a localized {@link String} using an Array of {@link Object}
      * arguments.
-     * @param format A {@link LCFormat} instance.
+     * @param format {@link LCFormat} instance.
      * @param args A Array of {@link Object}.
-     * @return A {@link Flowable} instance.
+     * @return {@link Flowable} instance.
      * @see #getString(MessageFormat, Object[])
      */
     @NotNull
@@ -342,9 +342,9 @@ public class Localizer implements LocalizerType {
     /**
      * Get a localized {@link String} using an Array of {@link Object}
      * arguments.
-     * @param format A {@link LCFormat} instance.
+     * @param format {@link LCFormat} instance.
      * @param args A Array of {@link Object}.
-     * @return A {@link String} value.
+     * @return {@link String} value.
      * @throws MissingResourceException This is thrown if
      * {@link MessageFormat#format(Object)} fails.
      */
@@ -355,13 +355,13 @@ public class Localizer implements LocalizerType {
     }
 
     /**
-     * Get the localization arguments from a {@link LCFormat}. We
+     * Get the localization arguments from {@link LCFormat}. We
      * need to individual prepare each {@link Object} argument in case it
-     * is a {@link String} that needs localization, or a nested
+     * is {@link String} that needs localization, or a nested
      * {@link LCFormat}.
-     * @param LOCALE A {@link Locale} instance.
-     * @param format A {@link LCFormat} instance.
-     * @return A {@link Flowable} instance.
+     * @param LOCALE {@link Locale} instance.
+     * @param format {@link LCFormat} instance.
+     * @return {@link Flowable} instance.
      * @see #rxPrepareArgument(Locale, Object)
      * @see CollectionUtil#toArray(Collection)
      */
@@ -390,9 +390,9 @@ public class Localizer implements LocalizerType {
      * Individually prepare each {@link Object} argument to take care of
      * {@link String} values or {@link LCFormat} instances that
      * need to be localized as well.
-     * @param locale A {@link Locale} instance.
-     * @param argument An {@link Object} instance.
-     * @return A {@link Flowable} instance.
+     * @param locale {@link Locale} instance.
+     * @param argument {@link Object} instance.
+     * @return {@link Flowable} instance.
      * @see #rxLocalize(LCFormat, Locale)
      * @see #rxLocalize(String, Locale)
      */
@@ -421,7 +421,7 @@ public class Localizer implements LocalizerType {
         }
 
         /**
-         * Add a {@link ResourceBundle}.
+         * Add {@link ResourceBundle}.
          * @param name The name of the {@link ResourceBundle}.
          * @param locale The {@link Locale} of the {@link ResourceBundle}.
          * @return The current {@link Builder} instance.

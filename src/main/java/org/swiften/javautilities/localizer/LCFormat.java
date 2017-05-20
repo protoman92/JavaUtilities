@@ -14,8 +14,8 @@ import java.util.*;
  */
 public class LCFormat {
     /**
-     * Get a {@link Builder} instance.
-     * @return A {@link Builder} instance.
+     * Get {@link Builder} instance.
+     * @return {@link Builder} instance.
      */
     @NotNull
     public static Builder builder() {
@@ -24,7 +24,7 @@ public class LCFormat {
 
     /**
      * Return an empty {@link LCFormat}.
-     * @return A {@link LCFormat} instance.
+     * @return {@link LCFormat} instance.
      */
     @NotNull
     public static LCFormat empty() {
@@ -42,7 +42,7 @@ public class LCFormat {
     @NotNull String pattern;
 
     /**
-     * A {@link List} of {@link Object} that will be used as arguments
+     * {@link List} of {@link Object} that will be used as arguments
      * by {@link java.text.MessageFormat#format(Object)}
      * @see java.text.MessageFormat#format(Object)
      */
@@ -64,7 +64,7 @@ public class LCFormat {
     //region Getters
     /**
      * Get {@link #pattern}.
-     * @return A {@link String} value.
+     * @return {@link String} value.
      * @see #pattern
      */
     @NotNull
@@ -74,7 +74,7 @@ public class LCFormat {
 
     /**
      * Get {@link #ARGUMENTS} as an Array.
-     * @return An {@link Object} Array.
+     * @return {@link Object} Array.
      * @see #ARGUMENTS
      */
     @NotNull
@@ -97,7 +97,7 @@ public class LCFormat {
 
         /**
          * Set the {@link #pattern} value.
-         * @param pattern A {@link String} value.
+         * @param pattern {@link String} value.
          * @return The current {@link Builder} instance.
          */
         @NotNull
@@ -107,10 +107,10 @@ public class LCFormat {
         }
 
         /**
-         * Add an {@link Object} argument to {@link #ARGUMENTS}. Note that
-         * if this argument is a {@link String} or another
+         * Add {@link Object} argument to {@link #ARGUMENTS}. Note that
+         * if this argument is {@link String} or another
          * {@link LCFormat}, it will also be localized.
-         * @param object An {@link Object} instance.
+         * @param object {@link Object} instance.
          * @return The current {@link Builder} instance.
          * @see Collection#add(Object)
          */
@@ -121,8 +121,8 @@ public class LCFormat {
         }
 
         /**
-         * Add a {@link Collection} of {@link Object} to {@link #ARGUMENTS}.
-         * @param args An {@link Collection} of {@link Object}.
+         * Add {@link Collection} of {@link Object} to {@link #ARGUMENTS}.
+         * @param args {@link Collection} of {@link Object}.
          * @return The current {@link Builder} instance.
          * @see Collection#addAll(Collection)
          */

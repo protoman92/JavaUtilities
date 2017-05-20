@@ -20,10 +20,10 @@ import java.util.concurrent.Callable;
  */
 public final class RxUtil {
     /**
-     * Apply a {@link FlowableTransformer} to an existing {@link Flowable}.
+     * Apply {@link FlowableTransformer} to an existing {@link Flowable}.
      * Applicable to {@link Flowable#compose(FlowableTransformer)}.
      * @param <T> Generics parameter.
-     * @return A {@link FlowableTransformer} instance.
+     * @return {@link FlowableTransformer} instance.
      * @see Flowable#compose(FlowableTransformer)
      */
     @NotNull
@@ -39,13 +39,13 @@ public final class RxUtil {
     }
 
     /**
-     * Create a {@link Flowable} from a {@link Collection} of {@link T}. This
+     * Create {@link Flowable} from {@link Collection} of {@link T}. This
      * {@link Flowable} emits {@link Index}, allowing us to access the original
      * {@link T} object, as well as its index in the {@link Collection}.
      * @param collection The {@link Collection} from which {@link Flowable}
      *                   will be constructed.
      * @param <T> Generics parameter.
-     * @return A {@link Flowable} instance.
+     * @return {@link Flowable} instance.
      * @see Flowable#fromIterable(Iterable)
      * @see Flowable#range(int, int)
      * @see Flowable#zip(Publisher, Publisher, BiFunction)
@@ -68,12 +68,12 @@ public final class RxUtil {
     }
 
     /**
-     * Create a {@link Flowable} from a varargs of {@link T}. This
+     * Create {@link Flowable} from a varargs of {@link T}. This
      * {@link Flowable} emits {@link Index}, allowing use to access the
      * original {@link T} object, as well as its index in the varargs.
      * @param objects A varargs of {@link T}.
      * @param <T> Generics parameter.
-     * @return A {@link Flowable} instance.
+     * @return {@link Flowable} instance.
      * @see #from(Collection)
      */
     @NotNull
@@ -83,9 +83,9 @@ public final class RxUtil {
 
     /**
      * Produce an error {@link Flowable} with an error message.
-     * @param error A {@link String} value.
+     * @param error {@link String} value.
      * @param <T> Generics parameter.
-     * @return A {@link Flowable} instance.
+     * @return {@link Flowable} instance.
      * @see Flowable#error(Throwable)
      * @see #error()
      */
@@ -100,10 +100,10 @@ public final class RxUtil {
 
     /**
      * Produce an error with a formatted {@link String} message.
-     * @param format A {@link String} value.
+     * @param format {@link String} value.
      * @param args A varargs of {@link Object}.
      * @param <T> Generics paramter.
-     * @return A {@link Flowable} instance.
+     * @return {@link Flowable} instance.
      * @see #error(String)
      */
     @NotNull
@@ -115,7 +115,7 @@ public final class RxUtil {
     /**
      * Produce an error {@link Flowable} with a blank message.
      * @param <T> Generics parameter.
-     * @return A {@link Flowable} instance.
+     * @return {@link Flowable} instance.
      * @see #error(String)
      */
     @NotNull

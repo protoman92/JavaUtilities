@@ -92,8 +92,8 @@ public final class MockLocalizerTest implements LocalizeErrorType {
      * Get the number of {@link ResourceBundle} that has a particular
      * {@link Locale}. If no {@link Locale} is provided, return the number
      * of items in {@link #BUNDLES}.
-     * @param locale A {@link Locale} instance.
-     * @return A {@link Integer} value.
+     * @param locale {@link Locale} instance.
+     * @return {@link Integer} value.
      * @see ResourceBundle#getLocale()
      */
     private int bundleCount(@Nullable Locale locale) {

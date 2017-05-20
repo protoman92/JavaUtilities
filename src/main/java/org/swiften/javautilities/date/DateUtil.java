@@ -23,15 +23,15 @@ public final class DateUtil {
     );
 
     /**
-     * Get a {@link Calendar} based on supplied properties.
-     * @param year An {@link Integer} value.
-     * @param month An {@link Integer} value.
-     * @param day An {@link Integer} value.
-     * @param hour An {@link Integer} value.
-     * @param minute An {@link Integer} value.
-     * @param second An {@link Integer} value.
-     * @param millisecond An {@link Integer} value.
-     * @return A {@link Calendar} instance.
+     * Get {@link Calendar} based on supplied properties.
+     * @param year {@link Integer} value.
+     * @param month {@link Integer} value.
+     * @param day {@link Integer} value.
+     * @param hour {@link Integer} value.
+     * @param minute {@link Integer} value.
+     * @param second {@link Integer} value.
+     * @param millisecond {@link Integer} value.
+     * @return {@link Calendar} instance.
      */
     @NotNull
     public static Calendar getCalendar(int year,
@@ -48,15 +48,15 @@ public final class DateUtil {
     }
 
     /**
-     * Get a {@link Date} based on supplied properties.
-     * @param year An {@link Integer} value.
-     * @param month An {@link Integer} value.
-     * @param day An {@link Integer} value.
-     * @param hour An {@link Integer} value.
-     * @param minute An {@link Integer} value.
-     * @param second An {@link Integer} value.
-     * @param millisecond An {@link Integer} value.
-     * @return A {@link Date} instance.
+     * Get {@link Date} based on supplied properties.
+     * @param year {@link Integer} value.
+     * @param month {@link Integer} value.
+     * @param day {@link Integer} value.
+     * @param hour {@link Integer} value.
+     * @param minute {@link Integer} value.
+     * @param second {@link Integer} value.
+     * @param millisecond {@link Integer} value.
+     * @return {@link Date} instance.
      */
     @NotNull
     public static Date getDate(int year,
@@ -78,11 +78,11 @@ public final class DateUtil {
     }
 
     /**
-     * Trim a {@link Date} by setting all properties after a certain
+     * Trim {@link Date} by setting all properties after a certain
      * granularity level to 1.
-     * @param dateToTrim A {@link Date} instance to be trimmed.
+     * @param dateToTrim {@link Date} instance to be trimmed.
      * @param granularity The level of trimming to be applied.
-     * @return A {@link Date} instance. This can be null if the granularity
+     * @return {@link Date} instance. This can be null if the granularity
      * level is not found within {@link #DATE_COMPONENTS_FIELDS}.
      */
     @Nullable
@@ -111,13 +111,13 @@ public final class DateUtil {
     }
 
     /**
-     * Check if a {@link Date} is earlier than, or the same as, another
+     * Check if {@link Date} is earlier than, or the same as, another
      * {@link Date}, based on a granularity level.
-     * @param firstDate A {@link Date} instance.
-     * @param secondDate A {@link Date} instance.
+     * @param firstDate {@link Date} instance.
+     * @param secondDate {@link Date} instance.
      * @param granularity The level of granularity to be applied when
-     *                    comparing. An {@link Integer} value.
-     * @return A {@link Boolean} value.
+     *                    comparing. {@link Integer} value.
+     * @return {@link Boolean} value.
      * @see #trimDateComponents(Date, int)
      */
     public static boolean notLaterThan(@NotNull Date firstDate,
@@ -129,13 +129,13 @@ public final class DateUtil {
     }
 
     /**
-     * Check if a {@link Date} is earlier than another {@link Date}, based on
+     * Check if {@link Date} is earlier than another {@link Date}, based on
      * a granularity level.
-     * @param firstDate A {@link Date} instance.
-     * @param secondDate A {@link Date} instance.
+     * @param firstDate {@link Date} instance.
+     * @param secondDate {@link Date} instance.
      * @param granularity The level of granularity to be applied when
-     *                    comparing. An {@link Integer} value.
-     * @return A {@link Boolean} value.
+     *                    comparing. {@link Integer} value.
+     * @return {@link Boolean} value.
      * @see #trimDateComponents(Date, int)
      */
     public static boolean earlierThan(@NotNull Date firstDate,
@@ -147,13 +147,13 @@ public final class DateUtil {
     }
 
     /**
-     * Check if a {@link Date} is later than, or the same as, another
+     * Check if {@link Date} is later than, or the same as, another
      * {@link Date}, based on a granularity level.
-     * @param firstDate A {@link Date} instance.
-     * @param secondDate A {@link Date} instance.
+     * @param firstDate {@link Date} instance.
+     * @param secondDate {@link Date} instance.
      * @param granularity The level of granularity to be applied when
-     *                    comparing. An {@link Integer} value.
-     * @return A {@link Boolean} value.
+     *                    comparing. {@link Integer} value.
+     * @return {@link Boolean} value.
      * @see #trimDateComponents(Date, int)
      */
     public static boolean notEarlierThan(@NotNull Date firstDate,
@@ -165,13 +165,13 @@ public final class DateUtil {
     }
 
     /**
-     * Check if a {@link Date} is later than another {@link Date}, based on
+     * Check if {@link Date} is later than another {@link Date}, based on
      * a granularity level.
-     * @param firstDate A {@link Date} instance.
-     * @param secondDate A {@link Date} instance.
+     * @param firstDate {@link Date} instance.
+     * @param secondDate {@link Date} instance.
      * @param granularity The level of granularity to be applied when
-     *                    comparing. An {@link Integer} value.
-     * @return A {@link Boolean} value.
+     *                    comparing. {@link Integer} value.
+     * @return {@link Boolean} value.
      * @see #trimDateComponents(Date, int)
      */
     public static boolean laterThan(@NotNull Date firstDate,
@@ -183,13 +183,13 @@ public final class DateUtil {
     }
 
     /**
-     * Check if a {@link Date} is the same as another {@link Date}, based on
+     * Check if {@link Date} is the same as another {@link Date}, based on
      * a granularity level.
-     * @param firstDate A {@link Date} instance.
-     * @param secondDate A {@link Date} instance.
+     * @param firstDate {@link Date} instance.
+     * @param secondDate {@link Date} instance.
      * @param granularity The level of granularity to be applied when
-     *                    comparing. An {@link Integer} value.
-     * @return A {@link Boolean} value.
+     *                    comparing. {@link Integer} value.
+     * @return {@link Boolean} value.
      * @see #trimDateComponents(Date, int)
      */
     public static boolean sameAs(@NotNull Date firstDate,
@@ -201,11 +201,11 @@ public final class DateUtil {
     }
 
     /**
-     * Check if a {@link Date} is earlier than, or the same as, another
+     * Check if {@link Date} is earlier than, or the same as, another
      * {@link Date}.
-     * @param firstDate A {@link Date} instance.
-     * @param secondDate A {@link Date} instance.
-     * @return A {@link Boolean} value.
+     * @param firstDate {@link Date} instance.
+     * @param secondDate {@link Date} instance.
+     * @return {@link Boolean} value.
      */
     public static boolean notLaterThan(@NotNull Date firstDate,
                                        @NotNull Date secondDate) {
@@ -213,11 +213,11 @@ public final class DateUtil {
     }
 
     /**
-     * Check if a {@link Date} is later than, or the same as, another
+     * Check if {@link Date} is later than, or the same as, another
      * {@link Date}.
-     * @param firstDate A {@link Date} instance.
-     * @param secondDate A {@link Date} instance.
-     * @return A {@link Boolean} value.
+     * @param firstDate {@link Date} instance.
+     * @param secondDate {@link Date} instance.
+     * @return {@link Boolean} value.
      */
     public static boolean notEarlierThan(@NotNull Date firstDate,
                                          @NotNull Date secondDate) {

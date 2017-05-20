@@ -14,7 +14,7 @@ public final class LogUtil {
 
     /**
      * Enable or disable logging.
-     * @param enabled A {@link Boolean} value indicating whether logging is
+     * @param enabled {@link Boolean} value indicating whether logging is
      *                enabled or not.
      */
     public static void toggleLogging(boolean enabled) {
@@ -23,15 +23,15 @@ public final class LogUtil {
 
     /**
      * Check if logging is enabled.
-     * @return A {@link Boolean} value indicating whether logging is enabled.
+     * @return {@link Boolean} value indicating whether logging is enabled.
      */
     public static boolean isLoggingEnabled() {
         return loggingEnabled;
     }
 
     /**
-     * Print new line an {@link Object}.
-     * @param object A {@link Nullable} {@link Object} to be printed.
+     * Print new line {@link Object}.
+     * @param object {@link Nullable} {@link Object} to be printed.
      * @see #isLoggingEnabled()
      */
     public static void println(@Nullable Object object) {
@@ -41,8 +41,8 @@ public final class LogUtil {
     }
 
     /**
-     * Print a {@link Throwable} stack trace.
-     * @param t A {@link Throwable} instance.
+     * Print {@link Throwable} stack trace.
+     * @param t {@link Throwable} instance.
      * @see #isLoggingEnabled()
      */
     public static void println(@NotNull Throwable t) {
@@ -64,8 +64,8 @@ public final class LogUtil {
     }
 
     /**
-     * Print format using a {@link String} format and varargs arguments.
-     * @param format A {@link String} value that represents the print format.
+     * Print format using {@link String} format and varargs arguments.
+     * @param format {@link String} value that represents the print format.
      * @param objects A varargs of {@link Object}.
      * @see #isLoggingEnabled()
      * @see #println(Throwable)
@@ -78,7 +78,7 @@ public final class LogUtil {
 
     /**
      * Print format with a thread id as well.
-     * @param format A {@link String} value that represents the print format.
+     * @param format {@link String} value that represents the print format.
      * @param objects A varargs of {@link Object}.
      * @see #isLoggingEnabled()
      * @see #println(Throwable)

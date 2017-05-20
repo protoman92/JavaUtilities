@@ -16,8 +16,8 @@ public class CollectionUtil {
      * @param <E> {@link T}'s generics.
      * @param <T> Generics that extends {@link Collection}
      * @return A unified {@link T} instance.
-     * @throws Exception Throws an {@link Exception} if the varargs is
-     * empty. We can simply throw a {@link RuntimeException} here.
+     * @throws Exception Throws {@link Exception} if the varargs is
+     * empty. We can simply throw {@link RuntimeException} here.
      */
     public static <E,T extends Collection<E>> T unify(@NotNull T...cls) throws Exception {
         int length = cls.length;
@@ -42,12 +42,12 @@ public class CollectionUtil {
     }
 
     /**
-     * Zip two {@link Collection} and produce a {@link List} of {@link Zipped}.
-     * @param a An {@link A} object.
-     * @param b A {@link B} object.
+     * Zip two {@link Collection} and produce {@link List} of {@link Zipped}.
+     * @param a {@link A} object.
+     * @param b {@link B} object.
      * @param <A> Generics parameter.
      * @param <B> Generics parameter.
-     * @return A {@link Collection} of {@link Zipped}.
+     * @return {@link Collection} of {@link Zipped}.
      */
     @NotNull
     public static <A,B> List<Zipped<A,B>> zip(@NotNull List<A> a, @NotNull List<B> b) {
@@ -66,12 +66,12 @@ public class CollectionUtil {
     }
 
     /**
-     * Produce a {@link List} from a varargs of {@link T}. If there is only
+     * Produce {@link List} from a varargs of {@link T}. If there is only
      * one element in the varargs, use {@link Collections#singletonList(Object)},
      * otherwise use {@link Arrays#asList(Object[])}.
      * @param objects A varargs of {@link T}.
      * @param <T> Generics parameter.
-     * @return A {@link List} of {@link T}.
+     * @return {@link List} of {@link T}.
      * @see Collections#singletonList(Object)
      * @see Arrays#asList(Object[])
      */
@@ -85,9 +85,9 @@ public class CollectionUtil {
     }
 
     /**
-     * Create an {@link Object} Array from a {@link Collection}.
-     * @param collection A {@link Collection} of {@link Object}
-     * @return A {@link Object} Array.
+     * Create {@link Object} Array from {@link Collection}.
+     * @param collection {@link Collection} of {@link Object}
+     * @return {@link Object} Array.
      */
     @NotNull
     public static Object[] toArray(@NotNull Collection<?> collection) {
@@ -101,7 +101,7 @@ public class CollectionUtil {
      * @param from Inclusive starting index.
      * @param to Exclusive ending index.
      * @param <T> Generics parameter.
-     * @return A {@link List} of {@link T}.
+     * @return {@link List} of {@link T}.
      * @see List#subList(int, int)
      * @see Collections#emptyList()
      */
@@ -121,10 +121,10 @@ public class CollectionUtil {
     }
 
     /**
-     * Convert an {@link Iterable} into a {@link List}.
-     * @param iterable An {@link Iterable} instance.
+     * Convert {@link Iterable} into {@link List}.
+     * @param iterable {@link Iterable} instance.
      * @param <T> Generics parameter.
-     * @return A {@link List} of {@link T}.
+     * @return {@link List} of {@link T}.
      */
     @NotNull
     public static <T> List<T> toList(@NotNull Iterable<T> iterable) {
@@ -138,10 +138,10 @@ public class CollectionUtil {
     }
 
     /**
-     * Convert an {@link Iterable} into a {@link Collection}.
-     * @param iterable An {@link Iterable} instance.
+     * Convert {@link Iterable} into {@link Collection}.
+     * @param iterable {@link Iterable} instance.
      * @param <T> Generics parameter.
-     * @return A {@link Collection} of {@link T}.
+     * @return {@link Collection} of {@link T}.
      * @see #toList(Iterable)
      */
     @NotNull

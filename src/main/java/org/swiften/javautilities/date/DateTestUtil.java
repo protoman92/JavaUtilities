@@ -12,7 +12,7 @@ import java.util.Date;
 public final class DateTestUtil {
     /**
      * Produce a random {@link Calendar}.
-     * @return A {@link Calendar} instance.
+     * @return {@link Calendar} instance.
      * @see DateUtil#getCalendar(int, int, int, int, int, int, int)
      */
     @NotNull
@@ -30,7 +30,7 @@ public final class DateTestUtil {
 
     /**
      * Produce a random {@link Date}.
-     * @return A {@link Date} instance.
+     * @return {@link Date} instance.
      * @see #randomCalendar()
      */
     @NotNull
