@@ -61,5 +61,14 @@ public final class BooleanUtil {
         return false;
     }
 
+    /**
+     * Reverse the value of a {@link Boolean}.
+     * @param b A {@link Boolean} value.
+     * @return A {@link Boolean} value.
+     */
+    public static boolean reverse(boolean b) {
+        return !b;
+    }
+
     private BooleanUtil() {}
 }

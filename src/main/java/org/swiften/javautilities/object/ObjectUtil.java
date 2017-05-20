@@ -81,5 +81,15 @@ public final class ObjectUtil {
         return isNull(Arrays.asList(objects));
     }
 
+    /**
+     * Cast an {@link Object} to {@link Object}.
+     * @param object An {@link Object}.
+     * @return An {@link Object}.
+     */
+    @Nullable
+    public static Object toObject(@Nullable Object object) {
+        return object;
+    }
+
     private ObjectUtil() {}
 }

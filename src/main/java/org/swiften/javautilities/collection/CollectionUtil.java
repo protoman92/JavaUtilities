@@ -42,16 +42,16 @@ public class CollectionUtil {
     }
 
     /**
-     * Zip two {@link Collection} and produce a {@link List} of {@link Pair}.
+     * Zip two {@link Collection} and produce a {@link List} of {@link Zipped}.
      * @param a An {@link A} object.
      * @param b A {@link B} object.
      * @param <A> Generics parameter.
      * @param <B> Generics parameter.
-     * @return A {@link Collection} of {@link Pair}.
+     * @return A {@link Collection} of {@link Zipped}.
      */
     @NotNull
-    public static <A,B> List<Pair<A,B>> zip(@NotNull List<A> a, @NotNull List<B> b) {
-        List<Pair<A,B>> zList = new LinkedList<Pair<A,B>>();
+    public static <A,B> List<Zipped<A,B>> zip(@NotNull List<A> a, @NotNull List<B> b) {
+        List<Zipped<A,B>> zList = new LinkedList<Zipped<A,B>>();
         int aLength = a.size();
         int bLength = b.size();
         int zLength = Math.min(aLength, bLength);
@@ -59,7 +59,7 @@ public class CollectionUtil {
         for (int i = 0; i < zLength; i++) {
             A aItem = a.get(i);
             B bItem = b.get(i);
-            zList.add(new Pair<A,B>(aItem, bItem));
+            zList.add(new Zipped<A,B>(aItem, bItem));
         }
 
         return zList;
@@ -118,6 +118,35 @@ public class CollectionUtil {
         } else {
             return original.subList(0, size);
         }
+    }
+
+    /**
+     * Convert an {@link Iterable} into a {@link List}.
+     * @param iterable An {@link Iterable} instance.
+     * @param <T> Generics parameter.
+     * @return A {@link List} of {@link T}.
+     */
+    @NotNull
+    public static <T> List<T> toList(@NotNull Iterable<T> iterable) {
+        List<T> list = new LinkedList<T>();
+
+        for (T t : iterable) {
+            list.add(t);
+        }
+
+        return list;
+    }
+
+    /**
+     * Convert an {@link Iterable} into a {@link Collection}.
+     * @param iterable An {@link Iterable} instance.
+     * @param <T> Generics parameter.
+     * @return A {@link Collection} of {@link T}.
+     * @see #toList(Iterable)
+     */
+    @NotNull
+    public static <T> Collection<T> toCollection(@NotNull Iterable<T> iterable) {
+        return toList(iterable);
     }
 
     private CollectionUtil() {}

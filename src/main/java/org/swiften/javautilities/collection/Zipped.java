@@ -13,11 +13,11 @@ import java.util.Collection;
  * @param <A> Generics parameter.
  * @param <B> Generics parameter.
  */
-public final class Pair<A,B> {
+public final class Zipped<A,B> {
     @Nullable public final A A;
     @Nullable public final B B;
 
-    public Pair(@Nullable A a, @Nullable B b) {
+    public Zipped(@Nullable A a, @Nullable B b) {
         A = a;
         B = b;
     }
@@ -29,8 +29,8 @@ public final class Pair<A,B> {
 
     @Override
     public boolean equals(@Nullable Object o) {
-        if (o instanceof Pair) {
-            Pair z = (Pair)o;
+        if (o instanceof Zipped) {
+            Zipped z = (Zipped)o;
 
             if (A != null && B != null) {
                 return A.equals(z.A) && B.equals(z.B);
