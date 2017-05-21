@@ -77,7 +77,9 @@ public class CollectionUtil {
      */
     @NotNull
     public static <T> List<T> asList(@NotNull T...objects) {
-        if (objects.length == 1) {
+        if (objects.length == 0) {
+            return Collections.emptyList();
+        } else if (objects.length == 1) {
             return Collections.singletonList(objects[0]);
         } else {
             return Arrays.asList(objects);
