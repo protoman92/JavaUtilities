@@ -42,16 +42,16 @@ public class CollectionUtil {
     }
 
     /**
-     * Zip two {@link Collection} and produce {@link List} of {@link Zipped}.
+     * Zip two {@link Collection} and produce {@link List} of {@link Zip}.
      * @param a {@link A} object.
      * @param b {@link B} object.
      * @param <A> Generics parameter.
      * @param <B> Generics parameter.
-     * @return {@link Collection} of {@link Zipped}.
+     * @return {@link Collection} of {@link Zip}.
      */
     @NotNull
-    public static <A,B> List<Zipped<A,B>> zip(@NotNull List<A> a, @NotNull List<B> b) {
-        List<Zipped<A,B>> zList = new LinkedList<Zipped<A,B>>();
+    public static <A,B> List<Zip<A,B>> zip(@NotNull List<A> a, @NotNull List<B> b) {
+        List<Zip<A,B>> zList = new LinkedList<Zip<A,B>>();
         int aLength = a.size();
         int bLength = b.size();
         int zLength = Math.min(aLength, bLength);
@@ -59,7 +59,7 @@ public class CollectionUtil {
         for (int i = 0; i < zLength; i++) {
             A aItem = a.get(i);
             B bItem = b.get(i);
-            zList.add(new Zipped<A,B>(aItem, bItem));
+            zList.add(new Zip<A,B>(aItem, bItem));
         }
 
         return zList;

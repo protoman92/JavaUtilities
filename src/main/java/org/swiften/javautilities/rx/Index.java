@@ -4,7 +4,7 @@ package org.swiften.javautilities.rx;
  * Created by haipham on 5/6/17.
  */
 
-import org.swiften.javautilities.collection.Zipped;
+import org.swiften.javautilities.collection.Zip;
 import io.reactivex.Flowable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
@@ -44,13 +44,13 @@ public final class Index<T> {
 
     /**
      * Produce a
-     * {@link Zipped}
+     * {@link Zip}
      * from {@link #INDEX} and {@link #OBJECT}.
-     * @return {@link Zipped}
+     * @return {@link Zip}
      * instance.
      */
     @NotNull
-    public Zipped<Integer,T> toZipped() {
-        return new Zipped<Integer,T>(INDEX, OBJECT);
+    public Zip<Integer,T> toZipped() {
+        return new Zip<Integer,T>(INDEX, OBJECT);
     }
 }

@@ -7,7 +7,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import org.jetbrains.annotations.NotNull;
-import org.swiften.javautilities.collection.Zipped;
+import org.swiften.javautilities.collection.Zip;
 import io.reactivex.subscribers.TestSubscriber;
 import org.swiften.javautilities.log.LogUtil;
 import org.testng.Assert;
@@ -38,8 +38,8 @@ public final class RxTest {
 
         for (int i = 0, length = collection.size(); i < length; i++) {
             Index index = (Index)nextEvents.get(i);
-            Zipped zipped = new Zipped(i, collection.get(i));
-            Assert.assertEquals(index.toZipped(), zipped);
+            Zip zip = new Zip(i, collection.get(i));
+            Assert.assertEquals(index.toZipped(), zip);
         }
     }
 
