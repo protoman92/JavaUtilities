@@ -1,5 +1,7 @@
 package org.swiften.javautilities.number;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Created by haipham on 4/9/17.
  */
@@ -21,6 +23,16 @@ public final class NumberUtil {
      */
     public static boolean isOdd(int number) {
         return !isEven(number);
+    }
+
+    /**
+     * Inverse a number.
+     * @param number {@link Number} instance.
+     * @return {@link Double} value.
+     * @see Number#doubleValue()
+     */
+    public static double inverse(@NotNull Number number) {
+        return 1 / (number.doubleValue());
     }
 
     private NumberUtil() {}
