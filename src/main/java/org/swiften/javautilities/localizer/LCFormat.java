@@ -10,7 +10,7 @@ import java.util.*;
 
 /**
  * Use this class to implement localization with {@link String} formats, to
- * be used with {@link LocalizerType#rxLocalize(LCFormat, Locale)}.
+ * be used with {@link LocalizerType#rxa_localize(LCFormat, Locale)}.
  */
 public class LCFormat {
     /**

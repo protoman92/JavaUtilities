@@ -8,7 +8,27 @@ import java.util.*;
 /**
  * Created by haipham on 3/20/17.
  */
-public class CollectionUtil {
+public final class CollectionUtil {
+    /**
+     * Check if a {@link Collection} is empty.
+     * @param collection {@link Collection} instance.
+     * @return {@link Boolean} value.
+     * @see Collection#isEmpty()
+     */
+    public static boolean isEmpty(@NotNull Collection<?> collection) {
+        return collection.isEmpty();
+    }
+
+    /**
+     * Check if a {@link Collection} is not empty.
+     * @param collection {@link Collection} instance.
+     * @return {@link Boolean} value.
+     * @see #isEmpty(Collection)
+     */
+    public static boolean isNotEmpty(@NotNull Collection<?> collection) {
+        return !isEmpty(collection);
+    }
+
     /**
      * Concatenate all {@link T} with generics {@link E} into one {@link T}.
      * The first {@link T} in the varargs will be appended to and changed.

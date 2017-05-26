@@ -22,7 +22,13 @@ public final class BooleanUtil {
      * @return {@link Boolean} value.
      */
     public static boolean isTrue(@NotNull Object object) {
-        return object instanceof Boolean && Boolean.class.cast(object);
+        if (object instanceof Boolean) {
+            return Boolean.class.cast(object);
+        } else if (object instanceof String) {
+            return Boolean.valueOf((String)object);
+        } else {
+            return false;
+        }
     }
 
     /**

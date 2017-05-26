@@ -17,8 +17,10 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public final class RxTest {
     @Test
     @SuppressWarnings("unchecked")
-    public void test_fromCollectionWithIndex_shouldWork() {
+    public void test_fromCollectionWithIndex() {
         // Setup
         TestSubscriber observer = CustomTestSubscriber.create();
         List<Integer> collection = Arrays.asList(1, 2, 3, 4);
@@ -49,7 +51,7 @@ public final class RxTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void test_flatMap_switchMap() {
+    public void test_flatMapAndSwitchMap() {
         // Setup
         PublishSubject<Integer> publishSubject = PublishSubject.<Integer>create();
         TestSubscriber<Integer> subscriber = CustomTestSubscriber.<Integer>create();
@@ -92,21 +94,6 @@ public final class RxTest {
         final Random RAND = new Random();
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
-        class Processor {
-            @NotNull
-            Flowable<Integer> process(final int NUMBER) {
-                return Flowable
-                    .timer(RAND.nextInt(10), TimeUnit.MILLISECONDS)
-                    .map(new Function<Long,Integer>() {
-                        @NotNull
-                        @Override
-                        public Integer apply(Long aLong) throws Exception {
-                            return NUMBER;
-                        }
-                    });
-            }
-        }
-
         // When
         Flowable.range(1, 100)
             .subscribeOn(Schedulers.io())
@@ -114,14 +101,129 @@ public final class RxTest {
             .concatMap(new Function<Integer,Publisher<Integer>>() {
                 @NotNull
                 @Override
-                public Publisher<Integer> apply(@NotNull Integer integer) throws Exception {
-                    return new Processor().process(integer);
+                public Publisher<Integer> apply(@NotNull final Integer I) throws Exception {
+                    return Flowable
+                        .timer(RAND.nextInt(10), TimeUnit.MILLISECONDS)
+                        .map(new Function<Long,Integer>() {
+                            @NotNull
+                            @Override
+                            public Integer apply(@NotNull Long l) throws Exception {
+                                return I;
+                            }
+                        });
+                }
+            })
+            .flatMap(new Function<Integer, Publisher<Integer>>() {
+                @NotNull
+                @Override
+                public Publisher<Integer> apply(@NotNull Integer i) throws Exception {
+                    return Flowable.just(i);
                 }
             })
             .doOnNext(new Consumer<Integer>() {
                 @Override
-                public void accept(@NotNull Integer integer) throws Exception {
-                    LogUtil.printfThread("Number %d", integer);
+                public void accept(@NotNull Integer i) throws Exception {
+                    LogUtil.printfThread("Number %d", i);
+                }
+            })
+            .subscribe(subscriber);
+
+        subscriber.awaitTerminalEvent();
+
+        // Then
+        LogUtil.println(RxTestUtil.nextEvents(subscriber));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void test_serializedSubject() {
+        // Setup
+        final PublishSubject SUBJECT = PublishSubject.create();
+        final Random RAND = new Random();
+        List<Thread> threads = new LinkedList<Thread>();
+        TestSubscriber subscriber = CustomTestSubscriber.create();
+
+        // When
+        SUBJECT.toFlowable(BackpressureStrategy.ERROR)
+            .serialize()
+            .subscribe(subscriber);
+
+        for (int i = 0; i < 10000; i++) {
+            final int INDEX = i;
+
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        long duration = RAND.nextInt(200);
+                        TimeUnit.MILLISECONDS.sleep(duration);
+                        SUBJECT.onNext(INDEX);
+                    } catch (InterruptedException e) {
+                        LogUtil.println(e);
+                    }
+                }
+            });
+
+            threads.add(thread);
+        }
+
+        for (Thread thread : threads) {
+            thread.start();
+        }
+
+        try {
+            TimeUnit.SECONDS.sleep(3);
+            SUBJECT.onComplete();
+            subscriber.awaitTerminalEvent();
+
+            // Then
+            LogUtil.println(RxTestUtil.nextEvents(subscriber));
+        } catch (InterruptedException e) {
+            LogUtil.println(e);
+        }
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void test_flatMapComplex() {
+        // Setup
+        TestSubscriber subscriber = CustomTestSubscriber.create();
+
+        // When
+        Flowable.range(0, 10)
+            .flatMap(new Function<Integer,Publisher<?>>() {
+                @Override
+                public Publisher<?> apply(@NotNull Integer i) throws Exception {
+                    return Flowable.just(i * 2);
+                }
+            })
+            .flatMap(
+                new Function<Object, Publisher<?>>() {
+                    @NotNull
+                    @Override
+                    public Publisher<?> apply(@NotNull Object o) throws Exception {
+                        return Flowable.just(o);
+                    }
+                },
+                new Function<Throwable, Publisher<?>>() {
+                    @NotNull
+                    @Override
+                    public Publisher<?> apply(@NotNull Throwable t) throws Exception {
+                        return Flowable.just(1);
+                    }
+                },
+                new Callable<Publisher<?>>() {
+                    @NotNull
+                    @Override
+                    public Publisher<?> call() throws Exception {
+                        return Flowable.just(2);
+                    }
+                }
+            )
+            .doOnNext(new Consumer<Object>() {
+                @Override
+                public void accept(Object o) throws Exception {
+                    LogUtil.println(o);
                 }
             })
             .subscribe(subscriber);

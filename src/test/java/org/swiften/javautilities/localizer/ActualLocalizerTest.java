@@ -87,7 +87,7 @@ public final class ActualLocalizerTest implements LocalizeErrorType {
             .flatMap(new Function<String,Publisher<String>>() {
                 @Override
                 public Publisher<String> apply(@NonNull String s) throws Exception {
-                    return LOCALIZER.rxLocalize(s, LOCALE);
+                    return LOCALIZER.rxa_localize(s, LOCALE);
                 }
             })
             .doOnNext(new Consumer<String>() {
@@ -126,7 +126,7 @@ public final class ActualLocalizerTest implements LocalizeErrorType {
                 public Publisher<String> apply(
                     @NonNull LCFormat format
                 ) throws Exception {
-                    return LOCALIZER.rxLocalize(format, LOCALE);
+                    return LOCALIZER.rxa_localize(format, LOCALE);
                 }
             })
             .doOnNext(new Consumer<String>() {

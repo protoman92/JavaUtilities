@@ -21,23 +21,22 @@ public interface LocalizerType extends LocalizeErrorType {
      * @return {@link Flowable} instance.
      */
     @NotNull
-    Flowable<String> rxLocalize(@NotNull String text,
-                                @Nullable Locale locale);
+    Flowable<String> rxa_localize(@NotNull String text, @Nullable Locale locale);
 
     /**
      * Localize {@link String} reactively. Uses a default {@link Locale}.
      * @param text {@link String} value to be localized.
      * @return {@link Flowable} instance.
-     * @see #rxLocalize(String, Locale)
+     * @see #rxa_localize(String, Locale)
      */
-    Flowable<String> rxLocalize(@NotNull String text);
+    Flowable<String> rxa_localize(@NotNull String text);
 
     /**
      * Localize {@link String}.
      * @param text {@link String} value to be localized.
      * @param locale {@link Locale} instance.
      * @return {@link String} value.
-     * @see #rxLocalize(String, Locale)
+     * @see #rxa_localize(String, Locale)
      */
     @NotNull
     String localize(@NotNull String text, @Nullable Locale locale);
@@ -57,17 +56,16 @@ public interface LocalizerType extends LocalizeErrorType {
      * @return {@link Flowable} instance.
      */
     @NotNull
-    Flowable<String> rxLocalize(@NotNull LCFormat format,
-                                @Nullable Locale locale);
+    Flowable<String> rxa_localize(@NotNull LCFormat format, @Nullable Locale locale);
 
     /**
      * Localize with format without using {@link Locale}.
      * @param format {@link LCFormat} instance.
      * @return {@link Flowable} instance.
-     * @see #rxLocalize(LCFormat, Locale)
+     * @see #rxa_localize(LCFormat, Locale)
      */
     @NotNull
-    Flowable<String> rxLocalize(@NotNull LCFormat format);
+    Flowable<String> rxa_localize(@NotNull LCFormat format);
 
     /**
      * Locale {@link String} with format, using {@link LCFormat}
@@ -75,7 +73,7 @@ public interface LocalizerType extends LocalizeErrorType {
      * @param format {@link LCFormat} instance.
      * @param locale {@link Locale} instance.
      * @return {@link String} value.
-     * @see #rxLocalize(LCFormat, Locale)
+     * @see #rxa_localize(LCFormat, Locale)
      */
     @NotNull
     String localize(@NotNull LCFormat format, @Nullable Locale locale);

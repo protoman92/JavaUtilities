@@ -67,18 +67,18 @@ public class Localizer implements LocalizerType {
     /**
      * Get {@link Flowable} that emits {@link ResourceBundle} which match a
      * specific {@link Locale} instance.
-     * @param FILTER {@link Locale} instance.
+     * @param LC {@link Locale} instance.
      * @return {@link Flowable} instance.
      * @see #bundles()
      */
     @NotNull
-    Flowable<ResourceBundle> rxResources(@Nullable final Locale FILTER) {
+    Flowable<ResourceBundle> rx_resources(@Nullable final Locale LC) {
         return Flowable.fromIterable(bundles())
             .filter(new Predicate<ResourceBundle>() {
                 @Override
                 public boolean test(@NonNull ResourceBundle bundle) throws Exception {
-                    Locale locale = bundle.getLocale();
-                    return ObjectUtil.isNull(FILTER, locale) || locale.equals(FILTER);
+                    Locale lc = bundle.getLocale();
+                    return ObjectUtil.isNull(LC, lc) || lc.equals(LC);
                 }
             });
     }
@@ -91,21 +91,19 @@ public class Localizer implements LocalizerType {
      * @param TEXT The {@link String} to be localized.
      * @param locale {@link Locale} instance.
      * @return {@link Flowable} instance.
-     * @see LocalizerType#rxLocalize(String, Locale)
-     * @see #rxResources(Locale)
+     * @see LocalizerType#rxa_localize(String, Locale)
+     * @see #rx_resources(Locale)
      * @see #rxGetString(ResourceBundle, String)
      * @see StringUtil#isNotNullOrEmpty(String)
      */
     @NotNull
-    public Flowable<String> rxLocalize(@NotNull final String TEXT,
-                                       @Nullable Locale locale) {
-        return rxResources(locale)
+    public Flowable<String> rxa_localize(@NotNull final String TEXT,
+                                         @Nullable Locale locale) {
+        return rx_resources(locale)
             .flatMap(new Function<ResourceBundle,Publisher<String>>() {
                 @NonNull
                 @Override
-                public Publisher<String> apply(@NotNull ResourceBundle bundle)
-                    throws Exception
-                {
+                public Publisher<String> apply(@NotNull ResourceBundle bundle) throws Exception {
                     return rxGetString(bundle, TEXT);
                 }
             })
@@ -124,11 +122,11 @@ public class Localizer implements LocalizerType {
      * Localize {@link String} with a default {@link Locale}.
      * @param text {@link String} value to be localized.
      * @return {@link Flowable} instance.
-     * @see #rxLocalize(String, Locale)
+     * @see #rxa_localize(String, Locale)
      */
     @NotNull
-    public Flowable<String> rxLocalize(@NotNull String text) {
-        return rxLocalize(text, null);
+    public Flowable<String> rxa_localize(@NotNull String text) {
+        return rxa_localize(text, null);
     }
 
     /**
@@ -136,12 +134,12 @@ public class Localizer implements LocalizerType {
      * @param text The {@link String} to be localized.
      * @param locale {@link Locale} instance.
      * @return {@link String} value.
-     * @see #rxLocalize(String, Locale)
+     * @see #rxa_localize(String, Locale)
      * @see StringUtil#isNotNullOrEmpty(String)
      */
     @NotNull
     public String localize(@NotNull String text, @Nullable Locale locale) {
-        String result = rxLocalize(text, locale).blockingFirst();
+        String result = rxa_localize(text, locale).blockingFirst();
         return StringUtil.isNotNullOrEmpty(result) ? result : text;
     }
 
@@ -203,12 +201,12 @@ public class Localizer implements LocalizerType {
      * @return {@link Flowable} instance.
      * @see #rxGetString(ResourceBundle, String)
      * @see StringUtil#isNotNullOrEmpty(String)
-     * @see #rxLocalize(LCFormat, Locale)
+     * @see #rxa_localize(LCFormat, Locale)
      */
     @NotNull
-    public Flowable<String> rxLocalize(@NotNull final LCFormat FORMAT,
-                                       @Nullable final Locale LOCALE) {
-        return rxResources(LOCALE)
+    public Flowable<String> rxa_localize(@NotNull final LCFormat FORMAT,
+                                         @Nullable final Locale LOCALE) {
+        return rx_resources(LOCALE)
             .flatMap(new Function<ResourceBundle,Publisher<String>>() {
                 @NonNull
                 @Override
@@ -224,18 +222,18 @@ public class Localizer implements LocalizerType {
             })
             .firstElement()
             .toFlowable()
-            .switchIfEmpty(rxLocalize(FORMAT.pattern(), LOCALE));
+            .switchIfEmpty(rxa_localize(FORMAT.pattern(), LOCALE));
     }
 
     /**
      * Same as above, but uses a default {@link Locale} instance.
      * @param format {@link LCFormat} instance.
      * @return {@link Flowable} instance.
-     * @see #rxLocalize(LCFormat, Locale)
+     * @see #rxa_localize(LCFormat, Locale)
      */
     @NotNull
-    public Flowable<String> rxLocalize(@NotNull LCFormat format) {
-        return rxLocalize(format, null);
+    public Flowable<String> rxa_localize(@NotNull LCFormat format) {
+        return rxa_localize(format, null);
     }
 
     /**
@@ -243,12 +241,12 @@ public class Localizer implements LocalizerType {
      * @param format {@link LCFormat} instance.
      * @param locale {@link Locale} instance.
      * @return {@link String} value.
-     * @see #rxLocalize(LCFormat, Locale)
+     * @see #rxa_localize(LCFormat, Locale)
      */
     @NotNull
     public String localize(@NotNull LCFormat format,
                            @Nullable Locale locale) {
-        String result = rxLocalize(format, locale).blockingFirst();
+        String result = rxa_localize(format, locale).blockingFirst();
         return StringUtil.isNotNullOrEmpty(result) ? result : format.pattern();
     }
 
@@ -393,16 +391,16 @@ public class Localizer implements LocalizerType {
      * @param locale {@link Locale} instance.
      * @param argument {@link Object} instance.
      * @return {@link Flowable} instance.
-     * @see #rxLocalize(LCFormat, Locale)
-     * @see #rxLocalize(String, Locale)
+     * @see #rxa_localize(LCFormat, Locale)
+     * @see #rxa_localize(String, Locale)
      */
     @NotNull
     @SuppressWarnings("WeakerAccess")
     Flowable<?> rxPrepareArgument(@NonNull Locale locale, @NotNull Object argument) {
         if (argument instanceof LCFormat) {
-            return rxLocalize((LCFormat)argument, locale);
+            return rxa_localize((LCFormat)argument, locale);
         } else if (argument instanceof String) {
-            return rxLocalize((String)argument, locale);
+            return rxa_localize((String)argument, locale);
         } else {
             return Flowable.just(argument);
         }

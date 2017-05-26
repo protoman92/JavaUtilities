@@ -127,7 +127,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
             TestSubscriber subscriber = CustomTestSubscriber.create();
 
             // When
-            LC.rxResources(locale).subscribe(subscriber);
+            LC.rx_resources(locale).subscribe(subscriber);
             subscriber.awaitTerminalEvent();
 
             // Then
@@ -151,7 +151,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
             .flatMap(new Function<String,Publisher<?>>() {
                 @Override
                 public Publisher<?> apply(@NotNull final String S1) throws Exception {
-                    return LC.rxLocalize(S1, LOCALE).doOnNext(new Consumer<String>() {
+                    return LC.rxa_localize(S1, LOCALE).doOnNext(new Consumer<String>() {
                         @Override
                         public void accept(@NotNull String s2) throws Exception {
                             assertEquals(S1, s2);
@@ -168,10 +168,10 @@ public final class MockLocalizerTest implements LocalizeErrorType {
         subscriber.assertNoErrors();
         subscriber.assertComplete();
         verify(LC, times(STR.size())).bundles();
-        verify(LC, times(STR.size())).rxResources(eq(LOCALE));
+        verify(LC, times(STR.size())).rx_resources(eq(LOCALE));
         verify(LC, times(times)).getString(any(ResourceBundle.class), anyString());
         verify(LC, times(times)).rxGetString(any(ResourceBundle.class), anyString());
-        verify(LC, times(STR.size())).rxLocalize(anyString(), eq(LOCALE));
+        verify(LC, times(STR.size())).rxa_localize(anyString(), eq(LOCALE));
         verifyNoMoreInteractions(LC);
     }
 
@@ -189,7 +189,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
                 @NotNull
                 @Override
                 public Publisher<String> apply(@NotNull String s) throws Exception {
-                    return LC.rxLocalize(s, LOCALE);
+                    return LC.rxa_localize(s, LOCALE);
                 }
             })
             .doOnNext(new Consumer<String>() {
@@ -207,10 +207,10 @@ public final class MockLocalizerTest implements LocalizeErrorType {
         subscriber.assertNoErrors();
         subscriber.assertComplete();
         verify(LC, times(STR.size())).bundles();
-        verify(LC, times(STR.size())).rxResources(eq(LOCALE));
+        verify(LC, times(STR.size())).rx_resources(eq(LOCALE));
         verify(LC, times(STR.size())).getString(any(ResourceBundle.class), anyString());
         verify(LC, times(STR.size())).rxGetString(any(ResourceBundle.class), anyString());
-        verify(LC, times(STR.size())).rxLocalize(anyString(), eq(LOCALE));
+        verify(LC, times(STR.size())).rxa_localize(anyString(), eq(LOCALE));
         verifyNoMoreInteractions(LC);
     }
 
@@ -228,12 +228,12 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 
         // Then
         verify(LC, times(STR.size())).bundles();
-        verify(LC, times(STR.size())).rxResources(eq(locale));
+        verify(LC, times(STR.size())).rx_resources(eq(locale));
 
         verify(LC, times(times)).getString(any(ResourceBundle.class), anyString());
         verify(LC, times(times)).rxGetString(any(ResourceBundle.class), anyString());
         verify(LC, times(STR.size())).localize(anyString(), eq(locale));
-        verify(LC, times(STR.size())).rxLocalize(anyString(), eq(locale));
+        verify(LC, times(STR.size())).rxa_localize(anyString(), eq(locale));
         verifyNoMoreInteractions(LC);
     }
 
@@ -251,11 +251,11 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 
         // Then
         verify(LC, times(STR.size())).bundles();
-        verify(LC, times(STR.size())).rxResources(eq(locale));
+        verify(LC, times(STR.size())).rx_resources(eq(locale));
         verify(LC, times(STR.size())).getString(any(ResourceBundle.class), anyString());
         verify(LC, times(STR.size())).rxGetString(any(ResourceBundle.class), anyString());
         verify(LC, times(STR.size())).localize(anyString(), eq(locale));
-        verify(LC, times(STR.size())).rxLocalize(anyString(), eq(locale));
+        verify(LC, times(STR.size())).rxa_localize(anyString(), eq(locale));
         verifyNoMoreInteractions(LC);
     }
     //endregion
@@ -273,7 +273,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
             .flatMap(new Function<LCFormat,Publisher<String>>() {
                 @Override
                 public Publisher<String> apply(@NotNull LCFormat format) throws Exception {
-                    return LC.rxLocalize(format, LOCALE);
+                    return LC.rxa_localize(format, LOCALE);
                 }
             })
             .subscribe(subscriber);
@@ -285,8 +285,8 @@ public final class MockLocalizerTest implements LocalizeErrorType {
         subscriber.assertNoErrors();
         subscriber.assertComplete();
         verify(LC, times(FMT.size())).bundles();
-        verify(LC, times(FMT.size())).rxResources(eq(LOCALE));
-        verify(LC, times(FMT.size())).rxLocalize(any(LCFormat.class), eq(LOCALE));
+        verify(LC, times(FMT.size())).rx_resources(eq(LOCALE));
+        verify(LC, times(FMT.size())).rxa_localize(any(LCFormat.class), eq(LOCALE));
         verify(LC, times(times)).rxGetString(any(ResourceBundle.class), any(LCFormat.class));
         verify(LC, times(times)).rxGetTemplate(any(ResourceBundle.class), anyString());
         verify(LC, times(times)).rxFormatArguments(any(Locale.class), any(LCFormat.class));
@@ -335,7 +335,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 //            .flatMap(new Function<LCFormat,Publisher<String>>() {
 //                @Override
 //                public Publisher<String> apply(@NotNull LCFormat format) throws Exception {
-//                    return LC.rxLocalize(format, LOCALE);
+//                    return LC.rxa_localize(format, LOCALE);
 //                }
 //            })
 //            .subscribe(subscriber);
@@ -348,8 +348,8 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 //        subscriber.assertComplete();
 //        LogUtil.println(RxTestUtil.firstNextEvent(subscriber));
 //        verify(LC, times(totalNestedCount)).bundles();
-//        verify(LC, times(FMT.size())).rxResources(eq(LOCALE));
-//        verify(LC, times(FMT.size())).rxLocalize(any(LCFormat.class), eq(LOCALE));
+//        verify(LC, times(FMT.size())).rx_resources(eq(LOCALE));
+//        verify(LC, times(FMT.size())).rxa_localize(any(LCFormat.class), eq(LOCALE));
 //        verify(LC, times(totalNestedFormatCount)).rxGetTemplate(any(ResourceBundle.class), anyString());
 //        verify(LC, times(totalNestedFormatCount)).rxGetString(any(ResourceBundle.class), any(LCFormat.class));
 //        verify(LC, times(totalGetStringCount)).rxGetString(any(ResourceBundle.class), anyString());
