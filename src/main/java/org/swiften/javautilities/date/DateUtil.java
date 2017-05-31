@@ -2,9 +2,12 @@ package org.swiften.javautilities.date;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.swiften.javautilities.object.ObjectUtil;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by haipham on 5/10/17.
@@ -12,7 +15,7 @@ import java.util.*;
 
 public final class DateUtil {
     @NotNull
-    public static final List<Integer> DATE_COMPONENTS_FIELDS = Arrays.asList(
+    static final List<Integer> DATE_COMPONENTS_FIELDS = Arrays.asList(
         Calendar.MILLISECOND,
         Calendar.SECOND,
         Calendar.MINUTE,
@@ -59,12 +62,8 @@ public final class DateUtil {
      * @return {@link Date} instance.
      */
     @NotNull
-    public static Date getDate(int year,
-                               int month,
-                               int day,
-                               int hour,
-                               int minute,
-                               int second,
+    public static Date getDate(int year, int month, int day,
+                               int hour, int minute, int second,
                                int millisecond) {
         return getCalendar(
             year,
@@ -78,8 +77,8 @@ public final class DateUtil {
     }
 
     /**
-     * Trim {@link Date} by setting all properties after a certain
-     * granularity level to 1.
+     * Trim {@link Date} by setting all properties after a certain granularity
+     * level to 1.
      * @param dateToTrim {@link Date} instance to be trimmed.
      * @param granularity The level of trimming to be applied.
      * @return {@link Date} instance. This can be null if the granularity
@@ -87,19 +86,18 @@ public final class DateUtil {
      */
     @Nullable
     @SuppressWarnings("MagicConstant")
-    public static Date trimDateComponents(@NotNull Date dateToTrim,
-                                          int granularity) {
+    public static Date trimDate(@NotNull Date dateToTrim, int granularity) {
         Calendar calendar = Calendar.getInstance();
-        List<Integer> dateComponentFields = DATE_COMPONENTS_FIELDS;
-        int index = dateComponentFields.indexOf(granularity);
+        List<Integer> componentFields = DATE_COMPONENTS_FIELDS;
+        int index = componentFields.indexOf(granularity);
 
-        if (index > -1 && index < dateComponentFields.size()) {
+        if (index > -1 && index < componentFields.size()) {
             calendar.setTime(dateToTrim);
 
             for (int i = 0; i < index; i++) {
                 Integer field;
 
-                if ((field = dateComponentFields.get(i)) != null) {
+                if (ObjectUtil.nonNull(field = componentFields.get(i))) {
                     calendar.set(field, 1);
                 }
             }
@@ -118,13 +116,13 @@ public final class DateUtil {
      * @param granularity The level of granularity to be applied when
      *                    comparing. {@link Integer} value.
      * @return {@link Boolean} value.
-     * @see #trimDateComponents(Date, int)
+     * @see #trimDate(Date, int)
      */
     public static boolean notLaterThan(@NotNull Date firstDate,
                                        @NotNull Date secondDate,
                                        int granularity) {
-        Date first = trimDateComponents(firstDate, granularity);
-        Date second = trimDateComponents(secondDate, granularity);
+        Date first = trimDate(firstDate, granularity);
+        Date second = trimDate(secondDate, granularity);
         return first != null && second != null && !first.after(second);
     }
 
@@ -136,13 +134,13 @@ public final class DateUtil {
      * @param granularity The level of granularity to be applied when
      *                    comparing. {@link Integer} value.
      * @return {@link Boolean} value.
-     * @see #trimDateComponents(Date, int)
+     * @see #trimDate(Date, int)
      */
     public static boolean earlierThan(@NotNull Date firstDate,
                                       @NotNull Date secondDate,
                                       int granularity) {
-        Date first = trimDateComponents(firstDate, granularity);
-        Date second = trimDateComponents(secondDate, granularity);
+        Date first = trimDate(firstDate, granularity);
+        Date second = trimDate(secondDate, granularity);
         return first != null && second != null && first.before(second);
     }
 
@@ -154,13 +152,13 @@ public final class DateUtil {
      * @param granularity The level of granularity to be applied when
      *                    comparing. {@link Integer} value.
      * @return {@link Boolean} value.
-     * @see #trimDateComponents(Date, int)
+     * @see #trimDate(Date, int)
      */
     public static boolean notEarlierThan(@NotNull Date firstDate,
                                          @NotNull Date secondDate,
                                          int granularity) {
-        Date first = trimDateComponents(firstDate, granularity);
-        Date second = trimDateComponents(secondDate, granularity);
+        Date first = trimDate(firstDate, granularity);
+        Date second = trimDate(secondDate, granularity);
         return first != null && second != null && !first.before(second);
     }
 
@@ -172,13 +170,13 @@ public final class DateUtil {
      * @param granularity The level of granularity to be applied when
      *                    comparing. {@link Integer} value.
      * @return {@link Boolean} value.
-     * @see #trimDateComponents(Date, int)
+     * @see #trimDate(Date, int)
      */
     public static boolean laterThan(@NotNull Date firstDate,
                                     @NotNull Date secondDate,
                                     int granularity) {
-        Date first = trimDateComponents(firstDate, granularity);
-        Date second = trimDateComponents(secondDate, granularity);
+        Date first = trimDate(firstDate, granularity);
+        Date second = trimDate(secondDate, granularity);
         return first != null && second != null && first.after(second);
     }
 
@@ -190,13 +188,13 @@ public final class DateUtil {
      * @param granularity The level of granularity to be applied when
      *                    comparing. {@link Integer} value.
      * @return {@link Boolean} value.
-     * @see #trimDateComponents(Date, int)
+     * @see #trimDate(Date, int)
      */
     public static boolean sameAs(@NotNull Date firstDate,
                                  @NotNull Date secondDate,
                                  int granularity) {
-        Date first = trimDateComponents(firstDate, granularity);
-        Date second = trimDateComponents(secondDate, granularity);
+        Date first = trimDate(firstDate, granularity);
+        Date second = trimDate(secondDate, granularity);
         return first != null && second != null && first.equals(second);
     }
 

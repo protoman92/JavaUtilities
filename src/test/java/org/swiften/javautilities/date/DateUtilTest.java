@@ -1,7 +1,6 @@
 package org.swiften.javautilities.date;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.TestOnly;
+import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.number.NumberTestUtil;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -16,6 +15,18 @@ import java.util.Random;
  */
 public final class DateUtilTest {
     @Test
+    public void test_dateTrimming_scrap() {
+        // Setup
+        Date date = Calendar.getInstance().getTime();
+
+        // When & Then
+        LogUtil.println(DateUtil.trimDate(date, Calendar.HOUR_OF_DAY));
+        LogUtil.println(DateUtil.trimDate(date, Calendar.DAY_OF_MONTH));
+        LogUtil.println(DateUtil.trimDate(date, Calendar.MONTH));
+        LogUtil.println(DateUtil.trimDate(date, Calendar.YEAR));
+    }
+
+    @Test
     @SuppressWarnings("MagicConstant")
     public void test_dateTrimming_shouldWork() {
         // Setup
@@ -29,7 +40,7 @@ public final class DateUtilTest {
             int component = components.get(rand.nextInt(components.size()));
 
             // When
-            Date trimmed = DateUtil.trimDateComponents(date, component);
+            Date trimmed = DateUtil.trimDate(date, component);
 
             // Then
             Assert.assertNotNull(trimmed);
