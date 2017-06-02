@@ -51,6 +51,6 @@ public final class Index<T> {
      */
     @NotNull
     public Zip<Integer,T> toZipped() {
-        return new Zip<Integer,T>(INDEX, OBJECT);
+        return Zip.of(INDEX, OBJECT);
     }
 }

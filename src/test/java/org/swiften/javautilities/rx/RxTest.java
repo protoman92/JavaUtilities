@@ -44,7 +44,7 @@ public final class RxTest {
 
         for (int i = 0, length = collection.size(); i < length; i++) {
             Index index = (Index)nextEvents.get(i);
-            Zip zip = new Zip(i, collection.get(i));
+            Zip zip = Zip.of(i, collection.get(i));
             Assert.assertEquals(index.toZipped(), zip);
         }
     }

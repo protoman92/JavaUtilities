@@ -79,7 +79,10 @@ public final class CollectionUtil {
         for (int i = 0; i < zLength; i++) {
             A aItem = a.get(i);
             B bItem = b.get(i);
-            zList.add(new Zip<A,B>(aItem, bItem));
+
+            if (ObjectUtil.nonNull(aItem, bItem)) {
+                zList.add(Zip.of(aItem, bItem));
+            }
         }
 
         return zList;

@@ -1,5 +1,7 @@
 package org.swiften.javautilities.collection;
 
+import io.reactivex.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -14,10 +16,23 @@ import java.util.Collection;
  * @param <B> Generics parameter.
  */
 public final class Zip<A,B> {
-    @Nullable public final A A;
-    @Nullable public final B B;
+    /**
+     * Create a new {@link Zip} instance.
+     * @param a {@link A} instance.
+     * @param b {@link B} instance.
+     * @param <A> Generics parameter.
+     * @param <B> Generics parameter.
+     * @return {@link Zip} instance.
+     */
+    @NotNull
+    public static <A,B> Zip<A,B> of(@NonNull A a, @NotNull B b) {
+        return new Zip<A,B>(a, b);
+    }
 
-    public Zip(@Nullable A a, @Nullable B b) {
+    @NonNull public final A A;
+    @NotNull public final B B;
+
+    private Zip(@NonNull A a, @NonNull B b) {
         A = a;
         B = b;
     }
@@ -31,12 +46,7 @@ public final class Zip<A,B> {
     public boolean equals(@Nullable Object o) {
         if (o instanceof Zip) {
             Zip z = (Zip)o;
-
-            if (A != null && B != null) {
-                return A.equals(z.A) && B.equals(z.B);
-            } else {
-                return false;
-            }
+            return A.equals(z.A) && B.equals(z.B);
         } else {
             return false;
         }
