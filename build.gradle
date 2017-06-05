@@ -94,11 +94,8 @@ def mavenPassword() {
 }
 
 dependencies {
-    /* Testing */
-    testCompile "org.testng:testng:+"
-    testCompile "org.mockito:mockito-core:+"
-
-    /* Release */
     compile "org.jetbrains:annotations-java5:+"
     compile "io.reactivex.rxjava2:rxjava:+"
+    testCompile "org.testng:testng:+"
+    testCompile "org.mockito:mockito-core:+"
 }
