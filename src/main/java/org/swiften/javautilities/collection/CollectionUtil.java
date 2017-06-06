@@ -1,5 +1,6 @@
 package org.swiften.javautilities.collection;
 
+import org.swiften.javautilities.number.NumberTestUtil;
 import org.swiften.javautilities.object.ObjectUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -172,6 +173,46 @@ public final class CollectionUtil {
     @NotNull
     public static <T> Collection<T> toCollection(@NotNull Iterable<T> iterable) {
         return toList(iterable);
+    }
+
+    /**
+     * Produce a random {@link T} from an Array of {@link T}.
+     * @param elements The Array of {@link T} from which the element will be
+     *                 produced.
+     * @param <T> Generics.
+     * @return {@link T} element.
+     * @throws RuntimeException If the produced element is null, or the
+     * Array is empty.
+     * @see CollectionTestUtil#randomElement(List)
+     */
+    @NotNull
+    public static <T> T randomElement(@NotNull T[] elements) {
+        return randomElement(Arrays.asList(elements));
+    }
+
+    /**
+     * Produce a random {@link T} from {@link List} of {@link T}.
+     * @param elements The {@link List} of {@link T} from which the element
+     *                 will be produce.
+     * @param <T> Generics.
+     * @return {@link T} element.
+     * @throws RuntimeException If the produced element is null, or the
+     * {@link List} is empty.
+     */
+    @NotNull
+    public static <T> T randomElement(@NotNull List<T> elements) {
+        if (!elements.isEmpty()) {
+            int index = NumberTestUtil.randomBetween(0, elements.size());
+            T element = elements.get(index);
+
+            if (element != null) {
+                return element;
+            } else {
+                throw new RuntimeException("Element cannot be null");
+            }
+        } else {
+            throw new RuntimeException("List/Array cannot be empty");
+        }
     }
 
     private CollectionUtil() {}

@@ -42,6 +42,26 @@ public final class Zip<A,B> {
         return String.format("First: %s, Second: %s", A, B);
     }
 
+    /**
+     * Get {@link A}.
+     * @return {@link A} instance.
+     * @see #A
+     */
+    @NotNull
+    public A first() {
+        return A;
+    }
+
+    /**
+     * Get {@link B}.
+     * @return {@link B} instance.
+     * @see #B
+     */
+    @NotNull
+    public B second() {
+        return B;
+    }
+
     @Override
     public boolean equals(@Nullable Object o) {
         if (o instanceof Zip) {
