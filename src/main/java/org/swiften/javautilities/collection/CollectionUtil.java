@@ -1,8 +1,8 @@
 package org.swiften.javautilities.collection;
 
-import org.swiften.javautilities.number.NumberTestUtil;
-import org.swiften.javautilities.object.ObjectUtil;
 import org.jetbrains.annotations.NotNull;
+import org.swiften.javautilities.number.NumberUtil;
+import org.swiften.javautilities.object.ObjectUtil;
 
 import java.util.*;
 
@@ -177,16 +177,16 @@ public final class CollectionUtil {
 
     /**
      * Produce a random {@link T} from an Array of {@link T}.
-     * @param elements The Array of {@link T} from which the element will be
+     * @param elements Varargs of {@link T} from which the element will be
      *                 produced.
      * @param <T> Generics.
      * @return {@link T} element.
      * @throws RuntimeException If the produced element is null, or the
      * Array is empty.
-     * @see CollectionTestUtil#randomElement(List)
+     * @see CollectionUtil#randomElement(List)
      */
     @NotNull
-    public static <T> T randomElement(@NotNull T[] elements) {
+    public static <T> T randomElement(@NotNull T...elements) {
         return randomElement(Arrays.asList(elements));
     }
 
@@ -202,7 +202,7 @@ public final class CollectionUtil {
     @NotNull
     public static <T> T randomElement(@NotNull List<T> elements) {
         if (!elements.isEmpty()) {
-            int index = NumberTestUtil.randomBetween(0, elements.size());
+            int index = NumberUtil.randomBetween(0, elements.size());
             T element = elements.get(index);
 
             if (element != null) {
