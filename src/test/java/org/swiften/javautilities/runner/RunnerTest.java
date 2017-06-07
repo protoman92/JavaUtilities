@@ -42,11 +42,11 @@ public final class RunnerTest extends BaseRunnerTest {
 
     @Test
     public void test_factory1() {
-        LogUtil.printfThread("Testing factory 1 - %d", INDEX);
+        LogUtil.printft("Testing factory 1 - %d", INDEX);
     }
 
     @Test(dataProvider = "dataProvider")
     public void test_dataProvider(char a) {
-        LogUtil.printfThread("Testing data provider 1 - %s %d", a, INDEX);
+        LogUtil.printft("Testing data provider 1 - %s %d", a, INDEX);
     }
 }

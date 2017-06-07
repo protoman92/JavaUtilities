@@ -12,7 +12,7 @@ public class BaseRunnerTest {
     final int INDEX;
 
     BaseRunnerTest(int index) {
-        LogUtil.printfThread("Runner test %s: %d", this, index);
+        LogUtil.printft("Runner test %s: %d", this, index);
         INDEX = index;
     }
 
@@ -24,11 +24,11 @@ public class BaseRunnerTest {
 
     @BeforeSuite
     public void beforeSuite() {
-        LogUtil.printfThread("Before suite %d", INDEX);
+        LogUtil.printft("Before suite %d", INDEX);
     }
 
     @AfterSuite
     public void afterSuite() {
-        LogUtil.printfThread("After suite %d", INDEX);
+        LogUtil.printft("After suite %d", INDEX);
     }
 }

@@ -1,6 +1,5 @@
 package org.swiften.javautilities.runner;
 
-import org.jetbrains.annotations.NotNull;
 import org.swiften.javautilities.log.LogUtil;
 import org.testng.annotations.*;
 
@@ -19,12 +18,12 @@ public final class RunnerTest2 extends BaseRunnerTest {
 
     @BeforeSuite
     public void beforeSuite() {
-        LogUtil.printfThread("Before suite 2 %d", INDEX);
+        LogUtil.printft("Before suite 2 %d", INDEX);
     }
 
     @AfterSuite
     public void afterSuite() {
-        LogUtil.printfThread("After suite 2 %d", INDEX);
+        LogUtil.printft("After suite 2 %d", INDEX);
     }
 
     @DataProvider(parallel = false)
@@ -40,11 +39,11 @@ public final class RunnerTest2 extends BaseRunnerTest {
 
     @Test
     public void test_factory1() {
-        LogUtil.printfThread("Testing factory 2 - %d", INDEX);
+        LogUtil.printft("Testing factory 2 - %d", INDEX);
     }
 
     @Test(dataProvider = "dataProvider")
     public void test_dataProvider(char a) {
-        LogUtil.printfThread("Testing data provider 2 - %s %d", a, INDEX);
+        LogUtil.printft("Testing data provider 2 - %s %d", a, INDEX);
     }
 }

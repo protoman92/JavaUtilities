@@ -123,7 +123,7 @@ public final class RxTest {
             .doOnNext(new Consumer<Integer>() {
                 @Override
                 public void accept(@NotNull Integer i) throws Exception {
-                    LogUtil.printfThread("Number %d", i);
+                    LogUtil.printft("Number %d", i);
                 }
             })
             .subscribe(subscriber);

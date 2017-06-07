@@ -2,7 +2,6 @@ package org.swiften.javautilities.log;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.swiften.javautilities.object.ObjectUtil;
 
 import java.util.Arrays;
 
@@ -83,7 +82,7 @@ public final class LogUtil {
      * @see #isLoggingEnabled()
      * @see #println(Throwable)
      */
-    public static void printfThread(@NotNull String format, @Nullable Object...objects) {
+    public static void printft(@NotNull String format, @Nullable Object...objects) {
         if (isLoggingEnabled()) {
             String threadFormat = "Thread %d: %s";
             String log = String.format(format, objects);
