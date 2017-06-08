@@ -126,7 +126,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
             TestSubscriber subscriber = CustomTestSubscriber.create();
 
             // When
-            LC.rx_resources(locale).subscribe(subscriber);
+            LC.rxe_resources(locale).subscribe(subscriber);
             subscriber.awaitTerminalEvent();
 
             // Then
@@ -167,9 +167,9 @@ public final class MockLocalizerTest implements LocalizeErrorType {
         subscriber.assertNoErrors();
         subscriber.assertComplete();
         verify(LC, times(STR.size())).bundles();
-        verify(LC, times(STR.size())).rx_resources(eq(LOCALE));
+        verify(LC, times(STR.size())).rxe_resources(eq(LOCALE));
         verify(LC, times(times)).getString(any(ResourceBundle.class), anyString());
-        verify(LC, times(times)).rxGetString(any(ResourceBundle.class), anyString());
+        verify(LC, times(times)).rxa_getString(any(ResourceBundle.class), anyString());
         verify(LC, times(STR.size())).rxa_localize(anyString(), eq(LOCALE));
         verifyNoMoreInteractions(LC);
     }
@@ -206,9 +206,9 @@ public final class MockLocalizerTest implements LocalizeErrorType {
         subscriber.assertNoErrors();
         subscriber.assertComplete();
         verify(LC, times(STR.size())).bundles();
-        verify(LC, times(STR.size())).rx_resources(eq(LOCALE));
+        verify(LC, times(STR.size())).rxe_resources(eq(LOCALE));
         verify(LC, times(STR.size())).getString(any(ResourceBundle.class), anyString());
-        verify(LC, times(STR.size())).rxGetString(any(ResourceBundle.class), anyString());
+        verify(LC, times(STR.size())).rxa_getString(any(ResourceBundle.class), anyString());
         verify(LC, times(STR.size())).rxa_localize(anyString(), eq(LOCALE));
         verifyNoMoreInteractions(LC);
     }
@@ -227,10 +227,10 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 
         // Then
         verify(LC, times(STR.size())).bundles();
-        verify(LC, times(STR.size())).rx_resources(eq(locale));
+        verify(LC, times(STR.size())).rxe_resources(eq(locale));
 
         verify(LC, times(times)).getString(any(ResourceBundle.class), anyString());
-        verify(LC, times(times)).rxGetString(any(ResourceBundle.class), anyString());
+        verify(LC, times(times)).rxa_getString(any(ResourceBundle.class), anyString());
         verify(LC, times(STR.size())).localize(anyString(), eq(locale));
         verify(LC, times(STR.size())).rxa_localize(anyString(), eq(locale));
         verifyNoMoreInteractions(LC);
@@ -250,9 +250,9 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 
         // Then
         verify(LC, times(STR.size())).bundles();
-        verify(LC, times(STR.size())).rx_resources(eq(locale));
+        verify(LC, times(STR.size())).rxe_resources(eq(locale));
         verify(LC, times(STR.size())).getString(any(ResourceBundle.class), anyString());
-        verify(LC, times(STR.size())).rxGetString(any(ResourceBundle.class), anyString());
+        verify(LC, times(STR.size())).rxa_getString(any(ResourceBundle.class), anyString());
         verify(LC, times(STR.size())).localize(anyString(), eq(locale));
         verify(LC, times(STR.size())).rxa_localize(anyString(), eq(locale));
         verifyNoMoreInteractions(LC);
@@ -264,7 +264,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
     public void test_rxLocalizeFormatWithNullTemplate_shouldEmitOriginal(@Nullable final Locale LOCALE) {
         // Setup
         int times = bundleCount(LOCALE) * FMT.size();
-        doReturn(Flowable.empty()).when(LC).rxGetTemplate(any(ResourceBundle.class), anyString());
+        doReturn(Flowable.empty()).when(LC).rxa_getTemplate(any(ResourceBundle.class), anyString());
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When
@@ -284,11 +284,11 @@ public final class MockLocalizerTest implements LocalizeErrorType {
         subscriber.assertNoErrors();
         subscriber.assertComplete();
         verify(LC, times(FMT.size())).bundles();
-        verify(LC, times(FMT.size())).rx_resources(eq(LOCALE));
+        verify(LC, times(FMT.size())).rxe_resources(eq(LOCALE));
         verify(LC, times(FMT.size())).rxa_localize(any(LCFormat.class), eq(LOCALE));
-        verify(LC, times(times)).rxGetString(any(ResourceBundle.class), any(LCFormat.class));
-        verify(LC, times(times)).rxGetTemplate(any(ResourceBundle.class), anyString());
-        verify(LC, times(times)).rxFormatArguments(any(Locale.class), any(LCFormat.class));
+        verify(LC, times(times)).rxa_getString(any(ResourceBundle.class), any(LCFormat.class));
+        verify(LC, times(times)).rxa_getTemplate(any(ResourceBundle.class), anyString());
+        verify(LC, times(times)).rxa_formatArguments(any(Locale.class), any(LCFormat.class));
         verifyNoMoreInteractions(LC);
     }
 
@@ -305,7 +305,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 //        int totalNestedFormatCount = ((nestedFormatCount + 1) * fmtCount) * bundleCount;
 //        int totalNestedCount = ((nestedFormatCount + nestedStringCount) * fmtCount) * bundleCount + fmtCount;
 //        int totalGetStringCount = (nestedStringCount * 2 * fmtCount) * bundleCount;
-//        doReturn(Flowable.just("Template")).when(LC).rxGetTemplate(any(ResourceBundle.class), anyString());
+//        doReturn(Flowable.just("Template")).when(LC).rxa_getTemplate(any(ResourceBundle.class), anyString());
 //        doThrow(mre()).when(LC).getString(any(MessageFormat.class), any(Object[].class));
 //
 //        for (LCFormat format : FMT) {
@@ -347,13 +347,13 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 //        subscriber.assertComplete();
 //        LogUtil.println(RxTestUtil.firstNextEvent(subscriber));
 //        verify(LC, times(totalNestedCount)).bundles();
-//        verify(LC, times(FMT.size())).rx_resources(eq(LOCALE));
+//        verify(LC, times(FMT.size())).rxe_resources(eq(LOCALE));
 //        verify(LC, times(FMT.size())).rxa_localize(any(LCFormat.class), eq(LOCALE));
-//        verify(LC, times(totalNestedFormatCount)).rxGetTemplate(any(ResourceBundle.class), anyString());
-//        verify(LC, times(totalNestedFormatCount)).rxGetString(any(ResourceBundle.class), any(LCFormat.class));
-//        verify(LC, times(totalGetStringCount)).rxGetString(any(ResourceBundle.class), anyString());
+//        verify(LC, times(totalNestedFormatCount)).rxa_getTemplate(any(ResourceBundle.class), anyString());
+//        verify(LC, times(totalNestedFormatCount)).rxa_getString(any(ResourceBundle.class), any(LCFormat.class));
+//        verify(LC, times(totalGetStringCount)).rxa_getString(any(ResourceBundle.class), anyString());
 //        verify(LC, times(totalGetStringCount)).getString(any(ResourceBundle.class), anyString());
-//        verify(LC, times(totalNestedFormatCount)).rxFormatArguments(any(Locale.class), any(LCFormat.class));
+//        verify(LC, times(totalNestedFormatCount)).rxa_formatArguments(any(Locale.class), any(LCFormat.class));
 //        verify(LC, times(totalNestedFormatCount)).rxPrepareArgument(any(Locale.class), any());
 //        verifyNoMoreInteractions(LC);
 //    }
