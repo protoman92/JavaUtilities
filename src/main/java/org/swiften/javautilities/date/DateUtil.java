@@ -88,16 +88,16 @@ public final class DateUtil {
     @SuppressWarnings("MagicConstant")
     public static Date trimDate(@NotNull Date dateToTrim, int granularity) {
         Calendar calendar = Calendar.getInstance();
-        List<Integer> componentFields = DATE_COMPONENTS_FIELDS;
-        int index = componentFields.indexOf(granularity);
+        List<Integer> components = DATE_COMPONENTS_FIELDS;
+        int index = components.indexOf(granularity);
 
-        if (index > -1 && index < componentFields.size()) {
+        if (index > -1 && index < components.size()) {
             calendar.setTime(dateToTrim);
 
             for (int i = 0; i < index; i++) {
                 Integer field;
 
-                if (ObjectUtil.nonNull(field = componentFields.get(i))) {
+                if (ObjectUtil.nonNull(field = components.get(i))) {
                     calendar.set(field, 1);
                 }
             }
@@ -220,6 +220,25 @@ public final class DateUtil {
     public static boolean notEarlierThan(@NotNull Date firstDate,
                                          @NotNull Date secondDate) {
         return !firstDate.before(secondDate);
+    }
+
+    /**
+     * Calculate the difference between two {@link Date}, based on granularity
+     * level. This is a simple comparison that does not take into account
+     * other attributes.
+     * @param first {@link Date} instance.
+     * @param second {@link Date} instance.
+     * @param granularity {@link Integer} value.
+     * @return {@link Integer} value.
+     */
+    public static int difference(@NotNull Date first,
+                                 @NotNull Date second,
+                                 int granularity) {
+        Calendar calendar1 = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+        calendar1.setTime(first);
+        calendar2.setTime(second);
+        return calendar1.get(granularity) - calendar2.get(granularity);
     }
 
     private DateUtil() {}
