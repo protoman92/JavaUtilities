@@ -24,6 +24,8 @@ public final class BooleanUtil {
     public static boolean isTrue(@NotNull Object object) {
         if (object instanceof Boolean) {
             return Boolean.class.cast(object);
+        } else if (object instanceof Integer) {
+            return object.equals(1);
         } else if (object instanceof String) {
             return Boolean.valueOf((String)object);
         } else {
