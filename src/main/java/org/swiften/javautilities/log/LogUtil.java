@@ -84,7 +84,7 @@ public final class LogUtil {
      */
     public static void printft(@NotNull String format, @Nullable Object...objects) {
         if (isLoggingEnabled()) {
-            String threadFormat = "Thread %d: %s";
+            String threadFormat = "T%d: %s";
             String log = String.format(format, objects);
             long thread = Thread.currentThread().getId();
             println(String.format(threadFormat, thread, log));
