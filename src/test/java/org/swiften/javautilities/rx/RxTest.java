@@ -53,8 +53,8 @@ public final class RxTest {
     @SuppressWarnings("unchecked")
     public void test_flatMapAndSwitchMap() {
         // Setup
-        PublishSubject<Integer> publishSubject = PublishSubject.<Integer>create();
-        TestSubscriber<Integer> subscriber = CustomTestSubscriber.<Integer>create();
+        PublishSubject<Integer> publishSubject = PublishSubject.create();
+        TestSubscriber<Integer> subscriber = CustomTestSubscriber.create();
 
         // When
         publishSubject

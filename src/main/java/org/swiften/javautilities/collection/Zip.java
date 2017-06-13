@@ -32,7 +32,7 @@ public final class Zip<A,B> {
     @NonNull public final A A;
     @NotNull public final B B;
 
-    private Zip(@NonNull A a, @NonNull B b) {
+    private Zip(@NonNull A a, @NotNull B b) {
         A = a;
         B = b;
     }
