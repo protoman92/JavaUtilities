@@ -423,7 +423,7 @@ public class Localizer implements LocalizerType {
          * Add {@link ResourceBundle}.
          * @param name The name of the {@link ResourceBundle}.
          * @param locale The {@link Locale} of the {@link ResourceBundle}.
-         * @return The current {@link Builder} instance.
+         * @return {@link Builder} instance.
          */
         @NotNull
         public Builder addBundle(@NotNull String name, @NotNull Locale locale) {

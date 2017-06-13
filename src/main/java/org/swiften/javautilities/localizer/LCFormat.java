@@ -98,7 +98,7 @@ public class LCFormat {
         /**
          * Set the {@link #pattern} value.
          * @param pattern {@link String} value.
-         * @return The current {@link Builder} instance.
+         * @return {@link Builder} instance.
          */
         @NotNull
         public Builder withPattern(@NotNull String pattern) {
@@ -111,7 +111,7 @@ public class LCFormat {
          * if this argument is {@link String} or another
          * {@link LCFormat}, it will also be localized.
          * @param object {@link Object} instance.
-         * @return The current {@link Builder} instance.
+         * @return {@link Builder} instance.
          * @see Collection#add(Object)
          */
         @NotNull
@@ -123,7 +123,7 @@ public class LCFormat {
         /**
          * Add {@link Collection} of {@link Object} to {@link #ARGUMENTS}.
          * @param args {@link Collection} of {@link Object}.
-         * @return The current {@link Builder} instance.
+         * @return {@link Builder} instance.
          * @see Collection#addAll(Collection)
          */
         @NotNull
