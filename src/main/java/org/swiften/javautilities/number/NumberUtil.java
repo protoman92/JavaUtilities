@@ -40,6 +40,26 @@ public final class NumberUtil {
     }
 
     /**
+     * Check if {@link Number} is larger than 0.
+     * @param number {@link Number} instance.
+     * @return {@link Boolean} value.
+     * @see Number#doubleValue()
+     */
+    public static boolean largerThanZero(@NotNull Number number) {
+        return number.doubleValue() > 0;
+    }
+
+    /**
+     * Check if {@link Number} is less than 0.
+     * @param number {@link Number} instance.
+     * @return {@link Boolean} value.
+     * @see Number#doubleValue()
+     */
+    public static boolean lessThanZero(@NotNull Number number) {
+        return number.doubleValue() < 0;
+    }
+
+    /**
      * Produce a random number between two bounds.
      * @param from The inclusive lower bound.
      * @param to The non-inclusive upper bound.
