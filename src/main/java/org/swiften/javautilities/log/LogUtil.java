@@ -54,12 +54,29 @@ public final class LogUtil {
      * Print new line a varargs of {@link Object}.
      * @param objects A varargs of {@link Object}.
      * @param <T> Generics parameter.
-     * @see #isLoggingEnabled()
+     * @see #println(Object)
      */
     public static <T> void println(@NotNull T...objects) {
-        if (isLoggingEnabled()) {
-            System.out.println(Arrays.toString(objects));
-        }
+        println(Arrays.toString(objects));
+    }
+
+    /**
+     * Print new line with thread information.
+     * @param object {@link Object} instance.
+     * @see #printft(String, Object...)
+     */
+    public static void printlnt(@Nullable Object object) {
+        printft("%s", object);
+    }
+
+    /**
+     * Print new line with thread information.
+     * @param objects Varargs of {@link Object}.
+     * @param <T> Generics parameter.
+     * @see #printlnt(Object)
+     */
+    public static <T> void printlnt(@NotNull T...objects) {
+        printlnt(Arrays.toString(objects));
     }
 
     /**
