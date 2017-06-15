@@ -91,5 +91,16 @@ public final class ObjectUtil {
         return object;
     }
 
+    /**
+     * Return the same {@link T} instance.
+     * @param object {@link T} instance.
+     * @param <T> Generics parameter.
+     * @return {@link T} instance.
+     */
+    @Nullable
+    public static <T> T eq(@Nullable T object) {
+        return object;
+    }
+
     private ObjectUtil() {}
 }
