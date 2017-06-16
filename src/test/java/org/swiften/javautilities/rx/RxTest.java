@@ -233,4 +233,78 @@ public final class RxTest {
         // Then
         LogUtil.println(RxTestUtil.nextEvents(subscriber));
     }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void test_concatAsync() {
+        // Setup
+        TestSubscriber subscriber = CustomTestSubscriber.create();
+
+        final Flowable<Object> f1 = Flowable
+            .timer(100, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .map(new Function<Long,Object>() {
+                @NotNull
+                @Override
+                public Object apply(Long aLong) throws Exception {
+                    return 1;
+                }
+            });
+
+        Flowable<Object> f2 = Flowable
+            .timer(200, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .map(new Function<Long,Object>() {
+                @NotNull
+                @Override
+                public Object apply(Long aLong) throws Exception {
+                    return 2;
+                }
+            });
+
+        // When
+        RxUtil.concatArrayDelayEach(5000, f1, f2)
+            .doOnNext(new Consumer<Object>() {
+                @Override
+                public void accept(Object o) throws Exception {
+                    LogUtil.printft("Post-delay: %s", o);
+                }
+            })
+            .subscribe(subscriber);
+
+        subscriber.awaitTerminalEvent();
+
+        // Then
+        LogUtil.printlnt(RxTestUtil.nextEvents(subscriber));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void test_concatMap_flatMap() {
+        // Setup
+        TestSubscriber subscriber = CustomTestSubscriber.create();
+
+        // When
+        Flowable.range(0, 10)
+            .flatMap(new Function<Integer,Publisher<?>>() {
+                @Override
+                public Publisher<?> apply(Integer integer) throws Exception {
+                    return Flowable.just(integer);
+                }
+            })
+            .doOnNext(new Consumer<Object>() {
+                @Override
+                public void accept(Object o) throws Exception {
+                    LogUtil.printlnt(o);
+                }
+            })
+            .subscribe(subscriber);
+
+        subscriber.awaitTerminalEvent();
+
+        // Then
+        LogUtil.printlnt(RxTestUtil.nextEvents(subscriber));
+    }
 }
