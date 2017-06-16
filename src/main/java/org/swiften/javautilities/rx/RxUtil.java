@@ -9,11 +9,12 @@ import io.reactivex.schedulers.Schedulers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
+import org.swiften.javautilities.collection.CollectionUtil;
 import org.swiften.javautilities.object.ObjectUtil;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by haipham on 3/31/17.
@@ -121,6 +122,83 @@ public final class RxUtil {
     @NotNull
     public static <T> Flowable<T> error() {
         return error("");
+    }
+
+    /**
+     * Periodically emit items and delay the execution of each subsequent
+     * {@link Flowable} by a fixed interval.
+     * @param DURATION {@link Long} value.
+     * @param UNIT {@link TimeUnit} instance.
+     * @param flowables {@link Iterable} of {@link Flowable}.
+     * @param <T> Generics parameter.
+     * @return {@link Flowable} instance.
+     */
+    @NotNull
+    public static <T> Flowable<T> concatIterableDelayEach(
+        final long DURATION,
+        @NotNull final TimeUnit UNIT,
+        @NotNull Iterable<Flowable<T>> flowables
+    ) {
+        return Flowable.fromIterable(flowables)
+            .concatMap(new Function<Flowable<T>,Publisher<T>>() {
+                @NotNull
+                @Override
+                public Publisher<T> apply(@NotNull Flowable<T> flowable) throws Exception {
+                    return flowable.delay(DURATION, UNIT);
+                }
+            });
+    }
+
+    /**
+     * Same as above, but uses a default {@link TimeUnit}.
+     * @param duration {@link Long} value.
+     * @param flowables {@link Iterable} of {@link Flowable}.
+     * @param <T> Generics parameter.
+     * @return {@link Flowable} instance.
+     * @see TimeUnit#MILLISECONDS
+     * @see #concatIterableDelayEach(long, TimeUnit, Iterable)
+     */
+    @NotNull
+    public static <T> Flowable<T> concatIterableDelayEach(
+        long duration,
+        @NotNull Iterable<Flowable<T>> flowables
+    ) {
+        return concatIterableDelayEach(duration, TimeUnit.MILLISECONDS, flowables);
+    }
+
+    /**
+     * Same as above, but uses varargs of {@link Flowable}.
+     * @param duration {@link Long} value.
+     * @param unit {@link TimeUnit} instance.
+     * @param flowables {@link Flowable} varargs.
+     * @param <T> Generics parameter.
+     * @return {@link Flowable} instance.
+     */
+    @NotNull
+    public static <T> Flowable<T> concatArrayDelayEach(
+        long duration,
+        @NotNull TimeUnit unit,
+        @NotNull Flowable<T>...flowables
+    ) {
+        Iterable<Flowable<T>> iterable = CollectionUtil.asList(flowables);
+        return concatIterableDelayEach(duration, unit, iterable);
+    }
+
+    /**
+     * Same as above, but uses a default {@link TimeUnit}.
+     * @param duration {@link Long} value.
+     * @param flowables {@link Flowable} varargs.
+     * @param <T> Generics parameter.
+     * @return {@link Flowable} instance.
+     * @see TimeUnit#MILLISECONDS
+     * @see #concatArrayDelayEach(long, TimeUnit, Flowable[])
+     */
+    @NotNull
+    public static <T> Flowable<T> concatArrayDelayEach(
+        long duration,
+        @NotNull Flowable<T>...flowables
+    ) {
+        return concatArrayDelayEach(duration, TimeUnit.MILLISECONDS, flowables);
     }
 
     private RxUtil() {}

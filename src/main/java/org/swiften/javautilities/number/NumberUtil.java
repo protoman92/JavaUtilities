@@ -50,6 +50,16 @@ public final class NumberUtil {
     }
 
     /**
+     * Check if {@link Number} is 0.
+     * @param number {@link Number} instance.
+     * @return {@link Boolean} value.
+     * @see Number#doubleValue()
+     */
+    public static boolean isZero(@NotNull Number number) {
+        return number.doubleValue() == 0;
+    }
+
+    /**
      * Check if {@link Number} is less than 0.
      * @param number {@link Number} instance.
      * @return {@link Boolean} value.

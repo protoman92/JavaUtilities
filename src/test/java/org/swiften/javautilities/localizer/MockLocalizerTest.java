@@ -1,17 +1,16 @@
 package org.swiften.javautilities.localizer;
 
-import org.jetbrains.annotations.Nullable;
-import org.swiften.javautilities.object.ObjectUtil;
-import org.swiften.javautilities.rx.CustomTestSubscriber;
 import io.reactivex.Flowable;
-import org.jetbrains.annotations.NotNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.subscribers.TestSubscriber;
-
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
+import org.swiften.javautilities.collection.CollectionUtil;
+import org.swiften.javautilities.object.ObjectUtil;
+import org.swiften.javautilities.rx.CustomTestSubscriber;
 import org.swiften.javautilities.rx.RxTestUtil;
-import static org.testng.Assert.*;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -22,6 +21,8 @@ import java.util.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Created by haipham on 3/26/17.
@@ -54,7 +55,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
         }
 
         for (ResourceBundle bundle : BUNDLES) {
-            Locale locale = CollectionTestUtil.randomElement(LOCALES);
+            Locale locale = CollectionUtil.randomElement(LOCALES);
             doReturn(locale).when(bundle).getLocale();
         }
 

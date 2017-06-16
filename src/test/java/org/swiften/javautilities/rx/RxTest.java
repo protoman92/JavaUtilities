@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.reactivestreams.Publisher;
 import org.swiften.javautilities.collection.Zip;
 import org.swiften.javautilities.log.LogUtil;
+import org.swiften.javautilities.number.NumberUtil;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -241,31 +242,43 @@ public final class RxTest {
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         final Flowable<Object> f1 = Flowable
-            .timer(100, TimeUnit.MILLISECONDS)
+            .just("Starting first stream")
+            .doOnNext(new Consumer<String>() {
+                @Override
+                public void accept(String s) throws Exception {
+                    LogUtil.printlnt(s);
+                }
+            })
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-            .map(new Function<Long,Object>() {
+            .map(new Function<String,Object>() {
                 @NotNull
                 @Override
-                public Object apply(Long aLong) throws Exception {
+                public Object apply(String s) throws Exception {
                     return 1;
                 }
             });
 
         Flowable<Object> f2 = Flowable
-            .timer(200, TimeUnit.MILLISECONDS)
+            .just("Starting second stream")
+            .doOnNext(new Consumer<String>() {
+                @Override
+                public void accept(String s) throws Exception {
+                    LogUtil.printlnt(s);
+                }
+            })
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-            .map(new Function<Long,Object>() {
+            .map(new Function<String,Object>() {
                 @NotNull
                 @Override
-                public Object apply(Long aLong) throws Exception {
+                public Object apply(String s) throws Exception {
                     return 2;
                 }
             });
 
         // When
-        RxUtil.concatArrayDelayEach(5000, f1, f2)
+        RxUtil.concatArrayDelayEach(1000, f1, f2)
             .doOnNext(new Consumer<Object>() {
                 @Override
                 public void accept(Object o) throws Exception {
@@ -288,10 +301,18 @@ public final class RxTest {
 
         // When
         Flowable.range(0, 10)
-            .flatMap(new Function<Integer,Publisher<?>>() {
+            .concatMap(new Function<Integer,Publisher<?>>() {
                 @Override
                 public Publisher<?> apply(Integer integer) throws Exception {
-                    return Flowable.just(integer);
+                    long delay = NumberUtil.randomBetween(100, 500);
+                    TimeUnit unit = TimeUnit.MILLISECONDS;
+                    return Flowable.just(integer).delay(delay, unit);
+                }
+            })
+            .flatMap(new Function<Object,Publisher<?>>() {
+                @Override
+                public Publisher<?> apply(Object o) throws Exception {
+                    return Flowable.just(((Integer)o) * 2);
                 }
             })
             .doOnNext(new Consumer<Object>() {
