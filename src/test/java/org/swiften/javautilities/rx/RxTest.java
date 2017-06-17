@@ -4,6 +4,8 @@ import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.BooleanSupplier;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -322,6 +324,78 @@ public final class RxTest {
                 }
             })
             .subscribe(subscriber);
+
+        subscriber.awaitTerminalEvent();
+
+        // Then
+        LogUtil.printlnt(RxTestUtil.nextEvents(subscriber));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void test_repeatWhen() {
+        // Setup
+        TestSubscriber subscriber = CustomTestSubscriber.create();
+
+        // When
+        Flowable.just(true)
+            .repeatWhen(new Function<Flowable<Object>,Publisher<?>>() {
+                @NotNull
+                @Override
+                public Publisher<?> apply(@NotNull Flowable<Object> flowable) throws Exception {
+                    return flowable
+                        .doOnNext(new Consumer<Object>() {
+                            @Override
+                            public void accept(@NonNull Object o) throws Exception {
+                                LogUtil.println(o);
+                            }
+                        })
+                        .take(2);
+                }
+            })
+            .repeat(3)
+            .subscribe(subscriber);
+
+        subscriber.awaitTerminalEvent();
+
+        // Then
+        LogUtil.println(RxTestUtil.nextEvents(subscriber));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void test_multipleConcat() {
+        // Setup
+        final Random RAND = new Random();
+        TestSubscriber subscriber = CustomTestSubscriber.create();
+
+        // When
+        Flowable.concatArray(
+            Flowable.range(0, 3)
+                .observeOn(Schedulers.io())
+                .flatMap(new Function<Integer,Publisher<?>>() {
+                    @NotNull
+                    @Override
+                    public Publisher<?> apply(@NotNull Integer integer) throws Exception {
+                        return Flowable.range(0, 2).delay(RAND.nextInt(200), TimeUnit.MILLISECONDS);
+                    }
+                }),
+
+            Flowable.range(0, 5)
+                .observeOn(Schedulers.io())
+                .flatMap(new Function<Integer,Publisher<?>>() {
+                    @NotNull
+                    @Override
+                    public Publisher<?> apply(@NotNull Integer integer) throws Exception {
+                        return Flowable.range(1, 3).delay(RAND.nextInt(200), TimeUnit.MILLISECONDS);
+                    }
+                })
+        ).doOnNext(new Consumer<Object>() {
+            @Override
+            public void accept(@NonNull Object o) throws Exception {
+                LogUtil.println(o);
+            }
+        }).subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
