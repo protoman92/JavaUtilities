@@ -92,6 +92,28 @@ public final class ObjectUtil {
     }
 
     /**
+     * Check if an {@link Object} is not null, and throw {@link RuntimeException}
+     * otherwise.
+     * @param object {@link Object} instance.
+     * @param message {@link String} value.
+     */
+    public static void requireNotNull(@Nullable Object object,
+                                      @NotNull String message) {
+        if (isNull(object)) {
+            throw new RuntimeException(message);
+        }
+    }
+
+    /**
+     * Same as above, but uses a default message.
+     * @param object {@link Object} instance.
+     * @see #requireNotNull(Object, String)
+     */
+    public static void requireNotNull(@Nullable Object object) {
+        requireNotNull(object, "");
+    }
+
+    /**
      * Return the same {@link T} instance.
      * @param object {@link T} instance.
      * @param <T> Generics parameter.

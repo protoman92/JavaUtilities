@@ -134,7 +134,7 @@ public final class RxUtil {
      * @return {@link Flowable} instance.
      */
     @NotNull
-    public static <T> Flowable<T> concatIterableDelayEach(
+    public static <T> Flowable<T> concatDelayEach(
         final long DURATION,
         @NotNull final TimeUnit UNIT,
         @NotNull Iterable<Flowable<T>> flowables
@@ -156,14 +156,14 @@ public final class RxUtil {
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
      * @see TimeUnit#MILLISECONDS
-     * @see #concatIterableDelayEach(long, TimeUnit, Iterable)
+     * @see #concatDelayEach(long, TimeUnit, Iterable)
      */
     @NotNull
-    public static <T> Flowable<T> concatIterableDelayEach(
+    public static <T> Flowable<T> concatDelayEach(
         long duration,
         @NotNull Iterable<Flowable<T>> flowables
     ) {
-        return concatIterableDelayEach(duration, TimeUnit.MILLISECONDS, flowables);
+        return concatDelayEach(duration, TimeUnit.MILLISECONDS, flowables);
     }
 
     /**
@@ -175,13 +175,13 @@ public final class RxUtil {
      * @return {@link Flowable} instance.
      */
     @NotNull
-    public static <T> Flowable<T> concatArrayDelayEach(
+    public static <T> Flowable<T> concatDelayEach(
         long duration,
         @NotNull TimeUnit unit,
         @NotNull Flowable<T>...flowables
     ) {
         Iterable<Flowable<T>> iterable = CollectionUtil.asList(flowables);
-        return concatIterableDelayEach(duration, unit, iterable);
+        return concatDelayEach(duration, unit, iterable);
     }
 
     /**
@@ -191,14 +191,14 @@ public final class RxUtil {
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
      * @see TimeUnit#MILLISECONDS
-     * @see #concatArrayDelayEach(long, TimeUnit, Flowable[])
+     * @see #concatDelayEach(long, TimeUnit, Flowable[])
      */
     @NotNull
-    public static <T> Flowable<T> concatArrayDelayEach(
+    public static <T> Flowable<T> concatDelayEach(
         long duration,
         @NotNull Flowable<T>...flowables
     ) {
-        return concatArrayDelayEach(duration, TimeUnit.MILLISECONDS, flowables);
+        return concatDelayEach(duration, TimeUnit.MILLISECONDS, flowables);
     }
 
     private RxUtil() {}

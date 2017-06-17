@@ -278,7 +278,7 @@ public final class RxTest {
             });
 
         // When
-        RxUtil.concatArrayDelayEach(1000, f1, f2)
+        RxUtil.concatDelayEach(1000, f1, f2)
             .doOnNext(new Consumer<Object>() {
                 @Override
                 public void accept(Object o) throws Exception {

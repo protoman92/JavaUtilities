@@ -65,5 +65,28 @@ public final class StringUtil {
         return builder.toString();
     }
 
+    /**
+     * Check if a {@link String} is not null/not empty, and throw
+     * {@link RuntimeException} otherwise.
+     * @param target {@link String} value.
+     * @param message {@link String} value.
+     * @see #isNullOrEmpty(String)
+     */
+    public static void requireNotNullOrEmpty(@NotNull String target,
+                                             @NotNull String message) {
+        if (isNullOrEmpty(target)) {
+            throw new RuntimeException(message);
+        }
+    }
+
+    /**
+     * Same as above, but uses a default message.
+     * @param target {@link String} value.
+     * @see #requireNotNullOrEmpty(String, String)
+     */
+    public static void requireNotNullOrEmpty(@NotNull String target) {
+        requireNotNullOrEmpty(target, "");
+    }
+
     private StringUtil() {}
 }
