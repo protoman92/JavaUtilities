@@ -5,9 +5,9 @@ import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.BooleanSupplier;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subscribers.TestSubscriber;
@@ -16,6 +16,7 @@ import org.reactivestreams.Publisher;
 import org.swiften.javautilities.collection.Zip;
 import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.number.NumberUtil;
+import org.swiften.javautilities.object.ObjectUtil;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -350,12 +351,118 @@ public final class RxTest {
                                 LogUtil.println(o);
                             }
                         })
-                        .take(2);
+                        .flatMap(new Function<Object,Publisher<?>>() {
+                            @Override
+                            public Publisher<?> apply(@NonNull Object o) throws Exception {
+                                return RxUtil.error();
+                            }
+                        })
+                        .onErrorReturnItem(true);
                 }
             })
             .repeat(3)
             .subscribe(subscriber);
 
+        subscriber.awaitTerminalEvent();
+
+        // Then
+        LogUtil.println(RxTestUtil.nextEvents(subscriber));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void test_repeatWhenWithBooleanFlowable() {
+        // Setup
+        final Random RAND = new Random();
+        TestSubscriber subscriber = CustomTestSubscriber.create();
+
+        // When
+        Flowable<Boolean> pred = Flowable.range(0, 100)
+            .observeOn(Schedulers.io())
+            .map(new Function<Integer,Boolean>() {
+                @NotNull
+                @Override
+                public Boolean apply(@NotNull Integer integer) throws Exception {
+                    return RAND.nextBoolean();
+                }
+            })
+            .firstElement()
+            .toFlowable()
+            .delay(RAND.nextInt(200), TimeUnit.MILLISECONDS)
+            .repeat();
+
+        Flowable.just(1)
+            .compose(RxUtil.repeatWhile(pred))
+            .subscribe(subscriber);
+
+        subscriber.awaitTerminalEvent();
+
+        // Then
+        LogUtil.println(RxTestUtil.nextEvents(subscriber));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void test_repeatWhenWithConcat() {
+        // Setup
+        final Random RAND = new Random();
+        final int LENGTH = 10;
+        TestSubscriber subscriber = CustomTestSubscriber.create();
+
+        Flowable<Boolean> pred = Flowable.just(1)
+            .map(new Function<Integer,Integer>() {
+                @NotNull
+                @Override
+                public Integer apply(@NotNull Integer integer) throws Exception {
+                    return RAND.nextInt(100);
+                }
+            })
+            .map(new Function<Integer,Boolean>() {
+                @NotNull
+                @Override
+                public Boolean apply(@NotNull Integer integer) throws Exception {
+                    return integer > LENGTH;
+                }
+            })
+            .firstElement()
+            .toFlowable()
+            .repeat();
+
+        Flowable<?> source = Flowable.defer(new Callable<Publisher<?>>() {
+            @Override
+            public Publisher<?> call() throws Exception {
+                return Flowable
+                    .concatArray(
+                        Flowable.just(1).delay(100, TimeUnit.MILLISECONDS),
+                        Flowable.just(2).delay(200, TimeUnit.MILLISECONDS),
+                        Flowable.just(3).delay(300, TimeUnit.MILLISECONDS)
+                    )
+                    .doOnNext(new Consumer<Integer>() {
+                        @Override
+                        public void accept(@NotNull Integer integer) throws Exception {
+                            LogUtil.printlnt(integer);
+                        }
+                    })
+                    .all(new Predicate<Integer>() {
+                        @Override
+                        public boolean test(@NotNull Integer integer) throws Exception {
+                            return ObjectUtil.nonNull(integer);
+                        }
+                    })
+                    .toFlowable();
+            }
+        });
+
+        // When
+        source.compose(RxUtil.repeatWhile(pred))
+            .all(new Predicate<Object>() {
+                @Override
+                public boolean test(@NotNull Object integer) throws Exception {
+                    return ObjectUtil.nonNull(integer);
+                }
+            })
+            .toFlowable()
+            .subscribe(subscriber);
         subscriber.awaitTerminalEvent();
 
         // Then

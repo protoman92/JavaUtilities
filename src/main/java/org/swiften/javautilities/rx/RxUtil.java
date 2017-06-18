@@ -4,12 +4,16 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableTransformer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
+import org.swiften.javautilities.bool.BooleanUtil;
 import org.swiften.javautilities.collection.CollectionUtil;
+import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.object.ObjectUtil;
 
 import java.util.Arrays;
@@ -199,6 +203,52 @@ public final class RxUtil {
         @NotNull Flowable<T>...flowables
     ) {
         return concatDelayEach(duration, TimeUnit.MILLISECONDS, flowables);
+    }
+
+    /**
+     * Repeat {@link Flowable} while a {@link Boolean} {@link Flowable} is
+     * emitting true.
+     * @param WHEN_FL {@link Flowable} instance.
+     * @param <T> Generics parameter.
+     * @return {@link FlowableTransformer} instance.
+     * @see BooleanUtil#isFalse(boolean)
+     * @see RxUtil#error()
+     */
+    @NotNull
+    public static <T> FlowableTransformer<T,T> repeatWhile(
+        @NotNull final Flowable<Boolean> WHEN_FL
+    ) {
+        return new FlowableTransformer<T,T>() {
+            @NotNull
+            @Override
+            public Publisher<T> apply(@NotNull Flowable<T> upstream) {
+                return upstream.repeatWhen(new Function<Flowable<Object>,Publisher<?>>() {
+                    @NotNull
+                    @Override
+                    public Publisher<?> apply(@NotNull Flowable<Object> flowable) throws Exception {
+                        return flowable
+                            .flatMap(new Function<Object,Publisher<Boolean>>() {
+                                @Override
+                                public Publisher<Boolean> apply(@NotNull Object o) throws Exception {
+                                    return WHEN_FL;
+                                }
+                            })
+                            .flatMap(new Function<Boolean,Publisher<?>>() {
+                                @NotNull
+                                @Override
+                                public Publisher<?> apply(@NotNull Boolean b) throws Exception {
+                                    if (BooleanUtil.isFalse(b)) {
+                                        return RxUtil.error();
+                                    } else {
+                                        return Flowable.just(b);
+                                    }
+                                }
+                            })
+                            .onErrorReturnItem(false);
+                    }
+                });
+            }
+        };
     }
 
     private RxUtil() {}
