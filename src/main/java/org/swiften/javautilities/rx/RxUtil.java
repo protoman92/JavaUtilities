@@ -233,14 +233,13 @@ public final class RxUtil {
                                     return WHEN_FL;
                                 }
                             })
-                            .flatMap(new Function<Boolean,Publisher<?>>() {
-                                @NotNull
+                            .map(new Function<Boolean,Object>() {
                                 @Override
-                                public Publisher<?> apply(@NotNull Boolean b) throws Exception {
+                                public Object apply(@NonNull Boolean b) throws Exception {
                                     if (BooleanUtil.isFalse(b)) {
-                                        return RxUtil.error();
+                                        throw new RuntimeException();
                                     } else {
-                                        return Flowable.just(b);
+                                        return true;
                                     }
                                 }
                             })
