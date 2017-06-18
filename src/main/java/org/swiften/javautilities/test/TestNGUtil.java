@@ -5,10 +5,7 @@ import org.swiften.javautilities.collection.CollectionUtil;
 import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.object.ObjectUtil;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by haipham on 6/18/17.
@@ -105,17 +102,12 @@ public final class TestNGUtil {
      * then wrapped in an {@link Object} array.
      * @param objects {@link Object} array.
      * @return {@link List} of {@link Object} array.
-     * @see #oneFromEach(Collection)
+     * @see CollectionUtil#asList(Object[])
+     * @see #oneFromEach(Collection[])
      */
     @NotNull
     public static List<Object[]> oneFromEach(@NotNull Object...objects) {
-        List<Object> data = new LinkedList<Object>();
-
-        for (Object object : objects) {
-            data.add(new Object[] { object });
-        }
-
-        return oneFromEach(data);
+        return oneFromEach(CollectionUtil.asList(objects));
     }
 
     private TestNGUtil() {}
