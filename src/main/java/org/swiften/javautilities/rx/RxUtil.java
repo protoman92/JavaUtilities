@@ -4,16 +4,13 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableTransformer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.BiFunction;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
 import org.swiften.javautilities.bool.BooleanUtil;
 import org.swiften.javautilities.collection.CollectionUtil;
-import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.object.ObjectUtil;
 
 import java.util.Arrays;
@@ -208,7 +205,7 @@ public final class RxUtil {
     /**
      * Repeat {@link Flowable} while a {@link Boolean} {@link Flowable} is
      * emitting true.
-     * @param WHEN_FL {@link Flowable} instance.
+     * @param WHEN_FLOWABLE {@link Flowable} instance.
      * @param <T> Generics parameter.
      * @return {@link FlowableTransformer} instance.
      * @see BooleanUtil#isFalse(boolean)
@@ -216,7 +213,7 @@ public final class RxUtil {
      */
     @NotNull
     public static <T> FlowableTransformer<T,T> repeatWhile(
-        @NotNull final Flowable<Boolean> WHEN_FL
+        @NotNull final Flowable<Boolean> WHEN_FLOWABLE
     ) {
         return new FlowableTransformer<T,T>() {
             @NotNull
@@ -230,16 +227,17 @@ public final class RxUtil {
                             .flatMap(new Function<Object,Publisher<Boolean>>() {
                                 @Override
                                 public Publisher<Boolean> apply(@NotNull Object o) throws Exception {
-                                    return WHEN_FL;
+                                    return WHEN_FLOWABLE;
                                 }
                             })
-                            .map(new Function<Boolean,Object>() {
+                            .flatMap(new Function<Boolean,Publisher<?>>() {
+                                @NotNull
                                 @Override
-                                public Object apply(@NonNull Boolean b) throws Exception {
+                                public Publisher<?> apply(@NotNull Boolean b) throws Exception {
                                     if (BooleanUtil.isFalse(b)) {
-                                        throw new RuntimeException();
+                                        return error();
                                     } else {
-                                        return true;
+                                        return Flowable.just(b);
                                     }
                                 }
                             })
