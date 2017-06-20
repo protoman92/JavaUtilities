@@ -3,24 +3,102 @@ package org.swiften.javautilities.rx;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableTransformer;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.exceptions.Exceptions;
 import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.TestSubscriber;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
 import org.swiften.javautilities.bool.BooleanUtil;
 import org.swiften.javautilities.collection.CollectionUtil;
+import org.swiften.javautilities.localizer.LocalizerType;
+import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.object.ObjectUtil;
+import org.swiften.javautilities.string.StringUtil;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by haipham on 3/31/17.
  */
 public final class RxUtil {
+    /**
+     * Get next events from {@link List} of {@link Object}.
+     * @param events {@link List} of all rx events.
+     * @param <T> Generics parameter.
+     * @return {@link List} of {@link T}.
+     */
+    @NotNull
+    @SuppressWarnings("unchecked")
+    public static <T> List<T> nextEvents(@NotNull List<Object> events) {
+        return (List)events.get(0);
+    }
+
+    /**
+     * Get next events from {@link TestSubscriber}.
+     * @param subscriber {@link TestSubscriber} instance.
+     * @return {@link List} instance.
+     */
+    @NotNull
+    @SuppressWarnings("unchecked")
+    public static List nextEvents(@NotNull TestSubscriber subscriber) {
+        return (List)subscriber.getEvents().get(0);
+    }
+
+    /**
+     * Get the number of next events from {@link List} of {@link Object}.
+     * @param events {@link List} of {@link Object}.
+     * @return {@link Integer} value.
+     * @see #nextEvents(List)
+     */
+    public static int nextEventsCount(@NotNull List<Object> events) {
+        return nextEvents(events).size();
+    }
+
+    /**
+     * Get the number of next events from {@link TestSubscriber}.
+     * @param subscriber {@link TestSubscriber} instance.
+     * @return {@link Integer} value.
+     * @see #nextEvents(TestSubscriber)
+     */
+    public static int nextEventsCount(@NotNull TestSubscriber subscriber) {
+        return nextEvents(subscriber).size();
+    }
+
+    /**
+     * Get the first next event from {@link List} of {@link Object}. This
+     * can throw {@link IndexOutOfBoundsException}.
+     * @param events {@link List} of all rx events.
+     * @param <T> Generics parameter.
+     * @return {@link T} instance.
+     * @see #nextEvents(List)
+     */
+    @NotNull
+    @SuppressWarnings("unchecked")
+    public static <T> T firstNextEvent(@NotNull List<Object> events) {
+        return (T) nextEvents(events).get(0);
+    }
+
+    /**
+     * Get the first next event from {@link TestSubscriber}. This can throw
+     * {@link IndexOutOfBoundsException}.
+     * @param subscriber {@link TestSubscriber} instance.
+     * @param <T> Generics parameter.
+     * @return {@link T} instance.
+     * @see #nextEvents(TestSubscriber)
+     */
+    @NotNull
+    @SuppressWarnings("unchecked")
+    public static <T> T firstNextEvent(@NotNull TestSubscriber subscriber) {
+        return (T)firstNextEvent(subscriber.getEvents());
+    }
+
     /**
      * Apply {@link FlowableTransformer} to an existing {@link Flowable}.
      * Applicable to {@link Flowable#compose(FlowableTransformer)}.
@@ -242,6 +320,178 @@ public final class RxUtil {
                                 }
                             })
                             .onErrorReturnItem(false);
+                    }
+                });
+            }
+        };
+    }
+
+    /**
+     * {@link Flowable#timeout(long, TimeUnit, Publisher)} with default
+     * {@link T} instance.
+     * @param DURATION {@link Long} value.
+     * @param UNIT {@link TimeUnit} instance.
+     * @param VALUE {@link T} instance.
+     * @param <T> Generics parameter.
+     * @return {@link FlowableTransformer} instance.
+     */
+    @NotNull
+    public static <T> FlowableTransformer<T,T> timeout(
+        final long DURATION,
+        @NotNull final TimeUnit UNIT,
+        @NotNull final T VALUE
+    ) {
+        return new FlowableTransformer<T,T>() {
+            @NotNull
+            @Override
+            public Publisher<T> apply(@NotNull Flowable<T> source) {
+                return source.timeout(DURATION, UNIT, Flowable.just(VALUE));
+            }
+        };
+    }
+
+    /**
+     * {@link Flowable#retryWhen(Function)}, but with a delay each iteration.
+     * @param TIMES {@link Integer} value.
+     * @param DELAY_FN {@link Function} instance to produce delay duration.
+     * @param UNIT {@link TimeUnit} instance.
+     * @param <T> Generics parameter.
+     * @return {@link FlowableTransformer} instance.
+     */
+    @NotNull
+    public static <T> FlowableTransformer<T,T> delayRetry(
+        final int TIMES,
+        @NotNull final Function<Integer,Long> DELAY_FN,
+        @NotNull final TimeUnit UNIT
+    ) {
+        return new FlowableTransformer<T,T>() {
+            @NotNull
+            @Override
+            public Publisher<T> apply(@NotNull Flowable<T> source) {
+                return source.retryWhen(new Function<Flowable<Throwable>,Publisher<?>>() {
+                    @NotNull
+                    @Override
+                    public Publisher<?> apply(@NotNull Flowable<Throwable> tf) throws Exception {
+                        /* We add one to the retry count, or else we won't be
+                         * able to catch when the count is exceeded */
+                        return Flowable.zip(
+                            tf, Flowable.range(1, TIMES + 1),
+                            new BiFunction<Throwable,Integer,Integer>() {
+                                @Override
+                                public Integer apply(@NotNull Throwable e,
+                                                     @NotNull Integer i) throws Exception {
+                                    if (i > TIMES) {
+                                        throw Exceptions.propagate(e);
+                                    } else {
+                                        return i;
+                                    }
+                                }
+                            }
+                        ).flatMap(new Function<Integer,Publisher<?>>() {
+                            @NotNull
+                            @Override
+                            public Publisher<?> apply(@NotNull Integer o) throws Exception {
+                                long delay = DELAY_FN.apply(o);
+                                return Flowable.timer(delay, TimeUnit.MILLISECONDS);
+                            }
+                        });
+                    }
+                });
+            }
+        };
+    }
+
+    /**
+     * Same as above, but uses a default {@link Function}.
+     * @param times {@link Integer} value.
+     * @param DELAY {@link Long} value.
+     * @param unit {@link TimeUnit} instance.
+     * @param <T> Generics parameter.
+     * @return {@link FlowableTransformer} instance.
+     * @see #delayRetry(int, Function, TimeUnit)
+     */
+    @NotNull
+    public static <T> FlowableTransformer<T,T> delayRetry(int times,
+                                                          final long DELAY,
+                                                          @NotNull TimeUnit unit) {
+        Function<Integer,Long> fn = new Function<Integer,Long>() {
+            @NotNull
+            @Override
+            public Long apply(@NotNull Integer integer) throws Exception {
+                return DELAY;
+            }
+        };
+
+        return delayRetry(times, fn, unit);
+    }
+
+    /**
+     * Same as above, but uses {@link TimeUnit#MILLISECONDS}.
+     * @param times {@link Integer} value.
+     * @param delay {@link Long} value.
+     * @param <T> Generics parameter.
+     * @return {@link FlowableTransformer} instance.
+     * @see TimeUnit#MILLISECONDS
+     * @see #delayRetry(int, Function, TimeUnit)
+     */
+    @NotNull
+    public static <T> FlowableTransformer<T,T> delayRetry(int times, long delay) {
+        return delayRetry(times, delay, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * Same as above, but uses {@link TimeUnit#MILLISECONDS}.
+     * @param duration {@link Long} value.
+     * @param value {@link T} instance.
+     * @param <T> Generics parameter.
+     * @return {@link FlowableTransformer} instance.
+     * @see TimeUnit#MILLISECONDS
+     * @see #timeout(long, TimeUnit, Object)
+     */
+    @NotNull
+    public static <T> FlowableTransformer<T,T> timeout(long duration, @NotNull T value) {
+        return timeout(duration, TimeUnit.MILLISECONDS, value);
+    }
+
+    /**
+     * Reactively remove all instances of {@link String} values from another
+     * {@link String}. Before the removal, we localize all {@link String}
+     * values to be removed.
+     * @param LOCALIZER {@link LocalizerType} instance.
+     * @param REMOVABLES {@link String} varargs.
+     * @return {@link FlowableTransformer} instance.
+     * @see LocalizerType#rxa_localize(String)
+     * @see StringUtil#removeAll(String, String)
+     */
+    @NotNull
+    public static FlowableTransformer<String,String> removeFromString(
+        @NotNull final LocalizerType LOCALIZER,
+        @NotNull final String...REMOVABLES
+    ) {
+        return new FlowableTransformer<String,String>() {
+            @Override
+            public Publisher<String> apply(@NonNull Flowable<String> source) {
+                return source.flatMap(new Function<String,Publisher<String>>() {
+                    @NotNull
+                    @Override
+                    public Publisher<String> apply(@NotNull String s) throws Exception {
+                        return Flowable.fromArray(REMOVABLES)
+                            .flatMap(new Function<String,Publisher<String>>() {
+                                @NotNull
+                                @Override
+                                public Publisher<String> apply(@NotNull String s) throws Exception {
+                                    return LOCALIZER.rxa_localize(s);
+                                }
+                            })
+                            .reduce(s, new BiFunction<String,String,String>() {
+                                @NotNull
+                                @Override
+                                public String apply(@NotNull String s,
+                                                    @NotNull String s2) throws Exception {
+                                    return StringUtil.removeAll(s, s2);
+                                }
+                            })
+                            .toFlowable();
                     }
                 });
             }

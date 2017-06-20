@@ -10,7 +10,7 @@ import org.reactivestreams.Publisher;
 import org.swiften.javautilities.collection.CollectionUtil;
 import org.swiften.javautilities.object.ObjectUtil;
 import org.swiften.javautilities.rx.CustomTestSubscriber;
-import org.swiften.javautilities.rx.RxTestUtil;
+import org.swiften.javautilities.rx.RxUtil;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -134,7 +134,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
             subscriber.assertSubscribed();
             subscriber.assertNoErrors();
             subscriber.assertComplete();
-            assertEquals(RxTestUtil.nextEventsCount(subscriber), included);
+            assertEquals(RxUtil.nextEventsCount(subscriber), included);
         }
     }
 
@@ -346,7 +346,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 //        subscriber.assertSubscribed();
 //        subscriber.assertNoErrors();
 //        subscriber.assertComplete();
-//        LogUtil.println(RxTestUtil.firstNextEvent(subscriber));
+//        LogUtil.println(RxUtil.firstNextEvent(subscriber));
 //        verify(LC, times(totalNestedCount)).bundles();
 //        verify(LC, times(FMT.size())).rxe_resources(eq(LOCALE));
 //        verify(LC, times(FMT.size())).rxa_localize(any(LCFormat.class), eq(LOCALE));

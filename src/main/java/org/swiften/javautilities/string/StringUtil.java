@@ -88,5 +88,17 @@ public final class StringUtil {
         requireNotNullOrEmpty(target, "");
     }
 
+    /**
+     * Remove all instance of {@link String} value from another {@link String}.
+     * @param original The original {@link String} value.
+     * @param removable The {@link String} value to be removed.
+     * @return {@link String} value.
+     */
+    @NotNull
+    public static String removeAll(@NotNull String original,
+                                   @NotNull String removable) {
+        return original.replaceAll(removable, "");
+    }
+
     private StringUtil() {}
 }

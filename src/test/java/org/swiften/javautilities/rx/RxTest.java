@@ -14,6 +14,8 @@ import io.reactivex.subscribers.TestSubscriber;
 import org.jetbrains.annotations.NotNull;
 import org.reactivestreams.Publisher;
 import org.swiften.javautilities.collection.Zip;
+import org.swiften.javautilities.localizer.Localizer;
+import org.swiften.javautilities.localizer.LocalizerType;
 import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.number.NumberUtil;
 import org.swiften.javautilities.object.ObjectUtil;
@@ -26,6 +28,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
+
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 /**
  * Created by haipham on 3/25/17.
@@ -43,7 +48,7 @@ public final class RxTest {
         observer.awaitTerminalEvent();
 
         // Then
-        List nextEvents = RxTestUtil.nextEvents(observer);
+        List nextEvents = RxUtil.nextEvents(observer);
         Assert.assertEquals(collection.size(), nextEvents.size());
 
         for (int i = 0, length = collection.size(); i < length; i++) {
@@ -88,7 +93,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.println(RxTestUtil.nextEvents(subscriber));
+        LogUtil.println(RxUtil.nextEvents(subscriber));
     }
 
     @Test
@@ -135,7 +140,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.println(RxTestUtil.nextEvents(subscriber));
+        LogUtil.println(RxUtil.nextEvents(subscriber));
     }
 
     @Test
@@ -181,7 +186,7 @@ public final class RxTest {
             subscriber.awaitTerminalEvent();
 
             // Then
-            LogUtil.println(RxTestUtil.nextEvents(subscriber));
+            LogUtil.println(RxUtil.nextEvents(subscriber));
         } catch (InterruptedException e) {
             LogUtil.println(e);
         }
@@ -235,7 +240,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.println(RxTestUtil.nextEvents(subscriber));
+        LogUtil.println(RxUtil.nextEvents(subscriber));
     }
 
     @Test
@@ -293,7 +298,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.printlnt(RxTestUtil.nextEvents(subscriber));
+        LogUtil.printlnt(RxUtil.nextEvents(subscriber));
     }
 
     @Test
@@ -329,7 +334,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.printlnt(RxTestUtil.nextEvents(subscriber));
+        LogUtil.printlnt(RxUtil.nextEvents(subscriber));
     }
 
     @Test
@@ -366,7 +371,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.println(RxTestUtil.nextEvents(subscriber));
+        LogUtil.println(RxUtil.nextEvents(subscriber));
     }
 
     @Test
@@ -398,7 +403,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.println(RxTestUtil.nextEvents(subscriber));
+        LogUtil.println(RxUtil.nextEvents(subscriber));
     }
 
     @Test
@@ -466,7 +471,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.println(RxTestUtil.nextEvents(subscriber));
+        LogUtil.println(RxUtil.nextEvents(subscriber));
     }
 
     @Test
@@ -507,6 +512,60 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.printlnt(RxTestUtil.nextEvents(subscriber));
+        LogUtil.printlnt(RxUtil.nextEvents(subscriber));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void test_delayRetry() {
+        // Setup
+        TestSubscriber subscriber = CustomTestSubscriber.create();
+
+        // When
+        Flowable.just(1)
+            .flatMap(new Function<Integer,Publisher<?>>() {
+                @NotNull
+                @Override
+                public Publisher<?> apply(@NotNull Integer i) throws Exception {
+                    return RxUtil.error("Error!");
+                }
+            })
+            .doOnError(new Consumer<Throwable>() {
+                @Override
+                public void accept(@NotNull Throwable t) throws Exception {
+                    LogUtil.println(t.getMessage());
+                }
+            })
+            .compose(RxUtil.delayRetry(3, new Function<Integer,Long>() {
+                @NotNull
+                @Override
+                public Long apply(@NotNull Integer i) throws Exception {
+                    return i * 500L;
+                }
+            }, TimeUnit.MILLISECONDS))
+            .subscribe(subscriber);
+
+        subscriber.awaitTerminalEvent();
+
+        // Then
+        LogUtil.printlnt(RxUtil.nextEvents(subscriber));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void test_removeFromString() {
+        // Setup
+        LocalizerType localizer = Localizer.builder().build();
+        TestSubscriber subscriber = CustomTestSubscriber.create();
+
+        // When
+        Flowable.just("ABC DEF GHJ")
+            .compose(RxUtil.removeFromString(localizer, "A", "E", "H"))
+            .subscribe(subscriber);
+
+        subscriber.awaitTerminalEvent();
+
+        // Then
+        LogUtil.printlnt(RxUtil.nextEvents(subscriber));
     }
 }

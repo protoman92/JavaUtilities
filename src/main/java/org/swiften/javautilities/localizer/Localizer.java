@@ -1,6 +1,7 @@
 package org.swiften.javautilities.localizer;
 
 import io.reactivex.annotations.NonNull;
+import io.reactivex.schedulers.Schedulers;
 import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
 import org.swiften.javautilities.collection.CollectionUtil;
