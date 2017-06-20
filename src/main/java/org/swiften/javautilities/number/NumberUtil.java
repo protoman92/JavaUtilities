@@ -97,5 +97,16 @@ public final class NumberUtil {
         return numbers;
     }
 
+    /**
+     * Get the sum of two {@link Number}.
+     * @param n1 {@link Number} instance.
+     * @param n2 {@link Number} instance.
+     * @return {@link Double} value.
+     * @see Number#doubleValue()
+     */
+    public static double sum(@NotNull Number n1, @NotNull Number n2) {
+        return n1.doubleValue() + n2.doubleValue();
+    }
+
     private NumberUtil() {}
 }
