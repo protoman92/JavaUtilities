@@ -273,8 +273,7 @@ public final class RxUtil {
      */
     @NotNull
     public static <T> Flowable<T> concatDelayEach(
-        long duration,
-        @NotNull Flowable<T>...flowables
+        long duration, @NotNull Flowable<T>...flowables
     ) {
         return concatDelayEach(duration, TimeUnit.MILLISECONDS, flowables);
     }
@@ -326,10 +325,31 @@ public final class RxUtil {
     }
 
     /**
+     * Repeat {@link Flowable} until a {@link Boolean} {@link Flowable}
+     * emits false.
+     * @param whenFlowable {@link Flowable} instance.
+     * @param <T> Generics parameter.
+     * @return {@link FlowableTransformer} instance.
+     * @see BooleanUtil#isFalse(boolean)
+     */
+    @NotNull
+    public static <T> FlowableTransformer<T,T> repeatUntil(
+        @NotNull Flowable<Boolean> whenFlowable
+    ) {
+        return repeatWhile(whenFlowable.map(new Function<Boolean,Boolean>() {
+            @NotNull
+            @Override
+            public Boolean apply(@NotNull Boolean b) throws Exception {
+                return BooleanUtil.isFalse(b);
+            }
+        }));
+    }
+
+    /**
      * Emit {@link T} while another {@link Flowable} is emitting true.
      * @param SOURCE {@link Flowable} instance.
      * @param WHEN_FL {@link Flowable} instance.
-     * @param DEFAULT {@link T} instance for the initial check.
+     * @param DEFAULT {@link Publisher} instance for the initial check.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
      * @see BooleanUtil#isTrue(boolean)
@@ -338,7 +358,7 @@ public final class RxUtil {
     @NotNull
     public static <T> Flowable<T> doWhile(@NotNull final Flowable<T> SOURCE,
                                           @NotNull final Flowable<Boolean> WHEN_FL,
-                                          @NotNull final T DEFAULT) {
+                                          @NotNull final Publisher<T> DEFAULT) {
         return WHEN_FL.flatMap(new Function<Boolean,Publisher<T>>() {
             @NotNull
             @Override
@@ -346,10 +366,94 @@ public final class RxUtil {
                 if (BooleanUtil.isTrue(b)) {
                     return SOURCE.compose(RxUtil.<T>repeatWhile(WHEN_FL));
                 } else {
-                    return Flowable.just(DEFAULT);
+                    return DEFAULT;
                 }
             }
         });
+    }
+
+    /**
+     * Same as above, but use {@link Flowable#empty()} as the default
+     * {@link Publisher}.
+     * @param source {@link Flowable} instance.
+     * @param whenFl {@link Flowable} instance.
+     * @param <T> Generics parameter.
+     * @return {@link Flowable} instance.
+     * @see #doWhile(Flowable, Flowable, Publisher)
+     */
+    @NotNull
+    public static <T> Flowable<T> doWhile(@NotNull Flowable<T> source,
+                                          @NotNull Flowable<Boolean> whenFl) {
+        return doWhile(source, whenFl, Flowable.<T>empty());
+    }
+
+    /**
+     * Same as above, but uses a default {@link T} instance.
+     * @param source {@link Flowable} instance.
+     * @param whenFl {@link Flowable} instance.
+     * @param defValue {@link T} instance.
+     * @param <T> Generics parameter.
+     * @return {@link Flowable} instance.
+     * @see #doWhile(Flowable, Flowable, Publisher)
+     */
+    @NotNull
+    public static <T> Flowable<T> doWhile(@NotNull Flowable<T> source,
+                                          @NotNull Flowable<Boolean> whenFl,
+                                          @NotNull T defValue) {
+        return doWhile(source, whenFl, Flowable.just(defValue));
+    }
+
+    /**
+     * Emit {@link T} until a {@link Boolean} {@link Flowable} emits true.
+     * @param source {@link Flowable} instance.
+     * @param untilFl {@link Flowable} instance.
+     * @param defPublisher {@link Publisher} instance.
+     * @param <T> Generics parameter.
+     * @return {@link Flowable} instance.
+     * @see #doWhile(Flowable, Flowable, Publisher)
+     */
+    @NotNull
+    public static <T> Flowable<T> doUntil(@NotNull Flowable<T> source,
+                                          @NotNull Flowable<Boolean> untilFl,
+                                          @NotNull Publisher<T> defPublisher) {
+        return doWhile(source, untilFl.map(new Function<Boolean,Boolean>() {
+            @NotNull
+            @Override
+            public Boolean apply(@NotNull Boolean b) throws Exception {
+                return BooleanUtil.isFalse(b);
+            }
+        }), defPublisher);
+    }
+
+    /**
+     * Same as above, but uses {@link Flowable#empty()} for the default
+     * {@link Publisher}.
+     * @param source {@link Flowable} instance.
+     * @param untilFl {@link Flowable} instance.
+     * @param <T> Generics parameter.
+     * @return {@link Flowable} instance.
+     * @see #doUntil(Flowable, Flowable, Publisher)
+     */
+    @NotNull
+    public static <T> Flowable<T> doUntil(@NotNull Flowable<T> source,
+                                          @NotNull Flowable<Boolean> untilFl) {
+        return doUntil(source, untilFl, Flowable.<T>empty());
+    }
+
+    /**
+     * Same as above, but uses a default {@link T} instance.
+     * @param source {@link Flowable} instance.
+     * @param untilFl {@link Flowable} instance.
+     * @param defValue {@link T} instance.
+     * @param <T> Generics parameter.
+     * @return {@link Flowable} instance.
+     * @see #doUntil(Flowable, Flowable, Publisher)
+     */
+    @NotNull
+    public static <T> Flowable<T> doUntil(@NotNull Flowable<T> source,
+                                          @NotNull Flowable<Boolean> untilFl,
+                                          @NotNull T defValue) {
+        return doUntil(source, untilFl, Flowable.just(defValue));
     }
 
     /**
@@ -400,19 +504,19 @@ public final class RxUtil {
     /**
      * Same as above, but uses a default {@link Flowable} that emits
      * {@link Boolean}.
-     * @param WHEN_FLOWABLE {@link Flowable} instance.
+     * @param WHEN_FL {@link Flowable} instance.
      * @param <T> Generics parameter.
      * @return {@link FlowableTransformer} instance.
      */
     @NotNull
     public static <T> FlowableTransformer<T,T> retryWhile(
-        @NotNull final Flowable<Boolean> WHEN_FLOWABLE
+        @NotNull final Flowable<Boolean> WHEN_FL
     ) {
         return retryWhile(new Function<Throwable,Flowable<Boolean>>() {
             @NotNull
             @Override
             public Flowable<Boolean> apply(@NotNull Throwable t) throws Exception {
-                return WHEN_FLOWABLE;
+                return WHEN_FL;
             }
         });
     }
