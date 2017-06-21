@@ -29,9 +29,6 @@ import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-
 /**
  * Created by haipham on 3/25/17.
  */
@@ -561,6 +558,89 @@ public final class RxTest {
         // When
         Flowable.just("ABC DEF GHJ")
             .compose(RxUtil.removeFromString(localizer, "A", "E", "H"))
+            .subscribe(subscriber);
+
+        subscriber.awaitTerminalEvent();
+
+        // Then
+        LogUtil.printlnt(RxUtil.nextEvents(subscriber));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void test_retryWhile() {
+        // Setup
+        final Random RAND = new Random();
+
+        Flowable<Boolean> predicate = Flowable.just(1)
+            .map(new Function<Integer,Integer>() {
+                @NotNull
+                @Override
+                public Integer apply(@NotNull Integer integer) throws Exception {
+                    return RAND.nextInt(100);
+                }
+            })
+            .map(new Function<Integer,Boolean>() {
+                @NotNull
+                @Override
+                public Boolean apply(@NotNull Integer i) throws Exception {
+                    LogUtil.printlnt(i);
+                    return i > 20;
+                }
+            });
+
+        TestSubscriber subscriber = CustomTestSubscriber.create();
+
+        // When
+        RxUtil.error("Error!")
+            .doOnError(new Consumer<Throwable>() {
+                @Override
+                public void accept(@NotNull Throwable t) throws Exception {
+                    LogUtil.printlnt(t.getMessage());
+                }
+            })
+            .compose(RxUtil.retryWhile(predicate))
+            .subscribe(subscriber);
+
+        subscriber.awaitTerminalEvent();
+
+        // Then
+        LogUtil.printlnt(RxUtil.nextEvents(subscriber));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void test_doWhile() {
+        // Setup
+        final Random RAND = new Random();
+
+        Flowable<Boolean> predicate = Flowable.just(1)
+            .map(new Function<Integer,Integer>() {
+                @NotNull
+                @Override
+                public Integer apply(@NotNull Integer i) throws Exception {
+                    return RAND.nextInt(100);
+                }
+            })
+            .map(new Function<Integer,Boolean>() {
+                @NotNull
+                @Override
+                public Boolean apply(@NotNull Integer i) throws Exception {
+                    LogUtil.printft("Current predicate: %s", i);
+                    return i > 50;
+                }
+            });
+
+        TestSubscriber subscriber = CustomTestSubscriber.create();
+
+        // When
+        RxUtil.doWhile(Flowable.just(1), predicate, 2)
+            .doOnNext(new Consumer<Integer>() {
+                @Override
+                public void accept(@NotNull Integer i) throws Exception {
+                    LogUtil.printlnt(i);
+                }
+            })
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
