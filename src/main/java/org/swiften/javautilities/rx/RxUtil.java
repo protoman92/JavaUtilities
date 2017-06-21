@@ -5,7 +5,6 @@ import io.reactivex.FlowableTransformer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.exceptions.Exceptions;
 import io.reactivex.functions.BiFunction;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.TestSubscriber;
@@ -15,7 +14,6 @@ import org.reactivestreams.Publisher;
 import org.swiften.javautilities.bool.BooleanUtil;
 import org.swiften.javautilities.collection.CollectionUtil;
 import org.swiften.javautilities.localizer.LocalizerType;
-import org.swiften.javautilities.log.LogUtil;
 import org.swiften.javautilities.object.ObjectUtil;
 import org.swiften.javautilities.string.StringUtil;
 
@@ -27,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by haipham on 3/31/17.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public final class RxUtil {
     /**
      * Get next events from {@link List} of {@link Object}.
@@ -327,6 +326,98 @@ public final class RxUtil {
     }
 
     /**
+     * Emit {@link T} while another {@link Flowable} is emitting true.
+     * @param SOURCE {@link Flowable} instance.
+     * @param WHEN_FL {@link Flowable} instance.
+     * @param DEFAULT {@link T} instance for the initial check.
+     * @param <T> Generics parameter.
+     * @return {@link Flowable} instance.
+     * @see BooleanUtil#isTrue(boolean)
+     * @see #repeatWhile(Flowable)
+     */
+    @NotNull
+    public static <T> Flowable<T> doWhile(@NotNull final Flowable<T> SOURCE,
+                                          @NotNull final Flowable<Boolean> WHEN_FL,
+                                          @NotNull final T DEFAULT) {
+        return WHEN_FL.flatMap(new Function<Boolean,Publisher<T>>() {
+            @NotNull
+            @Override
+            public Publisher<T> apply(@NotNull Boolean b) throws Exception {
+                if (BooleanUtil.isTrue(b)) {
+                    return SOURCE.compose(RxUtil.<T>repeatWhile(WHEN_FL));
+                } else {
+                    return Flowable.just(DEFAULT);
+                }
+            }
+        });
+    }
+
+    /**
+     * {@link Flowable#retryWhen(Function)} while a {@link Boolean}
+     * {@link Flowable} is emitting true.
+     * @param WHEN_FN {@link Function} instance that produces a {@link Boolean}
+     *                {@link Flowable}.
+     * @param <T> Generics parameter.
+     * @return {@link FlowableTransformer} instance.
+     * @see BooleanUtil#isFalse(boolean)
+     */
+    @NotNull
+    public static <T> FlowableTransformer<T,T> retryWhile(
+        @NotNull final Function<Throwable,Flowable<Boolean>> WHEN_FN
+    ) {
+        return new FlowableTransformer<T,T>() {
+            @NotNull
+            @Override
+            public Publisher<T> apply(@NotNull Flowable<T> source) {
+                return source.retryWhen(new Function<Flowable<Throwable>,Publisher<?>>() {
+                    @NotNull
+                    @Override
+                    public Publisher<?> apply(@NotNull Flowable<Throwable> tf) throws Exception {
+                        return tf.flatMap(new Function<Throwable,Publisher<?>>() {
+                            @NotNull
+                            @Override
+                            public Publisher<?> apply(@NotNull Throwable t) throws Exception {
+                                return WHEN_FN.apply(t)
+                                    .flatMap(new Function<Boolean,Publisher<?>>() {
+                                        @NotNull
+                                        @Override
+                                        public Publisher<?> apply(@NotNull Boolean b) throws Exception {
+                                            if (BooleanUtil.isFalse(b)) {
+                                                return error();
+                                            } else {
+                                                return Flowable.just(b);
+                                            }
+                                        }
+                                    });
+                            }
+                        });
+                    }
+                });
+            }
+        };
+    }
+
+    /**
+     * Same as above, but uses a default {@link Flowable} that emits
+     * {@link Boolean}.
+     * @param WHEN_FLOWABLE {@link Flowable} instance.
+     * @param <T> Generics parameter.
+     * @return {@link FlowableTransformer} instance.
+     */
+    @NotNull
+    public static <T> FlowableTransformer<T,T> retryWhile(
+        @NotNull final Flowable<Boolean> WHEN_FLOWABLE
+    ) {
+        return retryWhile(new Function<Throwable,Flowable<Boolean>>() {
+            @NotNull
+            @Override
+            public Flowable<Boolean> apply(@NotNull Throwable t) throws Exception {
+                return WHEN_FLOWABLE;
+            }
+        });
+    }
+
+    /**
      * {@link Flowable#timeout(long, TimeUnit, Publisher)} with default
      * {@link T} instance.
      * @param DURATION {@link Long} value.
@@ -392,7 +483,7 @@ public final class RxUtil {
                             @Override
                             public Publisher<?> apply(@NotNull Integer o) throws Exception {
                                 long delay = DELAY_FN.apply(o);
-                                return Flowable.timer(delay, TimeUnit.MILLISECONDS);
+                                return Flowable.timer(delay, UNIT);
                             }
                         });
                     }
@@ -411,9 +502,11 @@ public final class RxUtil {
      * @see #delayRetry(int, Function, TimeUnit)
      */
     @NotNull
-    public static <T> FlowableTransformer<T,T> delayRetry(int times,
-                                                          final long DELAY,
-                                                          @NotNull TimeUnit unit) {
+    public static <T> FlowableTransformer<T,T> delayRetry(
+        int times,
+        final long DELAY,
+        @NotNull TimeUnit unit
+    ) {
         Function<Integer,Long> fn = new Function<Integer,Long>() {
             @NotNull
             @Override
