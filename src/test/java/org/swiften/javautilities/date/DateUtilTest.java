@@ -1,6 +1,6 @@
 package org.swiften.javautilities.date;
 
-import org.swiften.javautilities.log.LogUtil;
+import org.swiften.javautilities.util.LogUtil;
 import org.swiften.javautilities.number.NumberUtil;
 import org.testng.Assert;
 import org.testng.annotations.Test;

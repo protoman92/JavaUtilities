@@ -1,6 +1,6 @@
 package org.swiften.javautilities.runner;
 
-import org.swiften.javautilities.log.LogUtil;
+import org.swiften.javautilities.util.LogUtil;
 import org.testng.annotations.*;
 
 import java.util.Iterator;

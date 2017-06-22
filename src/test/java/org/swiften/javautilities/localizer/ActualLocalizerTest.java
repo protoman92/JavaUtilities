@@ -1,7 +1,7 @@
 package org.swiften.javautilities.localizer;
 
 import org.jetbrains.annotations.Nullable;
-import org.swiften.javautilities.log.LogUtil;
+import org.swiften.javautilities.util.LogUtil;
 import org.swiften.javautilities.string.StringUtil;
 import org.swiften.javautilities.rx.CustomTestSubscriber;
 import io.reactivex.Flowable;

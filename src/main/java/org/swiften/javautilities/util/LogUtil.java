@@ -1,4 +1,4 @@
-package org.swiften.javautilities.log;
+package org.swiften.javautilities.util;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

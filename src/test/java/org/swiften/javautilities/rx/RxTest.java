@@ -15,7 +15,7 @@ import org.reactivestreams.Publisher;
 import org.swiften.javautilities.collection.Zip;
 import org.swiften.javautilities.localizer.Localizer;
 import org.swiften.javautilities.localizer.LocalizerType;
-import org.swiften.javautilities.log.LogUtil;
+import org.swiften.javautilities.util.LogUtil;
 import org.swiften.javautilities.number.NumberUtil;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -47,7 +47,7 @@ public final class RxTest {
                 @Override
                 public Boolean apply(@NotNull Integer i) throws Exception {
                     LogUtil.printft("Current predicate: %s", i);
-                    return i > 98;
+                    return i > 30;
                 }
             });
     }

@@ -2,8 +2,6 @@ package org.swiften.javautilities.test;
 
 import org.jetbrains.annotations.NotNull;
 import org.swiften.javautilities.collection.CollectionUtil;
-import org.swiften.javautilities.log.LogUtil;
-import org.swiften.javautilities.object.ObjectUtil;
 
 import java.util.*;
 
