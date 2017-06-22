@@ -1,7 +1,6 @@
 package org.swiften.javautilities.localizer;
 
 import org.jetbrains.annotations.NotNull;
-import org.swiften.javautilities.localizer.LocalizerType;
 
 /**
  * Created by haipham on 5/8/17.
@@ -16,6 +15,5 @@ public interface LocalizerProviderType {
      * Get the associated {@link LocalizerType} instance.
      * @return {@link LocalizerType} instance.
      */
-    @NotNull
-    LocalizerType localizer();
+    @NotNull LocalizerType localizer();
 }

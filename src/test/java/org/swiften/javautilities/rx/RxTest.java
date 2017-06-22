@@ -47,9 +47,17 @@ public final class RxTest {
                 @Override
                 public Boolean apply(@NotNull Integer i) throws Exception {
                     LogUtil.printft("Current predicate: %s", i);
-                    return i > 30;
+                    return i > 50;
                 }
             });
+    }
+
+    @NotNull
+    public RepeatParam defaultRPParam() {
+        return RepeatParam.builder()
+            .withDelay(500)
+            .withTimeUnit(TimeUnit.MILLISECONDS)
+            .build();
     }
 
     @Test
@@ -346,11 +354,18 @@ public final class RxTest {
     public void test_repeatWhile() {
         // Setup
         Flowable<Boolean> predicate = predicateFlowable();
+        RepeatParam param = defaultRPParam();
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When
         Flowable.just(1)
-            .compose(RxUtil.repeatWhile(predicate))
+            .compose(RxUtil.repeatWhile(predicate, param))
+            .doOnNext(new Consumer<Object>() {
+                @Override
+                public void accept(@NotNull Object o) throws Exception {
+                    LogUtil.printlnt(o);
+                }
+            })
             .count().toFlowable()
             .subscribe(subscriber);
 
@@ -365,11 +380,18 @@ public final class RxTest {
     public void test_repeatUntil() {
         // Setup
         Flowable<Boolean> predicate = predicateFlowable();
+        RepeatParam param = defaultRPParam();
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When
         Flowable.just(1)
-            .compose(RxUtil.repeatUntil(predicate))
+            .compose(RxUtil.repeatUntil(predicate, param))
+            .doOnNext(new Consumer<Object>() {
+                @Override
+                public void accept(@NotNull Object o) throws Exception {
+                    LogUtil.printlnt(o);
+                }
+            })
             .count().toFlowable()
             .subscribe(subscriber);
 
@@ -377,49 +399,6 @@ public final class RxTest {
 
         // Then
         LogUtil.println(RxUtil.nextEvents(subscriber));
-    }
-
-    @Test
-    @SuppressWarnings("unchecked")
-    public void test_multipleConcat() {
-        // Setup
-        final Random RAND = new Random();
-        TestSubscriber subscriber = CustomTestSubscriber.create();
-
-        // When
-        Flowable.concatArray(
-            Flowable.range(0, 3)
-                .observeOn(Schedulers.io())
-                .flatMap(new Function<Integer,Publisher<?>>() {
-                    @NotNull
-                    @Override
-                    public Publisher<?> apply(@NotNull Integer integer) throws Exception {
-                        return Flowable.range(0, 2)
-                            .delay(RAND.nextInt(200), TimeUnit.MILLISECONDS);
-                    }
-                }),
-
-            Flowable.range(0, 5)
-                .observeOn(Schedulers.io())
-                .flatMap(new Function<Integer,Publisher<?>>() {
-                    @NotNull
-                    @Override
-                    public Publisher<?> apply(@NotNull Integer integer) throws Exception {
-                        return Flowable.range(1, 3)
-                            .delay(RAND.nextInt(200), TimeUnit.MILLISECONDS);
-                    }
-                })
-        ).doOnNext(new Consumer<Object>() {
-            @Override
-            public void accept(@NonNull Object o) throws Exception {
-                LogUtil.println(o);
-            }
-        }).subscribe(subscriber);
-
-        subscriber.awaitTerminalEvent();
-
-        // Then
-        LogUtil.printlnt(RxUtil.nextEvents(subscriber));
     }
 
     @Test
@@ -481,6 +460,7 @@ public final class RxTest {
     public void test_retryWhile() {
         // Setup
         Flowable<Boolean> predicate = predicateFlowable();
+        RepeatParam param = defaultRPParam();
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When
@@ -491,7 +471,7 @@ public final class RxTest {
                     LogUtil.printlnt(t.getMessage());
                 }
             })
-            .compose(RxUtil.retryWhile(predicate))
+            .compose(RxUtil.retryWhile(predicate, param))
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
@@ -505,13 +485,14 @@ public final class RxTest {
     public void test_doWhile_doUntil() {
         // Setup
         Flowable<Boolean> predicate = predicateFlowable();
+        RepeatParam param = defaultRPParam();
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When
         Flowable
             .concatArray(
-                RxUtil.doWhile(Flowable.just(1), predicate),
-                RxUtil.doUntil(Flowable.just(2), predicate)
+                RxUtil.doWhile(Flowable.just(1), predicate, param),
+                RxUtil.doUntil(Flowable.just(2), predicate, param)
             ).doOnNext(new Consumer<Integer>() {
                 @Override
                 public void accept(@NotNull Integer i) throws Exception {

@@ -642,13 +642,19 @@ public final class RxUtil {
      * {@link Flowable} is emitting true.
      * @param WHEN_FN {@link Function} instance that produces a {@link Boolean}
      *                {@link Flowable}.
+     * @param PARAM {@link P} instance.
      * @param <T> Generics parameter.
+     * @param <P> Generics parameter.
      * @return {@link FlowableTransformer} instance.
      * @see BooleanUtil#isFalse(boolean)
+     * @see P#delay()
+     * @see P#timeUnit()
      */
     @NotNull
-    public static <T> FlowableTransformer<T,T> retryWhile(
-        @NotNull final Function<Throwable,Flowable<Boolean>> WHEN_FN
+    public static <T,P extends
+        DelayType> FlowableTransformer<T,T> retryWhile(
+            @NotNull final Function<Throwable,Flowable<Boolean>> WHEN_FN,
+            @NotNull final P PARAM
     ) {
         return new FlowableTransformer<T,T>() {
             @NotNull
@@ -658,6 +664,10 @@ public final class RxUtil {
                     @NotNull
                     @Override
                     public Publisher<?> apply(@NotNull Flowable<Throwable> tf) throws Exception {
+                        long delay = PARAM.delay();
+                        TimeUnit unit = PARAM.timeUnit();
+                        Scheduler scheduler = Schedulers.trampoline();
+
                         return tf.flatMap(new Function<Throwable,Publisher<?>>() {
                             @NotNull
                             @Override
@@ -675,7 +685,7 @@ public final class RxUtil {
                                         }
                                     });
                             }
-                        });
+                        }).delay(delay, unit, scheduler);
                     }
                 });
             }
@@ -683,15 +693,35 @@ public final class RxUtil {
     }
 
     /**
-     * Same as above, but uses a default {@link Flowable} that emits
-     * {@link Boolean}.
-     * @param WHEN_FL {@link Flowable} instance.
+     * Same as above, but uses default {@link RepeatParam} instance.
+     * @param whenFn {@link Function} instance.
      * @param <T> Generics parameter.
      * @return {@link FlowableTransformer} instance.
+     * @see RepeatParam#defaultInstance()
+     * @see #retryWhile(Function, DelayType)
      */
     @NotNull
     public static <T> FlowableTransformer<T,T> retryWhile(
-        @NotNull final Flowable<Boolean> WHEN_FL
+        @NotNull Function<Throwable,Flowable<Boolean>> whenFn
+    ) {
+        return retryWhile(whenFn, RepeatParam.defaultInstance());
+    }
+
+    /**
+     * Same as above, but uses a default {@link Flowable} that emits
+     * {@link Boolean}.
+     * @param WHEN_FL {@link Flowable} instance.
+     * @param param {@link P} instance.
+     * @param <T> Generics parameter.
+     * @param <P> Generics parameter.
+     * @return {@link FlowableTransformer} instance.
+     * @see #retryWhile(Flowable, DelayType)
+     */
+    @NotNull
+    public static <T,P extends
+        DelayType> FlowableTransformer<T,T> retryWhile(
+            @NotNull final Flowable<Boolean> WHEN_FL,
+            @NotNull P param
     ) {
         return retryWhile(new Function<Throwable,Flowable<Boolean>>() {
             @NotNull
@@ -699,7 +729,22 @@ public final class RxUtil {
             public Flowable<Boolean> apply(@NotNull Throwable t) throws Exception {
                 return WHEN_FL;
             }
-        });
+        }, param);
+    }
+
+    /**
+     * Same as above, but uses default {@link RepeatParam} instance.
+     * @param whenFl {@link Flowable} instance.
+     * @param <T> Generics parameter.
+     * @return {@link FlowableTransformer} instance.
+     * @see RepeatParam#defaultInstance()
+     * @see #retryWhile(Flowable, DelayType)
+     */
+    @NotNull
+    public static <T> FlowableTransformer<T,T> retryWhile(
+        @NotNull Flowable<Boolean> whenFl
+    ) {
+        return retryWhile(whenFl, RepeatParam.defaultInstance());
     }
 
     /**
