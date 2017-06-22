@@ -183,7 +183,7 @@ public final class RxUtil {
      * Produce an error with a formatted {@link String} message.
      * @param format {@link String} value.
      * @param args A varargs of {@link Object}.
-     * @param <T> Generics paramter.
+     * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
      * @see #error(String)
      */
@@ -240,8 +240,7 @@ public final class RxUtil {
      */
     @NotNull
     public static <T> Flowable<T> concatDelayEach(
-        long duration,
-        @NotNull Iterable<Flowable<T>> flowables
+        long duration, @NotNull Iterable<Flowable<T>> flowables
     ) {
         return concatDelayEach(duration, TimeUnit.MILLISECONDS, flowables);
     }
@@ -737,7 +736,7 @@ public final class RxUtil {
      * @param whenFl {@link Flowable} instance.
      * @param <T> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see RepeatParam#defaultInstance()
+     * @see RepeatParam#
      * @see #retryWhile(Flowable, DelayType)
      */
     @NotNull
