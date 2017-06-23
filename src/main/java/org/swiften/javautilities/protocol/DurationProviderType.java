@@ -7,7 +7,7 @@ package org.swiften.javautilities.protocol;
 /**
  * This interface provides a duration and {@link java.util.concurrent.TimeUnit}.
  */
-public interface DurationType extends TimeUnitType {
+public interface DurationProviderType extends TimeUnitProviderType {
     /**
      * Get a duration.
      * @return {@link Integer} value.

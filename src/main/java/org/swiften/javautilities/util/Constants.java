@@ -1,7 +1,12 @@
 package org.swiften.javautilities.util;
 
-import org.swiften.javautilities.protocol.RetryType;
-import org.swiften.javautilities.protocol.TimeUnitType;
+import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
+import org.jetbrains.annotations.NotNull;
+import org.swiften.javautilities.protocol.DelayProviderType;
+import org.swiften.javautilities.protocol.RetryProviderType;
+import org.swiften.javautilities.protocol.SchedulerProviderType;
+import org.swiften.javautilities.protocol.TimeUnitProviderType;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,19 +16,27 @@ import java.util.concurrent.TimeUnit;
 public final class Constants {
     /**
      * This value will be used to set default retry count for
-     * {@link RetryType#retries()}
+     * {@link RetryProviderType#retries()}
      */
     public static int DEFAULT_RETRIES = 2;
 
     /**
      * This value will be used to set default delay for
-     * {@link org.swiften.javautilities.protocol.DelayType}.
+     * {@link DelayProviderType}.
      */
     public static long DEFAULT_DELAY = 1000;
 
     /**
      * This value will be used to set default {@link TimeUnit} for
-     * {@link TimeUnitType#timeUnit()}
+     * {@link TimeUnitProviderType#timeUnit()}.
      */
+    @NotNull
     public static TimeUnit DEFAULT_TIME_UNIT = TimeUnit.MILLISECONDS;
+
+    /**
+     * This value will be used to set default {@link Scheduler} for
+     * {@link SchedulerProviderType#scheduler()}.
+     */
+    @NotNull
+    public static Scheduler DEFAULT_SCHEDULER = Schedulers.computation();
 }

@@ -7,7 +7,7 @@ package org.swiften.javautilities.protocol;
 /**
  * This interface provides delay and {@link java.util.concurrent.TimeUnit}.
  */
-public interface DelayType extends TimeUnitType {
+public interface DelayProviderType extends TimeUnitProviderType {
     /**
      * Get the associated delay duration.
      * @return {@link Long} value.

@@ -7,7 +7,7 @@ package org.swiften.javautilities.protocol;
 /**
  * This interface provides an index {@link Integer}.
  */
-public interface IndexType {
+public interface IndexProviderType {
     /**
      * Get the associated index {@link Integer}.
      * @return {@link Integer} value.

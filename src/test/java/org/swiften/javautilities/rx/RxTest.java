@@ -54,8 +54,8 @@ public final class RxTest {
     }
 
     @NotNull
-    public RepeatParam defaultRPParam() {
-        return RepeatParam.builder()
+    public RxUtilParam defaultRPParam() {
+        return RxUtilParam.builder()
             .withDelay(500)
             .withTimeUnit(TimeUnit.MILLISECONDS)
             .build();
@@ -355,7 +355,7 @@ public final class RxTest {
     public void test_repeatWhile() {
         // Setup
         Flowable<Boolean> predicate = predicateFlowable();
-        RepeatParam param = defaultRPParam();
+        RxUtilParam param = defaultRPParam();
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When
@@ -381,7 +381,7 @@ public final class RxTest {
     public void test_repeatUntil() {
         // Setup
         Flowable<Boolean> predicate = predicateFlowable();
-        RepeatParam param = defaultRPParam();
+        RxUtilParam param = defaultRPParam();
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When
@@ -461,7 +461,7 @@ public final class RxTest {
     public void test_retryWhile() {
         // Setup
         Flowable<Boolean> predicate = predicateFlowable();
-        RepeatParam param = defaultRPParam();
+        RxUtilParam param = defaultRPParam();
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When
@@ -486,7 +486,7 @@ public final class RxTest {
     public void test_doWhile_doUntil() {
         // Setup
         Flowable<Boolean> predicate = predicateFlowable();
-        RepeatParam param = defaultRPParam();
+        RxUtilParam param = defaultRPParam();
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When

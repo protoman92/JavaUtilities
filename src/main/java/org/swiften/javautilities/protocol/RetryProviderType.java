@@ -10,8 +10,8 @@ import org.swiften.javautilities.util.Constants;
 /**
  * This interface provides retry count.
  */
-public interface RetryType {
-    @NotNull RetryType DEFAULT = new RetryType() {
+public interface RetryProviderType {
+    @NotNull RetryProviderType DEFAULT = new RetryProviderType() {
         @Override
         public int retries() {
             return Constants.DEFAULT_RETRIES;
@@ -19,8 +19,7 @@ public interface RetryType {
     };
 
     /**
-     * Use this retry count if we are running an operation that is not expected
-     * to throw {@link Exception}.
+     * Provide a retry count.
      * @return {@link Integer} value.
      */
     int retries();

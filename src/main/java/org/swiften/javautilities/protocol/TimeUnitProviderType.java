@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * This interface provides {@link java.util.concurrent.TimeUnit}.
  */
-public interface TimeUnitType {
+public interface TimeUnitProviderType {
     /**
      * Get the associated {@link TimeUnit} instance.
      * @return {@link TimeUnit} instance.

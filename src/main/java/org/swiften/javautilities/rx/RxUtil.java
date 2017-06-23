@@ -16,7 +16,8 @@ import org.swiften.javautilities.bool.BooleanUtil;
 import org.swiften.javautilities.collection.CollectionUtil;
 import org.swiften.javautilities.localizer.LocalizerType;
 import org.swiften.javautilities.object.ObjectUtil;
-import org.swiften.javautilities.protocol.DelayType;
+import org.swiften.javautilities.protocol.DelayProviderType;
+import org.swiften.javautilities.protocol.SchedulerProviderType;
 import org.swiften.javautilities.string.StringUtil;
 
 import java.util.Arrays;
@@ -290,11 +291,13 @@ public final class RxUtil {
      * @see BooleanUtil#isFalse(boolean)
      * @see P#delay()
      * @see P#timeUnit()
+     * @see P#scheduler()
      * @see RxUtil#error()
      */
     @NotNull
     public static <T,P extends
-        DelayType> FlowableTransformer<T,T> repeatWhile(
+        DelayProviderType &
+        SchedulerProviderType> FlowableTransformer<T,T> repeatWhile(
             @NotNull final Flowable<Boolean> WHEN_FL,
             @NotNull final P PARAM
     ) {
@@ -308,7 +311,7 @@ public final class RxUtil {
                     public Publisher<?> apply(@NotNull Flowable<Object> flowable) throws Exception {
                         long delay = PARAM.delay();
                         TimeUnit unit = PARAM.timeUnit();
-                        Scheduler scheduler = Schedulers.trampoline();
+                        Scheduler scheduler = PARAM.scheduler();
 
                         return flowable
                             .flatMap(new Function<Object,Publisher<Boolean>>() {
@@ -337,18 +340,18 @@ public final class RxUtil {
     }
 
     /**
-     * Same as above, but uses a default {@link RepeatParam}.
+     * Same as above, but uses a default {@link RxUtilParam}.
      * @param whenFl {@link Flowable} instance.
      * @param <T> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see RepeatParam#defaultInstance()
-     * @see #repeatWhile(Flowable, DelayType)
+     * @see RxUtilParam#defaultInstance()
+     * @see #repeatWhile(Flowable, DelayProviderType)
      */
     @NotNull
     public static <T> FlowableTransformer<T,T> repeatWhile(
         @NotNull Flowable<Boolean> whenFl
     ) {
-        return repeatWhile(whenFl, RepeatParam.defaultInstance());
+        return repeatWhile(whenFl, RxUtilParam.defaultInstance());
     }
 
     /**
@@ -360,11 +363,12 @@ public final class RxUtil {
      * @param <P> Generics parameter.
      * @return {@link FlowableTransformer} instance.
      * @see BooleanUtil#isFalse(boolean)
-     * @see #repeatWhile(Flowable, DelayType)
+     * @see #repeatWhile(Flowable, DelayProviderType)
      */
     @NotNull
     public static <T,P extends
-        DelayType> FlowableTransformer<T,T> repeatUntil(
+        DelayProviderType &
+        SchedulerProviderType> FlowableTransformer<T,T> repeatUntil(
             @NotNull Flowable<Boolean> whenFl,
             @NotNull P param
     ) {
@@ -378,18 +382,18 @@ public final class RxUtil {
     }
 
     /**
-     * Same as above, but uses a default {@link RepeatParam}.
+     * Same as above, but uses a default {@link RxUtilParam}.
      * @param whenFl {@link Flowable} instance.
      * @param <T> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see RepeatParam#defaultInstance()
-     * @see #repeatWhile(Flowable, DelayType)
+     * @see RxUtilParam#defaultInstance()
+     * @see #repeatWhile(Flowable, DelayProviderType)
      */
     @NotNull
     public static <T> FlowableTransformer<T,T> repeatUntil(
         @NotNull Flowable<Boolean> whenFl
     ) {
-        return repeatUntil(whenFl, RepeatParam.defaultInstance());
+        return repeatUntil(whenFl, RxUtilParam.defaultInstance());
     }
 
     /**
@@ -406,7 +410,8 @@ public final class RxUtil {
      */
     @NotNull
     public static <T,P extends
-        DelayType> Flowable<T> doWhile(
+        DelayProviderType &
+        SchedulerProviderType> Flowable<T> doWhile(
             @NotNull final Flowable<T> SOURCE,
             @NotNull final Flowable<Boolean> WHEN_FL,
             @NotNull final Publisher<T> DEFAULT,
@@ -426,20 +431,20 @@ public final class RxUtil {
     }
 
     /**
-     * Same as above, but uses default {@link RepeatParam}.
+     * Same as above, but uses default {@link RxUtilParam}.
      * @param source {@link Flowable} instance.
      * @param whenFl {@link Flowable} instance.
      * @param publisher {@link Publisher} instance.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see RepeatParam#defaultInstance()
-     * @see #doWhile(Flowable, Flowable, Publisher, DelayType)
+     * @see RxUtilParam#defaultInstance()
+     * @see #doWhile(Flowable, Flowable, Publisher, DelayProviderType)
      */
     @NotNull
     public static <T> Flowable<T> doWhile(@NotNull Flowable<T> source,
                                           @NotNull Flowable<Boolean> whenFl,
                                           @NotNull Publisher<T> publisher) {
-        return doWhile(source, whenFl, publisher, RepeatParam.defaultInstance());
+        return doWhile(source, whenFl, publisher, RxUtilParam.defaultInstance());
     }
 
     /**
@@ -451,11 +456,12 @@ public final class RxUtil {
      * @param <T> Generics parameter.
      * @param <P> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see #doWhile(Flowable, Flowable, Publisher, DelayType)
+     * @see #doWhile(Flowable, Flowable, Publisher, DelayProviderType)
      */
     @NotNull
     public static <T,P extends
-        DelayType> Flowable<T> doWhile(
+        DelayProviderType &
+        SchedulerProviderType> Flowable<T> doWhile(
             @NotNull Flowable<T> source,
             @NotNull Flowable<Boolean> whenFl,
             @NotNull P param
@@ -464,18 +470,18 @@ public final class RxUtil {
     }
 
     /**
-     * Same as above, but use default {@link RepeatParam}.
+     * Same as above, but use default {@link RxUtilParam}.
      * @param source {@link Flowable} instance.
      * @param whenFl {@link Flowable} instance.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see RepeatParam#defaultInstance()
-     * @see #doWhile(Flowable, Flowable, DelayType)
+     * @see RxUtilParam#defaultInstance()
+     * @see #doWhile(Flowable, Flowable, DelayProviderType)
      */
     @NotNull
     public static <T> Flowable<T> doWhile(@NotNull Flowable<T> source,
                                           @NotNull Flowable<Boolean> whenFl) {
-        return doWhile(source, whenFl, RepeatParam.defaultInstance());
+        return doWhile(source, whenFl, RxUtilParam.defaultInstance());
     }
 
     /**
@@ -491,7 +497,8 @@ public final class RxUtil {
      */
     @NotNull
     public static <T,P extends
-        DelayType> Flowable<T> doWhile(
+        DelayProviderType &
+        SchedulerProviderType> Flowable<T> doWhile(
             @NotNull Flowable<T> source,
             @NotNull Flowable<Boolean> whenFl,
             @NotNull T defValue,
@@ -501,20 +508,20 @@ public final class RxUtil {
     }
 
     /**
-     * Same as above, but uses default {@link RepeatParam}.
+     * Same as above, but uses default {@link RxUtilParam}.
      * @param source {@link Flowable} instance.
      * @param whenFl {@link Flowable} instance.
      * @param defValue {@link T} instance.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see RepeatParam#defaultInstance()
-     * @see #doWhile(Flowable, Flowable, Object, DelayType)
+     * @see RxUtilParam#defaultInstance()
+     * @see #doWhile(Flowable, Flowable, Object, DelayProviderType)
      */
     @NotNull
     public static <T> Flowable<T> doWhile(@NotNull Flowable<T> source,
                                           @NotNull Flowable<Boolean> whenFl,
                                           @NotNull T defValue) {
-        return doWhile(source, whenFl, defValue, RepeatParam.defaultInstance());
+        return doWhile(source, whenFl, defValue, RxUtilParam.defaultInstance());
     }
 
     /**
@@ -526,11 +533,12 @@ public final class RxUtil {
      * @param <T> Generics parameter.
      * @param <P> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see #doWhile(Flowable, Flowable, Publisher, DelayType)
+     * @see #doWhile(Flowable, Flowable, Publisher, DelayProviderType)
      */
     @NotNull
     public static <T,P extends
-        DelayType> Flowable<T> doUntil(
+        DelayProviderType &
+        SchedulerProviderType> Flowable<T> doUntil(
             @NotNull Flowable<T> source,
             @NotNull Flowable<Boolean> untilFl,
             @NotNull Publisher<T> defPublisher,
@@ -546,20 +554,20 @@ public final class RxUtil {
     }
 
     /**
-     * Same as above, but uses default {@link RepeatParam}.
+     * Same as above, but uses default {@link RxUtilParam}.
      * @param source {@link Flowable} instance.
      * @param untilFl {@link Flowable} instance.
      * @param defPublisher {@link Publisher} instance.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see RepeatParam#defaultInstance()
-     * @see #doUntil(Flowable, Flowable, Publisher, DelayType)
+     * @see RxUtilParam#defaultInstance()
+     * @see #doUntil(Flowable, Flowable, Publisher, DelayProviderType)
      */
     @NotNull
     public static <T> Flowable<T> doUntil(@NotNull Flowable<T> source,
                                           @NotNull Flowable<Boolean> untilFl,
                                           @NotNull Publisher<T> defPublisher) {
-        return doUntil(source, untilFl, defPublisher, RepeatParam.defaultInstance());
+        return doUntil(source, untilFl, defPublisher, RxUtilParam.defaultInstance());
     }
 
     /**
@@ -571,11 +579,12 @@ public final class RxUtil {
      * @param <T> Generics parameter.
      * @param <P> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see #doUntil(Flowable, Flowable, Publisher, DelayType)
+     * @see #doUntil(Flowable, Flowable, Publisher, DelayProviderType)
      */
     @NotNull
     public static <T,P extends
-        DelayType> Flowable<T> doUntil(
+        DelayProviderType &
+        SchedulerProviderType> Flowable<T> doUntil(
             @NotNull Flowable<T> source,
             @NotNull Flowable<Boolean> untilFl,
             @NotNull P param
@@ -584,18 +593,18 @@ public final class RxUtil {
     }
 
     /**
-     * Same as above, but uses default {@link RepeatParam}.
+     * Same as above, but uses default {@link RxUtilParam}.
      * @param source {@link Flowable} instance.
      * @param untilFl {@link Flowable} instance.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see RepeatParam#defaultInstance()
-     * @see #doUntil(Flowable, Flowable, DelayType)
+     * @see RxUtilParam#defaultInstance()
+     * @see #doUntil(Flowable, Flowable, DelayProviderType)
      */
     @NotNull
     public static <T> Flowable<T> doUntil(@NotNull Flowable<T> source,
                                           @NotNull Flowable<Boolean> untilFl) {
-        return doUntil(source, untilFl, RepeatParam.defaultInstance());
+        return doUntil(source, untilFl, RxUtilParam.defaultInstance());
     }
 
     /**
@@ -607,11 +616,12 @@ public final class RxUtil {
      * @param <T> Generics parameter.
      * @param <P> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see #doUntil(Flowable, Flowable, Publisher, DelayType)
+     * @see #doUntil(Flowable, Flowable, Publisher, DelayProviderType)
      */
     @NotNull
     public static <T,P extends
-        DelayType> Flowable<T> doUntil(
+        DelayProviderType &
+        SchedulerProviderType> Flowable<T> doUntil(
             @NotNull Flowable<T> source,
             @NotNull Flowable<Boolean> untilFl,
             @NotNull T defValue,
@@ -621,19 +631,19 @@ public final class RxUtil {
     }
 
     /**
-     * Same as above, but uses default {@link RepeatParam} instance.
+     * Same as above, but uses default {@link RxUtilParam} instance.
      * @param source {@link Flowable} instance.
      * @param untilFl {@link Flowable} instance.
      * @param defValue {@link T} instance.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see #doUntil(Flowable, Flowable, Object, DelayType)
+     * @see #doUntil(Flowable, Flowable, Object, DelayProviderType)
      */
     @NotNull
     public static <T> Flowable<T> doUntil(@NotNull Flowable<T> source,
                                           @NotNull Flowable<Boolean> untilFl,
                                           @NotNull T defValue) {
-        return doUntil(source, untilFl, defValue, RepeatParam.defaultInstance());
+        return doUntil(source, untilFl, defValue, RxUtilParam.defaultInstance());
     }
 
     /**
@@ -648,10 +658,12 @@ public final class RxUtil {
      * @see BooleanUtil#isFalse(boolean)
      * @see P#delay()
      * @see P#timeUnit()
+     * @see P#scheduler()
      */
     @NotNull
     public static <T,P extends
-        DelayType> FlowableTransformer<T,T> retryWhile(
+        DelayProviderType &
+        SchedulerProviderType> FlowableTransformer<T,T> retryWhile(
             @NotNull final Function<Throwable,Flowable<Boolean>> WHEN_FN,
             @NotNull final P PARAM
     ) {
@@ -665,7 +677,7 @@ public final class RxUtil {
                     public Publisher<?> apply(@NotNull Flowable<Throwable> tf) throws Exception {
                         long delay = PARAM.delay();
                         TimeUnit unit = PARAM.timeUnit();
-                        Scheduler scheduler = Schedulers.trampoline();
+                        Scheduler scheduler = PARAM.scheduler();
 
                         return tf.flatMap(new Function<Throwable,Publisher<?>>() {
                             @NotNull
@@ -692,18 +704,18 @@ public final class RxUtil {
     }
 
     /**
-     * Same as above, but uses default {@link RepeatParam} instance.
+     * Same as above, but uses default {@link RxUtilParam} instance.
      * @param whenFn {@link Function} instance.
      * @param <T> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see RepeatParam#defaultInstance()
-     * @see #retryWhile(Function, DelayType)
+     * @see RxUtilParam#defaultInstance()
+     * @see #retryWhile(Function, DelayProviderType)
      */
     @NotNull
     public static <T> FlowableTransformer<T,T> retryWhile(
         @NotNull Function<Throwable,Flowable<Boolean>> whenFn
     ) {
-        return retryWhile(whenFn, RepeatParam.defaultInstance());
+        return retryWhile(whenFn, RxUtilParam.defaultInstance());
     }
 
     /**
@@ -714,11 +726,12 @@ public final class RxUtil {
      * @param <T> Generics parameter.
      * @param <P> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see #retryWhile(Flowable, DelayType)
+     * @see #retryWhile(Flowable, DelayProviderType)
      */
     @NotNull
     public static <T,P extends
-        DelayType> FlowableTransformer<T,T> retryWhile(
+        DelayProviderType &
+        SchedulerProviderType> FlowableTransformer<T,T> retryWhile(
             @NotNull final Flowable<Boolean> WHEN_FL,
             @NotNull P param
     ) {
@@ -732,18 +745,18 @@ public final class RxUtil {
     }
 
     /**
-     * Same as above, but uses default {@link RepeatParam} instance.
+     * Same as above, but uses default {@link RxUtilParam} instance.
      * @param whenFl {@link Flowable} instance.
      * @param <T> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see RepeatParam#
-     * @see #retryWhile(Flowable, DelayType)
+     * @see RxUtilParam#
+     * @see #retryWhile(Flowable, DelayProviderType)
      */
     @NotNull
     public static <T> FlowableTransformer<T,T> retryWhile(
         @NotNull Flowable<Boolean> whenFl
     ) {
-        return retryWhile(whenFl, RepeatParam.defaultInstance());
+        return retryWhile(whenFl, RxUtilParam.defaultInstance());
     }
 
     /**

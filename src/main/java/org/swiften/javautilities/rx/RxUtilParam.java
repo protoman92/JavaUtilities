@@ -5,16 +5,19 @@ package org.swiften.javautilities.rx;
  */
 
 import io.reactivex.Flowable;
+import io.reactivex.Scheduler;
+import io.reactivex.schedulers.Schedulers;
 import org.jetbrains.annotations.NotNull;
-import org.swiften.javautilities.protocol.DelayType;
+import org.swiften.javautilities.protocol.DelayProviderType;
+import org.swiften.javautilities.protocol.SchedulerProviderType;
 import org.swiften.javautilities.util.Constants;
 
 import java.util.concurrent.TimeUnit;
 
 /**
- * Parameter object for {@link RxUtil#repeatWhile(Flowable, DelayType)}.
+ * Parameter object for {@link RxUtil#repeatWhile(Flowable, DelayProviderType)}.
  */
-public final class RepeatParam implements DelayType {
+public final class RxUtilParam implements DelayProviderType, SchedulerProviderType {
     /**
      * Get {@link Builder} instance.
      * @return {@link Builder} instance.
@@ -25,31 +28,34 @@ public final class RepeatParam implements DelayType {
     }
 
     /**
-     * Get default {@link RepeatParam}.
-     * @return {@link RepeatParam} instance.
+     * Get default {@link RxUtilParam}.
+     * @return {@link RxUtilParam} instance.
      * @see Builder#withDelay(long)
      * @see Builder#withTimeUnit(TimeUnit)
      */
     @NotNull
-    public static RepeatParam defaultInstance() {
+    public static RxUtilParam defaultInstance() {
         return builder()
             .withDelay(0)
             .withTimeUnit(TimeUnit.MILLISECONDS)
+            .withScheduler(Schedulers.trampoline())
             .build();
     }
 
     @NotNull private TimeUnit unit;
+    @NotNull private Scheduler scheduler;
     private long delay;
 
-    RepeatParam() {
+    RxUtilParam() {
         delay = Constants.DEFAULT_DELAY;
+        scheduler = Constants.DEFAULT_SCHEDULER;
         unit = Constants.DEFAULT_TIME_UNIT;
     }
 
     /**
      * Override this method to provide default implementation.
      * @return {@link Long} value.
-     * @see DelayType#delay()
+     * @see DelayProviderType#delay()
      * @see #delay
      */
     @Override
@@ -60,7 +66,7 @@ public final class RepeatParam implements DelayType {
     /**
      * Override this method to provide default implementation.
      * @return {@link TimeUnit} instance.
-     * @see DelayType#timeUnit()
+     * @see DelayProviderType#timeUnit()
      * @see #unit
      */
     @NotNull
@@ -70,14 +76,26 @@ public final class RepeatParam implements DelayType {
     }
 
     /**
-     * Builder class for {@link RepeatParam}.
+     * Override this method to provide default implementation.
+     * @return {@link Scheduler} instance.
+     * @see SchedulerProviderType#scheduler()
+     * @see #scheduler
+     */
+    @NotNull
+    @Override
+    public Scheduler scheduler() {
+        return scheduler;
+    }
+
+    /**
+     * Builder class for {@link RxUtilParam}.
      */
     public static final class Builder {
         @NotNull
-        RepeatParam PARAM;
+        RxUtilParam PARAM;
 
         Builder() {
-            PARAM = new RepeatParam();
+            PARAM = new RxUtilParam();
         }
 
         /**
@@ -105,11 +123,23 @@ public final class RepeatParam implements DelayType {
         }
 
         /**
+         * Set the {@link #scheduler} instance.
+         * @param scheduler {@link Scheduler} instance.
+         * @return {@link Builder} instance.
+         * @see #scheduler
+         */
+        @NotNull
+        public Builder withScheduler(@NotNull Scheduler scheduler) {
+            PARAM.scheduler = scheduler;
+            return this;
+        }
+
+        /**
          * Get {@link #PARAM}.
-         * @return {@link RepeatParam} instance.
+         * @return {@link RxUtilParam} instance.
          * @see #PARAM
          */
-        public RepeatParam build() {
+        public RxUtilParam build() {
             return PARAM;
         }
     }

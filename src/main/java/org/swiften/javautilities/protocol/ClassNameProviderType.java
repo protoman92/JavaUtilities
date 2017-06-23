@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * This interface provides a class name.
  */
-public interface ClassNameType {
+public interface ClassNameProviderType {
     /**
      * Get the associated class name.
      * @return {@link String} value.
