@@ -19,6 +19,7 @@ import org.swiften.javautilities.object.ObjectUtil;
 import org.swiften.javautilities.protocol.DelayProviderType;
 import org.swiften.javautilities.protocol.SchedulerProviderType;
 import org.swiften.javautilities.string.StringUtil;
+import org.swiften.javautilities.util.LogUtil;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -74,6 +75,15 @@ public final class RxUtil {
     }
 
     /**
+     * Log next events with thread information.
+     * @param subscriber {@link TestSubscriber} instance.
+     * @see #nextEvents(List)
+     */
+    public static void logNextEvents(@NotNull TestSubscriber subscriber) {
+        LogUtil.printlnt(nextEvents(subscriber));
+    }
+
+    /**
      * Get the first next event from {@link List} of {@link Object}. This
      * can throw {@link IndexOutOfBoundsException}.
      * @param events {@link List} of all rx events.
@@ -84,7 +94,7 @@ public final class RxUtil {
     @NotNull
     @SuppressWarnings("unchecked")
     public static <T> T firstNextEvent(@NotNull List<Object> events) {
-        return (T) nextEvents(events).get(0);
+        return (T)nextEvents(events).get(0);
     }
 
     /**
@@ -99,6 +109,15 @@ public final class RxUtil {
     @SuppressWarnings("unchecked")
     public static <T> T firstNextEvent(@NotNull TestSubscriber subscriber) {
         return (T)firstNextEvent(subscriber.getEvents());
+    }
+
+    /**
+     * Log first next event with thread information.
+     * @param subscriber {@link TestSubscriber} instance.
+     * @see #firstNextEvent(TestSubscriber)
+     */
+    public static void logFirstNextEvent(@NotNull TestSubscriber subscriber) {
+        LogUtil.printlnt(firstNextEvent(subscriber));
     }
 
     /**
