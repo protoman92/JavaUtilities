@@ -6,6 +6,7 @@ import io.reactivex.Scheduler;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.exceptions.Exceptions;
 import io.reactivex.functions.BiFunction;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.TestSubscriber;
@@ -121,22 +122,43 @@ public final class RxUtil {
     }
 
     /**
-     * Apply {@link FlowableTransformer} to an existing {@link Flowable}.
-     * Applicable to {@link Flowable#compose(FlowableTransformer)}.
+     * Log onNext value after applying a {@link Function} to it.
+     * @param TRANSFORMER {@link Function} instance.
      * @param <T> Generics parameter.
+     * @param <U> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see Flowable#compose(FlowableTransformer)
      */
     @NotNull
-    public static <T> FlowableTransformer<T,T> withCommonSchedulers() {
-        return new FlowableTransformer<T, T>() {
-            @NonNull
-            public Publisher<T> apply(@NonNull Flowable<T> upstream) {
-                return upstream
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.trampoline());
+    public static <T,U> FlowableTransformer<T,T> logNext(@NotNull final Function<T,U> TRANSFORMER) {
+        return new FlowableTransformer<T,T>() {
+            @NotNull
+            @Override
+            public Publisher<T> apply(@NotNull Flowable<T> upstream) {
+                return upstream.doOnNext(new Consumer<T>() {
+                    @Override
+                    public void accept(@NotNull T t) throws Exception {
+                        LogUtil.printlnt(TRANSFORMER.apply(t));
+                    }
+                });
             }
         };
+    }
+
+    /**
+     * Same as above, but the transform function returns the same value.
+     * @param <T> Generics parameter.
+     * @return {@link FlowableTransformer} instance.
+     * @see #logNext(Function)
+     */
+    @NotNull
+    public static <T> FlowableTransformer<T,T> logNext() {
+        return logNext(new Function<T,T>() {
+            @NotNull
+            @Override
+            public T apply(@NotNull T t) throws Exception {
+                return t;
+            }
+        });
     }
 
     /**
