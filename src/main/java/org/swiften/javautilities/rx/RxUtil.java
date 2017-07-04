@@ -169,9 +169,6 @@ public final class RxUtil {
      *                   will be constructed.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see Flowable#fromIterable(Iterable)
-     * @see Flowable#range(int, int)
-     * @see Flowable#zip(Publisher, Publisher, BiFunction)
      */
     @NotNull
     public static <T> Flowable<Index<T>> from(@NotNull Collection<T> collection) {
@@ -209,8 +206,6 @@ public final class RxUtil {
      * @param error {@link String} value.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see Flowable#error(Throwable)
-     * @see #error()
      */
     @NotNull
     public static <T> Flowable<T> error(@Nullable String error) {
@@ -277,7 +272,6 @@ public final class RxUtil {
      * @param flowables {@link Iterable} of {@link Flowable}.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see TimeUnit#MILLISECONDS
      * @see #concatDelayEach(long, TimeUnit, Iterable)
      */
     @NotNull
@@ -294,6 +288,7 @@ public final class RxUtil {
      * @param flowables {@link Flowable} varargs.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
+     * @see #concatDelayEach(long, TimeUnit, Iterable)
      */
     @NotNull
     public static <T> Flowable<T> concatDelayEach(
@@ -311,7 +306,6 @@ public final class RxUtil {
      * @param flowables {@link Flowable} varargs.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see TimeUnit#MILLISECONDS
      * @see #concatDelayEach(long, TimeUnit, Flowable[])
      */
     @NotNull
@@ -329,11 +323,7 @@ public final class RxUtil {
      * @param <T> Generics parameter.
      * @param <P> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see BooleanUtil#isFalse(boolean)
-     * @see P#delay()
-     * @see P#timeUnit()
-     * @see P#scheduler()
-     * @see RxUtil#error()
+     * @see #error()
      */
     @NotNull
     public static <T,P extends
@@ -385,7 +375,6 @@ public final class RxUtil {
      * @param whenFl {@link Flowable} instance.
      * @param <T> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see RxUtilParam#defaultInstance()
      * @see #repeatWhile(Flowable, DelayProviderType)
      */
     @NotNull
@@ -403,7 +392,6 @@ public final class RxUtil {
      * @param <T> Generics parameter.
      * @param <P> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see BooleanUtil#isFalse(boolean)
      * @see #repeatWhile(Flowable, DelayProviderType)
      */
     @NotNull
@@ -427,7 +415,6 @@ public final class RxUtil {
      * @param whenFl {@link Flowable} instance.
      * @param <T> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see RxUtilParam#defaultInstance()
      * @see #repeatWhile(Flowable, DelayProviderType)
      */
     @NotNull
@@ -446,7 +433,6 @@ public final class RxUtil {
      * @param <T> Generics parameter.
      * @param <P> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see BooleanUtil#isTrue(boolean)
      * @see #repeatWhile(Flowable)
      */
     @NotNull
@@ -478,7 +464,6 @@ public final class RxUtil {
      * @param publisher {@link Publisher} instance.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see RxUtilParam#defaultInstance()
      * @see #doWhile(Flowable, Flowable, Publisher, DelayProviderType)
      */
     @NotNull
@@ -516,7 +501,6 @@ public final class RxUtil {
      * @param whenFl {@link Flowable} instance.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see RxUtilParam#defaultInstance()
      * @see #doWhile(Flowable, Flowable, DelayProviderType)
      */
     @NotNull
@@ -555,7 +539,6 @@ public final class RxUtil {
      * @param defValue {@link T} instance.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see RxUtilParam#defaultInstance()
      * @see #doWhile(Flowable, Flowable, Object, DelayProviderType)
      */
     @NotNull
@@ -601,7 +584,6 @@ public final class RxUtil {
      * @param defPublisher {@link Publisher} instance.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see RxUtilParam#defaultInstance()
      * @see #doUntil(Flowable, Flowable, Publisher, DelayProviderType)
      */
     @NotNull
@@ -639,7 +621,6 @@ public final class RxUtil {
      * @param untilFl {@link Flowable} instance.
      * @param <T> Generics parameter.
      * @return {@link Flowable} instance.
-     * @see RxUtilParam#defaultInstance()
      * @see #doUntil(Flowable, Flowable, DelayProviderType)
      */
     @NotNull
@@ -696,10 +677,6 @@ public final class RxUtil {
      * @param <T> Generics parameter.
      * @param <P> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see BooleanUtil#isFalse(boolean)
-     * @see P#delay()
-     * @see P#timeUnit()
-     * @see P#scheduler()
      */
     @NotNull
     public static <T,P extends
@@ -749,7 +726,6 @@ public final class RxUtil {
      * @param whenFn {@link Function} instance.
      * @param <T> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see RxUtilParam#defaultInstance()
      * @see #retryWhile(Function, DelayProviderType)
      */
     @NotNull
@@ -790,7 +766,6 @@ public final class RxUtil {
      * @param whenFl {@link Flowable} instance.
      * @param <T> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see RxUtilParam#
      * @see #retryWhile(Flowable, DelayProviderType)
      */
     @NotNull
@@ -907,7 +882,6 @@ public final class RxUtil {
      * @param delay {@link Long} value.
      * @param <T> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see TimeUnit#MILLISECONDS
      * @see #delayRetry(int, Function, TimeUnit)
      */
     @NotNull
@@ -921,7 +895,6 @@ public final class RxUtil {
      * @param value {@link T} instance.
      * @param <T> Generics parameter.
      * @return {@link FlowableTransformer} instance.
-     * @see TimeUnit#MILLISECONDS
      * @see #timeout(long, TimeUnit, Object)
      */
     @NotNull

@@ -355,7 +355,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 //        verify(LC, times(totalGetStringCount)).rxa_getString(any(ResourceBundle.class), anyString());
 //        verify(LC, times(totalGetStringCount)).getString(any(ResourceBundle.class), anyString());
 //        verify(LC, times(totalNestedFormatCount)).rxa_formatArguments(any(Locale.class), any(LCFormat.class));
-//        verify(LC, times(totalNestedFormatCount)).rxPrepareArgument(any(Locale.class), any());
+//        verify(LC, times(totalNestedFormatCount)).rxa_prepareArgument(any(Locale.class), any());
 //        verifyNoMoreInteractions(LC);
 //    }
 }

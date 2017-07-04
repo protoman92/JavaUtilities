@@ -54,7 +54,7 @@ public final class BooleanUtil {
     /**
      * Return {@link Boolean#TRUE}, no matter what parameter is used.
      * @param object {@link Object} instance.
-     * @return {@link Boolean#TRUE}
+     * @return {@link Boolean} value.
      */
     public static boolean toTrue(@Nullable Object object) {
         return true;
@@ -63,7 +63,7 @@ public final class BooleanUtil {
     /**
      * Return {@link Boolean#FALSE}, no matter what parameter is used.
      * @param object {@link Object} instance
-     * @return {@link Boolean#FALSE}
+     * @return {@link Boolean} value.
      */
     public static boolean toFalse(@Nullable Object object) {
         return false;

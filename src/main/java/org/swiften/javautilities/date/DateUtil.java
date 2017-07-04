@@ -2,6 +2,7 @@ package org.swiften.javautilities.date;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.swiften.javautilities.number.NumberUtil;
 import org.swiften.javautilities.object.ObjectUtil;
 
 import java.util.Arrays;
@@ -24,6 +25,35 @@ public final class DateUtil {
         Calendar.MONTH,
         Calendar.YEAR
     );
+
+    /**
+     * Produce a random {@link Calendar}.
+     * @return {@link Calendar} instance.
+     * @see DateUtil#getCalendar(int, int, int, int, int, int, int)
+     * @see NumberUtil#randomBetween(int, int)
+     */
+    @NotNull
+    public static Calendar randomCalendar() {
+        return DateUtil.getCalendar(
+            NumberUtil.randomBetween(2000, 2016),
+            NumberUtil.randomBetween(1, 11),
+            NumberUtil.randomBetween(1, 31),
+            NumberUtil.randomBetween(1, 23),
+            NumberUtil.randomBetween(1, 59),
+            NumberUtil.randomBetween(1, 59),
+            NumberUtil.randomBetween(1, 999)
+        );
+    }
+
+    /**
+     * Produce a random {@link Date}.
+     * @return {@link Date} instance.
+     * @see #randomCalendar()
+     */
+    @NotNull
+    public static Date randomDate() {
+        return randomCalendar().getTime();
+    }
 
     /**
      * Get {@link Calendar} based on supplied properties.

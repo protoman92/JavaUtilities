@@ -1,7 +1,6 @@
 package org.swiften.javautilities.localizer;
 
 import io.reactivex.annotations.NonNull;
-import io.reactivex.schedulers.Schedulers;
 import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
 import org.swiften.javautilities.collection.CollectionUtil;
@@ -35,7 +34,6 @@ public class Localizer implements LocalizerType {
     /**
      * Get {@link #BUNDLES}.
      * @return {@link List} of {@link ResourceBundle}.
-     * @see #BUNDLES
      */
     @NotNull
     List<ResourceBundle> bundles() {
@@ -45,8 +43,6 @@ public class Localizer implements LocalizerType {
     /**
      * Get {@link List} of {@link Locale} from {@link #bundles()}.
      * @return {@link List} of {@link Locale}.
-     * @see ObjectUtil#nonNull(Object)
-     * @see #bundles()
      */
     @NotNull
     List<Locale> locales() {
@@ -70,8 +66,6 @@ public class Localizer implements LocalizerType {
      * specific {@link Locale} instance.
      * @param LC {@link Locale} instance.
      * @return {@link Flowable} instance.
-     * @see ObjectUtil#isNull(Object)
-     * @see #bundles()
      */
     @NotNull
     Flowable<ResourceBundle> rxe_resources(@Nullable final Locale LC) {
@@ -94,7 +88,6 @@ public class Localizer implements LocalizerType {
      * @param locale {@link Locale} instance.
      * @return {@link Flowable} instance.
      * @see LocalizerType#rxa_localize(String, Locale)
-     * @see StringUtil#isNotNullOrEmpty(String)
      * @see #rxa_getString(ResourceBundle, String)
      * @see #rxe_resources(Locale)
      */
@@ -136,8 +129,8 @@ public class Localizer implements LocalizerType {
      * @param text The {@link String} to be localized.
      * @param locale {@link Locale} instance.
      * @return {@link String} value.
-     * @see #rxa_localize(String, Locale)
      * @see StringUtil#isNotNullOrEmpty(String)
+     * @see #rxa_localize(String, Locale)
      */
     @NotNull
     public String localize(@NotNull String text, @Nullable Locale locale) {
@@ -163,7 +156,6 @@ public class Localizer implements LocalizerType {
      * @param text {@link String} value to be localized.
      * @return {@link Flowable} instance.
      * @see #getString(MessageFormat, Object[])
-     * @see ObjectUtil#nonNull(Object...)
      */
     @NotNull
     @SuppressWarnings("WeakerAccess")
@@ -182,9 +174,6 @@ public class Localizer implements LocalizerType {
      * @param bundle {@link ResourceBundle} instance.
      * @param text {@link String} value to be localized.
      * @return {@link String} value.
-     * @see ResourceBundle#getString(String)
-     * @throws MissingResourceException This is thrown if
-     * {@link ResourceBundle#getString(String)} fails.
      */
     @NotNull
     @SuppressWarnings("WeakerAccess")
@@ -202,18 +191,19 @@ public class Localizer implements LocalizerType {
      * @param LOCALE {@link Locale} instance.
      * @return {@link Flowable} instance.
      * @see #rxa_getString(ResourceBundle, String)
-     * @see StringUtil#isNotNullOrEmpty(String)
      * @see #rxa_localize(LCFormat, Locale)
      */
     @NotNull
     public Flowable<String> rxa_localize(@NotNull final LCFormat FORMAT,
                                          @Nullable final Locale LOCALE) {
+        final Localizer THIS = this;
+
         return rxe_resources(LOCALE)
             .flatMap(new Function<ResourceBundle,Publisher<String>>() {
                 @NonNull
                 @Override
                 public Publisher<String> apply(@NonNull ResourceBundle bundle) throws Exception {
-                    return rxa_getString(bundle, FORMAT);
+                    return THIS.rxa_getString(bundle, FORMAT);
                 }
             })
             .filter(new Predicate<String>() {
@@ -345,8 +335,6 @@ public class Localizer implements LocalizerType {
      * @param format {@link LCFormat} instance.
      * @param args A Array of {@link Object}.
      * @return {@link String} value.
-     * @throws MissingResourceException This is thrown if
-     * {@link MessageFormat#format(Object)} fails.
      */
     @NotNull
     @SuppressWarnings("WeakerAccess")
@@ -362,8 +350,7 @@ public class Localizer implements LocalizerType {
      * @param LOCALE {@link Locale} instance.
      * @param format {@link LCFormat} instance.
      * @return {@link Flowable} instance.
-     * @see #rxPrepareArgument(Locale, Object)
-     * @see CollectionUtil#toArray(Collection)
+     * @see #rxa_prepareArgument(Locale, Object)
      */
     @NotNull
     @SuppressWarnings("WeakerAccess")
@@ -373,7 +360,7 @@ public class Localizer implements LocalizerType {
             .flatMap(new Function<Object,Publisher<?>>() {
                 @Override
                 public Publisher<?> apply(@NonNull Object o) throws Exception {
-                    return rxPrepareArgument(LOCALE, o);
+                    return rxa_prepareArgument(LOCALE, o);
                 }
             })
             .toList()
@@ -398,7 +385,7 @@ public class Localizer implements LocalizerType {
      */
     @NotNull
     @SuppressWarnings("WeakerAccess")
-    Flowable<?> rxPrepareArgument(@NonNull Locale locale, @NotNull Object argument) {
+    Flowable<?> rxa_prepareArgument(@NonNull Locale locale, @NotNull Object argument) {
         if (argument instanceof LCFormat) {
             return rxa_localize((LCFormat)argument, locale);
         } else if (argument instanceof String) {
@@ -425,6 +412,7 @@ public class Localizer implements LocalizerType {
          * @param name The name of the {@link ResourceBundle}.
          * @param locale The {@link Locale} of the {@link ResourceBundle}.
          * @return {@link Builder} instance.
+         * @see #BUNDLES
          */
         @NotNull
         public Builder addBundle(@NotNull String name, @NotNull Locale locale) {

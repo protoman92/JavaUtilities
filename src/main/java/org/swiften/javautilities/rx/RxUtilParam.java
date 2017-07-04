@@ -56,7 +56,6 @@ public final class RxUtilParam implements DelayProviderType, SchedulerProviderTy
      * Override this method to provide default implementation.
      * @return {@link Long} value.
      * @see DelayProviderType#delay()
-     * @see #delay
      */
     @Override
     public long delay() {
@@ -67,7 +66,6 @@ public final class RxUtilParam implements DelayProviderType, SchedulerProviderTy
      * Override this method to provide default implementation.
      * @return {@link TimeUnit} instance.
      * @see DelayProviderType#timeUnit()
-     * @see #unit
      */
     @NotNull
     @Override
@@ -79,7 +77,6 @@ public final class RxUtilParam implements DelayProviderType, SchedulerProviderTy
      * Override this method to provide default implementation.
      * @return {@link Scheduler} instance.
      * @see SchedulerProviderType#scheduler()
-     * @see #scheduler
      */
     @NotNull
     @Override

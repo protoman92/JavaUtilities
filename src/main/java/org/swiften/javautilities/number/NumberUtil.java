@@ -33,7 +33,6 @@ public final class NumberUtil {
      * Inverse a number.
      * @param number {@link Number} instance.
      * @return {@link Double} value.
-     * @see Number#doubleValue()
      */
     public static double inverse(@NotNull Number number) {
         return 1 / (number.doubleValue());
@@ -43,7 +42,6 @@ public final class NumberUtil {
      * Check if {@link Number} is larger than 0.
      * @param number {@link Number} instance.
      * @return {@link Boolean} value.
-     * @see Number#doubleValue()
      */
     public static boolean largerThanZero(@NotNull Number number) {
         return number.doubleValue() > 0;
@@ -53,7 +51,6 @@ public final class NumberUtil {
      * Check if {@link Number} is 0.
      * @param number {@link Number} instance.
      * @return {@link Boolean} value.
-     * @see Number#doubleValue()
      */
     public static boolean isZero(@NotNull Number number) {
         return number.doubleValue() == 0;
@@ -63,7 +60,6 @@ public final class NumberUtil {
      * Check if {@link Number} is less than 0.
      * @param number {@link Number} instance.
      * @return {@link Boolean} value.
-     * @see Number#doubleValue()
      */
     public static boolean lessThanZero(@NotNull Number number) {
         return number.doubleValue() < 0;
@@ -102,7 +98,6 @@ public final class NumberUtil {
      * @param n1 {@link Number} instance.
      * @param n2 {@link Number} instance.
      * @return {@link Double} value.
-     * @see Number#doubleValue()
      */
     public static double sum(@NotNull Number n1, @NotNull Number n2) {
         return n1.doubleValue() + n2.doubleValue();

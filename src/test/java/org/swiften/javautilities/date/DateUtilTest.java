@@ -10,9 +10,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertNotNull;
+
 /**
  * Created by haipham on 5/10/17.
  */
+@SuppressWarnings("MessageMissingOnTestNGAssertion")
 public final class DateUtilTest {
     @Test
     public void test_dateTrimming_scrap() {
@@ -35,7 +39,7 @@ public final class DateUtilTest {
         Random rand = new Random();
 
         for (int i = 0; i < 100000; i++) {
-            Date date = DateTestUtil.randomDate();
+            Date date = DateUtil.randomDate();
             calendar.setTime(date);
             int component = components.get(rand.nextInt(components.size()));
 
@@ -43,9 +47,9 @@ public final class DateUtilTest {
             Date trimmed = DateUtil.trimDate(date, component);
 
             // Then
-            Assert.assertNotNull(trimmed);
+            assertNotNull(trimmed);
             calendar.setTime(trimmed);
-            Assert.assertNotEquals(calendar.get(component), 0);
+            assertNotEquals(calendar.get(component), 0);
         }
     }
 
@@ -59,7 +63,7 @@ public final class DateUtilTest {
 
         for (int i = 1; i < 100000; i++) {
             // When
-            Date date = DateTestUtil.randomDate();
+            Date date = DateUtil.randomDate();
             calendar.setTime(date);
             int component = components.get(rand.nextInt(components.size()));
             int random = NumberUtil.randomBetween(1, 10);

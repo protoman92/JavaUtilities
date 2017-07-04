@@ -19,7 +19,6 @@ public final class TestNGUtil {
      * every inner {@link Object} array.
      * @param objects {@link List} of {@link Collection}.
      * @return {@link List} of {@link Object} array.
-     * @see CollectionUtil#subList(List, int, int)
      */
     @NotNull
     public static List<Object[]> oneFromEach(@NotNull List<Collection<?>> objects) {
@@ -56,7 +55,6 @@ public final class TestNGUtil {
      * Same as above, but uses varargs of {@link Collection}.
      * @param objects {@link Collection} varargs.
      * @return {@link List} of {@link Object} array.
-     * @see CollectionUtil#asList(Object[])
      * @see #oneFromEach(List)
      */
     @NotNull
@@ -69,7 +67,6 @@ public final class TestNGUtil {
      * @param objects {@link Collection} of {@link T} array.
      * @param <T> Generics parameter.
      * @return {@link List} of {@link Object} array.
-     * @see CollectionUtil#asList(Object[])
      * @see #oneFromEach(List)
      */
     @NotNull
@@ -87,7 +84,6 @@ public final class TestNGUtil {
      * Same as above, but uses varargs of {@link Object} array.
      * @param objects {@link Object} array varargs.
      * @return {@link List} of {@link Object} array.
-     * @see CollectionUtil#asList(Object[])
      * @see #oneFromEach(Collection)
      */
     @NotNull
@@ -100,7 +96,6 @@ public final class TestNGUtil {
      * then wrapped in an {@link Object} array.
      * @param objects {@link Object} array.
      * @return {@link List} of {@link Object} array.
-     * @see CollectionUtil#asList(Object[])
      * @see #oneFromEach(Collection[])
      */
     @NotNull
