@@ -40,8 +40,8 @@ public final class RxUtil {
      */
     @NotNull
     @SuppressWarnings("unchecked")
-    public static <T> List<T> nextEvents(@NotNull List<Object> events) {
-        return (List)events.get(0);
+    public static <T> List<T> nextEvents(@NotNull List<T> events) {
+        return (List<T>)events.get(0);
     }
 
     /**
@@ -51,8 +51,8 @@ public final class RxUtil {
      */
     @NotNull
     @SuppressWarnings("unchecked")
-    public static List nextEvents(@NotNull TestSubscriber subscriber) {
-        return (List)subscriber.getEvents().get(0);
+    public static <T> List<T> nextEvents(@NotNull TestSubscriber subscriber) {
+        return (List<T>)subscriber.getEvents().get(0);
     }
 
     /**
