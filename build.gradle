@@ -1,15 +1,24 @@
-//group gradle.PROJECT_GROUP
-//version gradle.PROJECT_VERSION
+buildscript {
+    repositories {
+        mavenCentral()
+    }
 
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'maven-publish'
+    dependencies {
+        classpath 'me.tatarka:gradle-retrolambda:3.6.0'
+    }
+}
 
-sourceCompatibility = 1.6
+group 'com.holmusk'
+version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven-publish'
+apply plugin: 'me.tatarka.retrolambda'
 
 //publishing {
 //    publications {

@@ -30,26 +30,17 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by haipham on 3/25/17.
  */
+@SuppressWarnings("WeakerAccess")
 public final class RxTest {
     @NotNull
     public Flowable<Boolean> predicateFlowable() {
         final Random RAND = new Random();
 
         return Flowable.just(1)
-            .map(new Function<Integer,Integer>() {
-                @NotNull
-                @Override
-                public Integer apply(@NotNull Integer i) throws Exception {
-                    return RAND.nextInt(100);
-                }
-            })
-            .map(new Function<Integer,Boolean>() {
-                @NotNull
-                @Override
-                public Boolean apply(@NotNull Integer i) throws Exception {
-                    LogUtil.printft("Current predicate: %s", i);
-                    return i > 50;
-                }
+            .map(a -> RAND.nextInt(100))
+            .map(a -> {
+                LogUtil.printft("Current predicate: %s", a);
+                return a > 50;
             });
     }
 
@@ -93,19 +84,8 @@ public final class RxTest {
         // When
         publishSubject
             .observeOn(Schedulers.io())
-            .switchMap(new Function<Integer,ObservableSource<Integer>>() {
-                @Override
-                public ObservableSource<Integer> apply(@NotNull Integer integer) throws Exception {
-                    return Observable.range(0, integer);
-                }
-            })
-            .map(new Function<Integer,Integer>() {
-                @NotNull
-                @Override
-                public Integer apply(@NotNull Integer i) throws Exception {
-                    return i * 2;
-                }
-            })
+            .switchMap(integer -> Observable.range(0, integer))
+            .map(a -> a * 2)
             .toFlowable(BackpressureStrategy.BUFFER)
             .delay(100, TimeUnit.MILLISECONDS, Schedulers.io())
             .observeOn(Schedulers.trampoline())
@@ -132,34 +112,11 @@ public final class RxTest {
         Flowable.range(1, 100)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-            .concatMap(new Function<Integer,Publisher<Integer>>() {
-                @NotNull
-                @Override
-                public Publisher<Integer> apply(@NotNull final Integer I) throws Exception {
-                    return Flowable
-                        .timer(RAND.nextInt(10), TimeUnit.MILLISECONDS)
-                        .map(new Function<Long,Integer>() {
-                            @NotNull
-                            @Override
-                            public Integer apply(@NotNull Long l) throws Exception {
-                                return I;
-                            }
-                        });
-                }
-            })
-            .flatMap(new Function<Integer, Publisher<Integer>>() {
-                @NotNull
-                @Override
-                public Publisher<Integer> apply(@NotNull Integer i) throws Exception {
-                    return Flowable.just(i);
-                }
-            })
-            .doOnNext(new Consumer<Integer>() {
-                @Override
-                public void accept(@NotNull Integer i) throws Exception {
-                    LogUtil.printft("Number %d", i);
-                }
-            })
+            .concatMap(a -> Flowable
+                .timer(RAND.nextInt(10), TimeUnit.MILLISECONDS)
+                .map(b -> a))
+            .flatMap(Flowable::just)
+            .doOnNext(a -> LogUtil.printft("Number %d", a))
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
@@ -176,41 +133,9 @@ public final class RxTest {
 
         // When
         Flowable.range(0, 10)
-            .flatMap(new Function<Integer,Publisher<?>>() {
-                @Override
-                public Publisher<?> apply(@NotNull Integer i) throws Exception {
-                    return Flowable.just(i * 2);
-                }
-            })
-            .flatMap(
-                new Function<Object, Publisher<?>>() {
-                    @NotNull
-                    @Override
-                    public Publisher<?> apply(@NotNull Object o) throws Exception {
-                        return Flowable.just(o);
-                    }
-                },
-                new Function<Throwable, Publisher<?>>() {
-                    @NotNull
-                    @Override
-                    public Publisher<?> apply(@NotNull Throwable t) throws Exception {
-                        return Flowable.just(1);
-                    }
-                },
-                new Callable<Publisher<?>>() {
-                    @NotNull
-                    @Override
-                    public Publisher<?> call() throws Exception {
-                        return Flowable.just(2);
-                    }
-                }
-            )
-            .doOnNext(new Consumer<Object>() {
-                @Override
-                public void accept(Object o) throws Exception {
-                    LogUtil.println(o);
-                }
-            })
+            .flatMap(a -> Flowable.just(a * 2))
+            .flatMap(Flowable::just, t -> Flowable.just(1), () -> Flowable.just(2))
+            .doOnNext(LogUtil::println)
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
@@ -227,48 +152,21 @@ public final class RxTest {
 
         final Flowable<Object> f1 = Flowable
             .just("Starting first stream")
-            .doOnNext(new Consumer<String>() {
-                @Override
-                public void accept(String s) throws Exception {
-                    LogUtil.printlnt(s);
-                }
-            })
+            .doOnNext(LogUtil::printlnt)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-            .map(new Function<String,Object>() {
-                @NotNull
-                @Override
-                public Object apply(String s) throws Exception {
-                    return 1;
-                }
-            });
+            .map(s -> 1);
 
         Flowable<Object> f2 = Flowable
             .just("Starting second stream")
-            .doOnNext(new Consumer<String>() {
-                @Override
-                public void accept(String s) throws Exception {
-                    LogUtil.printlnt(s);
-                }
-            })
+            .doOnNext(LogUtil::printlnt)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-            .map(new Function<String,Object>() {
-                @NotNull
-                @Override
-                public Object apply(String s) throws Exception {
-                    return 2;
-                }
-            });
+            .map(s -> 2);
 
         // When
         RxUtil.concatDelayEach(1000, f1, f2)
-            .doOnNext(new Consumer<Object>() {
-                @Override
-                public void accept(Object o) throws Exception {
-                    LogUtil.printft("Post-delay: %s", o);
-                }
-            })
+            .doOnNext(a -> LogUtil.printft("Post-delay: %s", a))
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
@@ -285,26 +183,13 @@ public final class RxTest {
 
         // When
         Flowable.range(0, 10)
-            .concatMap(new Function<Integer,Publisher<?>>() {
-                @Override
-                public Publisher<?> apply(Integer integer) throws Exception {
-                    long delay = NumberUtil.randomBetween(100, 500);
-                    TimeUnit unit = TimeUnit.MILLISECONDS;
-                    return Flowable.just(integer).delay(delay, unit);
-                }
+            .concatMap((Function<Integer, Publisher<?>>) integer -> {
+                long delay = NumberUtil.randomBetween(100, 500);
+                TimeUnit unit = TimeUnit.MILLISECONDS;
+                return Flowable.just(integer).delay(delay, unit);
             })
-            .flatMap(new Function<Object,Publisher<?>>() {
-                @Override
-                public Publisher<?> apply(Object o) throws Exception {
-                    return Flowable.just(((Integer)o) * 2);
-                }
-            })
-            .doOnNext(new Consumer<Object>() {
-                @Override
-                public void accept(Object o) throws Exception {
-                    LogUtil.printlnt(o);
-                }
-            })
+            .flatMap(a -> Flowable.just(((Integer)a) * 2))
+            .doOnNext(LogUtil::printlnt)
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
@@ -321,26 +206,10 @@ public final class RxTest {
 
         // When
         Flowable.just(true)
-            .repeatWhen(new Function<Flowable<Object>,Publisher<?>>() {
-                @NotNull
-                @Override
-                public Publisher<?> apply(@NotNull Flowable<Object> flowable) throws Exception {
-                    return flowable
-                        .doOnNext(new Consumer<Object>() {
-                            @Override
-                            public void accept(@NonNull Object o) throws Exception {
-                                LogUtil.println(o);
-                            }
-                        })
-                        .flatMap(new Function<Object,Publisher<?>>() {
-                            @Override
-                            public Publisher<?> apply(@NonNull Object o) throws Exception {
-                                return RxUtil.error();
-                            }
-                        })
-                        .onErrorReturnItem(true);
-                }
-            })
+            .repeatWhen(a -> a
+                .doOnNext(LogUtil::println)
+                .flatMap(b -> RxUtil.error())
+                .onErrorReturnItem(true))
             .repeat(3)
             .subscribe(subscriber);
 
@@ -361,12 +230,7 @@ public final class RxTest {
         // When
         Flowable.just(1)
             .compose(RxUtil.repeatWhile(predicate, param))
-            .doOnNext(new Consumer<Object>() {
-                @Override
-                public void accept(@NotNull Object o) throws Exception {
-                    LogUtil.printlnt(o);
-                }
-            })
+            .doOnNext(LogUtil::printlnt)
             .count().toFlowable()
             .subscribe(subscriber);
 
@@ -387,12 +251,7 @@ public final class RxTest {
         // When
         Flowable.just(1)
             .compose(RxUtil.repeatUntil(predicate, param))
-            .doOnNext(new Consumer<Object>() {
-                @Override
-                public void accept(@NotNull Object o) throws Exception {
-                    LogUtil.printlnt(o);
-                }
-            })
+            .doOnNext(LogUtil::printlnt)
             .count().toFlowable()
             .subscribe(subscriber);
 
@@ -410,26 +269,9 @@ public final class RxTest {
 
         // When
         Flowable.just(1)
-            .flatMap(new Function<Integer,Publisher<?>>() {
-                @NotNull
-                @Override
-                public Publisher<?> apply(@NotNull Integer i) throws Exception {
-                    return RxUtil.error("Error!");
-                }
-            })
-            .doOnError(new Consumer<Throwable>() {
-                @Override
-                public void accept(@NotNull Throwable t) throws Exception {
-                    LogUtil.println(t.getMessage());
-                }
-            })
-            .compose(RxUtil.delayRetry(3, new Function<Integer,Long>() {
-                @NotNull
-                @Override
-                public Long apply(@NotNull Integer i) throws Exception {
-                    return i * 500L;
-                }
-            }, TimeUnit.MILLISECONDS))
+            .flatMap(i -> RxUtil.error("Error!"))
+            .doOnError(a -> LogUtil.println(a.getMessage()))
+            .compose(RxUtil.delayRetry(3, i -> i * 500L, TimeUnit.MILLISECONDS))
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
@@ -466,12 +308,7 @@ public final class RxTest {
 
         // When
         RxUtil.error("Error!")
-            .doOnError(new Consumer<Throwable>() {
-                @Override
-                public void accept(@NotNull Throwable t) throws Exception {
-                    LogUtil.printlnt(t.getMessage());
-                }
-            })
+            .doOnError(a -> LogUtil.printlnt(a.getMessage()))
             .compose(RxUtil.retryWhile(predicate, param))
             .subscribe(subscriber);
 
@@ -490,22 +327,16 @@ public final class RxTest {
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When
-        Flowable
-            .concatArray(
-                RxUtil.doWhile(Flowable.just(1), predicate, param),
-                RxUtil.doUntil(Flowable.just(2), predicate, param)
-            ).doOnNext(new Consumer<Integer>() {
-                @Override
-                public void accept(@NotNull Integer i) throws Exception {
-                    if (i == 1) {
-                        LogUtil.printlnt("doWhile running");
-                    } else if (i == 2) {
-                        LogUtil.printlnt("doUntil running");
-                    }
-                }
-            })
-            .count().toFlowable()
-            .subscribe(subscriber);
+        Flowable.concatArray(
+            RxUtil.<Integer, RxUtilParam>doWhile(Flowable.just(1), predicate, param),
+            RxUtil.<Integer, RxUtilParam>doUntil(Flowable.just(2), predicate, param)
+        ).doOnNext(i -> {
+            if (i == 1) {
+                LogUtil.printlnt("doWhile running");
+            } else if (i == 2) {
+                LogUtil.printlnt("doUntil running");
+            }
+        }).count().toFlowable().subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 

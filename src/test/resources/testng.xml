@@ -4,11 +4,4 @@
        thread-count="100"
        data-provider-thread-count="100">
 
-    <test name="Runner Tests">
-        <classes>
-            <class name="org.swiften.javautilities.runner.RunnerTest"/>
-            <class name="org.swiften.javautilities.runner.RunnerTest2"/>
-        </classes>
-    </test>
-
 </suite>

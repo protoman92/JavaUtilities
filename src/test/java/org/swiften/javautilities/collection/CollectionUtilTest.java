@@ -12,6 +12,7 @@ import java.util.List;
  */
 public final class CollectionUtilTest {
     @Test
+    @SuppressWarnings("unchecked")
     public void test_zipList_shouldSucceed() {
         // Setup
         List list1 = Arrays.asList("a", "b", "c", "d", "e");

@@ -99,7 +99,7 @@ public final class ObjectUtil {
      */
     public static void requireNotNull(@Nullable Object object,
                                       @NotNull String message) {
-        if (isNull(object)) {
+        if (object == null) {
             throw new RuntimeException(message);
         }
     }
