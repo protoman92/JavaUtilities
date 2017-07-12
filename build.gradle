@@ -8,7 +8,7 @@ buildscript {
     }
 }
 
-group 'com.holmusk'
+group 'org.swiften'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -19,6 +19,14 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
 apply plugin: 'me.tatarka.retrolambda'
+
+compileJava {
+    sourceCompatibility = "1.6"
+}
+
+compileTestJava {
+    sourceCompatibility = "1.8"
+}
 
 //publishing {
 //    publications {
