@@ -4,9 +4,12 @@ package org.swiften.javautilities.functional.tryf;
  * Created by haipham on 7/12/17.
  */
 
+import io.reactivex.Flowable;
+import io.reactivex.FlowableTransformer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
+import org.reactivestreams.Publisher;
 
 /**
  * Utility class for {@link TryType}.
@@ -19,7 +22,7 @@ public final class Tries {
      * @see Try#success(Object)
      */
     @NotNull
-    public static <Val> Function<? super Val, Try<Val>> successFn() {
+    public static <Val> Function<Val, Try<Val>> successFn() {
         return new Function<Val, Try<Val>>() {
             @NotNull
             @Override
@@ -36,7 +39,7 @@ public final class Tries {
      * @see Try#failure(Throwable)
      */
     @NotNull
-    public static <Val> Function<? super Throwable, Try<Val>> failureFn() {
+    public static <Val> Function<Throwable, Try<Val>> failureFn() {
         return new Function<Throwable, Try<Val>>() {
             @NotNull
             @Override
@@ -53,12 +56,30 @@ public final class Tries {
      * @see TryType#getOrThrow()
      */
     @NotNull
-    public static <Val> Function<? super TryConvertibleType<Val>, ? extends Val> getFn() {
+    public static <Val> Function<TryConvertibleType<Val>, Val> getFn() {
         return new Function<TryConvertibleType<Val>, Val>() {
             @NotNull
             @Override
             public Val apply(@NotNull TryConvertibleType<Val> tryInstance) throws Exception {
                 return tryInstance.asTry().getOrThrow();
+            }
+        };
+    }
+
+    /**
+     * {@link FlowableTransformer} to wrap an emission in {@link Try}.
+     * @param <T> Generics parameter.
+     * @return {@link FlowableTransformer} instance.
+     */
+    @NotNull
+    public static <T> FlowableTransformer<T, Try<T>> wrapFn() {
+        return new FlowableTransformer<T, Try<T>>() {
+            @NotNull
+            @Override
+            public Publisher<Try<T>> apply(@NonNull Flowable<T> upstream) {
+                return upstream
+                    .map(Tries.<T>successFn())
+                    .onErrorReturn(Tries.<T>failureFn());
             }
         };
     }

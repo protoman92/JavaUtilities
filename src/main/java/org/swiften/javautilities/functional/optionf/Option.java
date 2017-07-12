@@ -5,6 +5,7 @@ import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.swiften.javautilities.functional.tryf.Try;
+import org.swiften.javautilities.util.LogUtil;
 
 /**
  * Created by haipham on 7/12/17.
@@ -70,6 +71,12 @@ public abstract class Option<Val> implements OptionType<Val> {
 
         Some(@NotNull Val value) {
             VALUE = value;
+        }
+
+        @NotNull
+        @Override
+        public String toString() {
+            return String.format("Present: %s", VALUE);
         }
 
         /**
@@ -177,6 +184,12 @@ public abstract class Option<Val> implements OptionType<Val> {
      */
     private static final class Nothing<Val> extends Option<Val> {
         Nothing() {}
+
+        @NotNull
+        @Override
+        public String toString() {
+            return "Nothing";
+        }
 
         /**
          * Override this method to provide default implementation.

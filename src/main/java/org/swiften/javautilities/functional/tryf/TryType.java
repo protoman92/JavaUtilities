@@ -2,6 +2,8 @@ package org.swiften.javautilities.functional.tryf;
 
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.swiften.javautilities.functional.maybef.MaybeType;
 import org.swiften.javautilities.functional.optionf.OptionConvertibleType;
 
 /**
@@ -12,7 +14,7 @@ import org.swiften.javautilities.functional.optionf.OptionConvertibleType;
  * Try monad interface.
  * @param <Val> Generics parameter.
  */
-public interface TryType<Val> extends TryConvertibleType<Val>, OptionConvertibleType<Val> {
+public interface TryType<Val> extends TryConvertibleType<Val>, OptionConvertibleType<Val>, MaybeType<Val> {
     /**
      * Check whether there is a success value.
      * @return {@link Boolean} value.
@@ -24,6 +26,12 @@ public interface TryType<Val> extends TryConvertibleType<Val>, OptionConvertible
      * @return {@link Boolean} value.
      */
     boolean isFailure();
+
+    /**
+     * Get the failure {@link Exception}.
+     * @return {@link Exception} instance.
+     */
+    @Nullable Exception getError();
 
     /**
      * Get the success {@link Val}, or throw the failure {@link Exception}.

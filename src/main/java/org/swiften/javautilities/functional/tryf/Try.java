@@ -2,6 +2,7 @@ package org.swiften.javautilities.functional.tryf;
 
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.swiften.javautilities.functional.optionf.Option;
 import org.swiften.javautilities.functional.optionf.OptionType;
 
@@ -99,6 +100,12 @@ public abstract class Try<Val> implements TryType<Val> {
             VALUE = value;
         }
 
+        @NotNull
+        @Override
+        public String toString() {
+            return String.format("Success: %s", VALUE);
+        }
+
         /**
          * Override this method to provide default implementation.
          * @return {@link Option<Val>} instance.
@@ -117,6 +124,48 @@ public abstract class Try<Val> implements TryType<Val> {
         @NotNull
         @Override
         public Val getOrThrow() throws Exception {
+            return VALUE;
+        }
+
+        /**
+         * Override this method to provide default implementation.
+         * @return {@link Val} instance.
+         */
+        @Nullable
+        @Override
+        public Val get() {
+            return VALUE;
+        }
+
+        /**
+         * Override this method to provide default implementation.
+         * @return {@link Exception} instance.
+         */
+        @Nullable
+        @Override
+        public Exception getError() {
+            return null;
+        }
+
+        /**
+         * Override this method to provide default implementation.
+         * @return {@link Val} instance.
+         * @throws Exception If failure.
+         */
+        @NotNull
+        @Override
+        public Val getOrThrow(@NotNull Exception e) throws Exception {
+            return VALUE;
+        }
+
+
+        /**
+         * Override this method to provide default implementation.
+         * @return {@link Val} instance.
+         */
+        @NotNull
+        @Override
+        public Val getOrElse(@NotNull Val value) {
             return VALUE;
         }
 
@@ -188,6 +237,10 @@ public abstract class Try<Val> implements TryType<Val> {
             ERROR = e;
         }
 
+        public String toString() {
+            return String.format("Failure: %s", ERROR);
+        }
+
         /**
          * Override this method to provide default implementation.
          * @return {@link Option<Val>} instance.
@@ -207,6 +260,47 @@ public abstract class Try<Val> implements TryType<Val> {
         @Override
         public Val getOrThrow() throws Exception {
             throw ERROR;
+        }
+
+        /**
+         * Override this method to provide default implementation.
+         * @return {@link Val} instance.
+         */
+        @Nullable
+        @Override
+        public Val get() {
+            return null;
+        }
+
+        /**
+         * Override this method to provide default implementation.
+         * @return {@link Exception} instance.
+         */
+        @Nullable
+        @Override
+        public Exception getError() {
+            return ERROR;
+        }
+
+        /**
+         * Override this method to provide default implementation.
+         * @return {@link Val} instance.
+         * @throws Exception If failure.
+         */
+        @NotNull
+        @Override
+        public Val getOrThrow(@NotNull Exception e) throws Exception {
+            throw e;
+        }
+
+        /**
+         * Override this method to provide default implementation.
+         * @return {@link Val} instance.
+         */
+        @NotNull
+        @Override
+        public Val getOrElse(@NotNull Val value) {
+            return value;
         }
 
         /**
