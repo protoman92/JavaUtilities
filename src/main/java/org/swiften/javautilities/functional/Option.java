@@ -1,11 +1,8 @@
-package org.swiften.javautilities.functional.optionf;
+package org.swiften.javautilities.functional;
 
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.swiften.javautilities.functional.tryf.Try;
-import org.swiften.javautilities.util.LogUtil;
 
 /**
  * Created by haipham on 7/12/17.
@@ -14,10 +11,10 @@ public abstract class Option<Val> implements OptionType<Val> {
     @NotNull static final String VALUE_UNAVAILABLE = "Value unavailable";
 
     /**
-     * Get {@link Some<Val>}.
+     * Get {@link Option}.
      * @param value {@link Val} instance.
      * @param <Val> Generics parameter.
-     * @return {@link Option<Val>} instance.
+     * @return {@link Option} instance.
      */
     @NotNull
     public static <Val> Option<Val> some(@NotNull Val value) {
@@ -27,16 +24,18 @@ public abstract class Option<Val> implements OptionType<Val> {
     /**
      * Get {@link Nothing<Val>}.
      * @param <Val> Generics parameter.
-     * @return {@link Option<Val>} instance.
+     * @return {@link Option} instance.
      */
     @NotNull
     public static <Val> Option<Val> nothing() {
         return new Nothing<Val>();
     }
 
+    Option() {}
+
     /**
      * Override this method to provide default implementation.
-     * @return {@link Option<Val>} instance.
+     * @return {@link Option} instance.
      */
     @NotNull
     @Override
@@ -81,7 +80,7 @@ public abstract class Option<Val> implements OptionType<Val> {
 
         /**
          * Override this method to provide default implementation.
-         * @return {@link Try<Val>} instance.
+         * @return {@link Try} instance.
          */
         @NotNull
         @Override
@@ -126,7 +125,7 @@ public abstract class Option<Val> implements OptionType<Val> {
          * Override this method to provide default implementation.
          * @param transform Transform {@link Function} from {@link Val} to {@link Val1}.
          * @param <Val1> Generics parameter.
-         * @return {@link Option<Val1>} instance.
+         * @return {@link Option} instance.
          */
         @NotNull
         @Override
@@ -142,7 +141,7 @@ public abstract class Option<Val> implements OptionType<Val> {
          * Override this method to provide default implementation.
          * @param transform {@link OptionConvertibleType} of transform {@link Function}.
          * @param <Val1> Generics parameter.
-         * @return {@link Option<Val1>}
+         * @return {@link Option}
          */
         @NotNull
         @Override
@@ -163,9 +162,9 @@ public abstract class Option<Val> implements OptionType<Val> {
 
         /**
          * Override this method to provide default implementation.
-         * @param transform Transform {@link Function} from {@link Val} to {@link Option<Val1>}.
+         * @param transform Transform {@link Function} from {@link Val} to {@link Option}.
          * @param <Val1> Generics parameter.
-         * @return {@link Option<Val1>} instance.
+         * @return {@link Option} instance.
          */
         @NotNull
         @Override
@@ -193,7 +192,7 @@ public abstract class Option<Val> implements OptionType<Val> {
 
         /**
          * Override this method to provide default implementation.
-         * @return {@link Try<Val>} instance.
+         * @return {@link Try} instance.
          */
         @NotNull
         @Override
@@ -238,7 +237,7 @@ public abstract class Option<Val> implements OptionType<Val> {
          * Override this method to provide default implementation.
          * @param transform Transform {@link Function} from {@link Val} to {@link Val1}.
          * @param <Val1> Generics parameter.
-         * @return {@link Option<Val1>} instance.
+         * @return {@link Option} instance.
          */
         @NotNull
         @Override
@@ -250,7 +249,7 @@ public abstract class Option<Val> implements OptionType<Val> {
          * Override this method to provide default implementation.
          * @param transform {@link OptionConvertibleType} of transform {@link Function}.
          * @param <Val1> Generics parameter.
-         * @return {@link Option<Val1>}
+         * @return {@link Option}
          */
         @NotNull
         @Override
@@ -260,9 +259,9 @@ public abstract class Option<Val> implements OptionType<Val> {
 
         /**
          * Override this method to provide default implementation.
-         * @param transform Transform {@link Function} from {@link Val} to {@link Option<Val1>}.
+         * @param transform Transform {@link Function} from {@link Val} to {@link Option}.
          * @param <Val1> Generics parameter.
-         * @return {@link Option<Val1>} instance.
+         * @return {@link Option} instance.
          */
         @NotNull
         @Override

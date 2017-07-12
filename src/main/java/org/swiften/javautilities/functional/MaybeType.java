@@ -1,4 +1,4 @@
-package org.swiften.javautilities.functional.maybef;
+package org.swiften.javautilities.functional;
 
 /**
  * Created by haipham on 7/12/17.
@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Implement this interface to signify presence of value or lack thereof.
+ * @param <Val> Generics parameter.
  */
 public interface MaybeType<Val> {
     /**

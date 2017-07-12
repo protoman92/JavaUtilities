@@ -1,10 +1,8 @@
-package org.swiften.javautilities.functional.tryf;
+package org.swiften.javautilities.functional;
 
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.swiften.javautilities.functional.maybef.MaybeType;
-import org.swiften.javautilities.functional.optionf.OptionConvertibleType;
 
 /**
  * Created by haipham on 11/7/17.
@@ -44,7 +42,7 @@ public interface TryType<Val> extends TryConvertibleType<Val>, OptionConvertible
      * Functor.
      * @param transform Transform {@link Function} from {@link Val} to {@link Val1}.
      * @param <Val1> Generics parameter.
-     * @return {@link Try<Val1>} instance.
+     * @return {@link Try} instance.
      */
     @NotNull
     <Val1> Try<Val1> map(@NotNull Function<? super Val, ? extends Val1> transform);
@@ -53,16 +51,16 @@ public interface TryType<Val> extends TryConvertibleType<Val>, OptionConvertible
      * Applicative.
      * @param transform {@link TryConvertibleType} of transform {@link Function}.
      * @param <Val1> Generics parameter.
-     * @return {@link Try<Val>}
+     * @return {@link Try}
      */
     @NotNull
     <Val1> Try<Val1> apply(@NotNull TryConvertibleType<Function<? super Val, ? extends Val1>> transform);
 
     /**
      * Monad.
-     * @param transform Transform {@link Function} from {@link Val} to {@link Try<Val1>}.
+     * @param transform Transform {@link Function} from {@link Val} to {@link Try}.
      * @param <Val1> Generics parameter.
-     * @return {@link Try<Val1>} instance.
+     * @return {@link Try} instance.
      */
     @NotNull
     <Val1> Try<Val1> flatMap(@NotNull Function<? super Val, ? extends TryConvertibleType<Val1>> transform);

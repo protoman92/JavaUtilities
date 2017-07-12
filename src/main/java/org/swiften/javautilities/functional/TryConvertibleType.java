@@ -1,7 +1,6 @@
-package org.swiften.javautilities.functional.tryf;
+package org.swiften.javautilities.functional;
 
 import org.jetbrains.annotations.NotNull;
-import org.swiften.javautilities.functional.optionf.OptionConvertibleType;
 
 /**
  * Created by haipham on 11/7/17.
@@ -13,7 +12,7 @@ import org.swiften.javautilities.functional.optionf.OptionConvertibleType;
  */
 public interface TryConvertibleType<Val> {
     /**
-     * Convert the current {@link TryConvertibleType<Val>} into {@link Try<Val>}.
+     * Convert the current {@link TryConvertibleType<Val>} into {@link Try}.
      * @return {@link Try} instance.
      */
     @NotNull Try<Val> asTry();

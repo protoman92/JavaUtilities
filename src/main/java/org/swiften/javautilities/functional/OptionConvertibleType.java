@@ -1,4 +1,4 @@
-package org.swiften.javautilities.functional.optionf;
+package org.swiften.javautilities.functional;
 
 /**
  * Created by haipham on 7/12/17.
@@ -10,8 +10,8 @@ package org.swiften.javautilities.functional.optionf;
  */
 public interface OptionConvertibleType<Val> {
     /**
-     * Convert the current {@link OptionConvertibleType<Val>} into {@link Option<Val>}.
-     * @return {@link Option<Val>} instance.
+     * Convert the current {@link OptionConvertibleType<Val>} into {@link Option}.
+     * @return {@link Option} instance.
      */
     Option<Val> asOption();
 }

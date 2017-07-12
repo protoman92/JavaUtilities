@@ -1,5 +1,7 @@
 package org.swiften.javautilities.object;
 
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -122,6 +124,22 @@ public final class ObjectUtil {
     @Nullable
     public static <T> T eq(@Nullable T object) {
         return object;
+    }
+
+    /**
+     * {@link Function} to return the same value passed in.
+     * @param <T> Generics parameter.
+     * @return {@link Function} instance.
+     */
+    @NotNull
+    public static <T> Function<? super T, ? extends T> eqFn() {
+        return new Function<T, T>() {
+            @NotNull
+            @Override
+            public T apply(@NotNull T t) throws Exception {
+                return t;
+            }
+        };
     }
 
     private ObjectUtil() {}

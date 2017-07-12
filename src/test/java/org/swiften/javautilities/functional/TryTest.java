@@ -1,17 +1,12 @@
-package org.swiften.javautilities.functional.tryf;
+package org.swiften.javautilities.functional;
 
 import io.reactivex.Flowable;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 import io.reactivex.subscribers.TestSubscriber;
-import org.intellij.lang.annotations.Flow;
-import org.jetbrains.annotations.NotNull;
+import org.swiften.javautilities.functional.Tries;
+import org.swiften.javautilities.functional.Try;
 import org.swiften.javautilities.rx.CustomTestSubscriber;
-import org.swiften.javautilities.rx.RxTest;
 import org.swiften.javautilities.rx.RxUtil;
 import org.testng.annotations.Test;
-
-import java.util.Currency;
 
 import static org.mockito.Mockito.mock;
 import static org.testng.Assert.*;

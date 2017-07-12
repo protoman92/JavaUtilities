@@ -1,5 +1,6 @@
-package org.swiften.javautilities.functional.optionf;
+package org.swiften.javautilities.functional;
 
+import org.swiften.javautilities.functional.Option;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;

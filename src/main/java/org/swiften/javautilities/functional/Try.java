@@ -1,20 +1,18 @@
-package org.swiften.javautilities.functional.tryf;
+package org.swiften.javautilities.functional;
 
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.swiften.javautilities.functional.optionf.Option;
-import org.swiften.javautilities.functional.optionf.OptionType;
 
 /**
  * Created by haipham on 11/7/17.
  */
 public abstract class Try<Val> implements TryType<Val> {
     /**
-     * Get {@link Success<Val>}.
+     * Get {@link Success}.
      * @param value {@link Val} instance.
      * @param <Val> Generics parameter.
-     * @return {@link Try<Val>} instance.
+     * @return {@link Try} instance.
      */
     @NotNull
     public static <Val> Try<Val> success(@NotNull Val value) {
@@ -22,10 +20,10 @@ public abstract class Try<Val> implements TryType<Val> {
     }
 
     /**
-     * Get {@link Failure<Val>}.
+     * Get {@link Failure}.
      * @param e {@link Exception} instance.
      * @param <Val> Generics parameter.
-     * @return {@link Try<Val>} instance.
+     * @return {@link Try} instance.
      */
     @NotNull
     public static <Val> Try<Val> failure(@NotNull Exception e) {
@@ -33,10 +31,10 @@ public abstract class Try<Val> implements TryType<Val> {
     }
 
     /**
-     * Get {@link Failure<Val>}.
+     * Get {@link Failure}.
      * @param t {@link Throwable} instance.
      * @param <Val> Generics parameter.
-     * @return {@link Try<Val>} instance.
+     * @return {@link Try} instance.
      * @see #failure(Exception)
      */
     @NotNull
@@ -49,10 +47,10 @@ public abstract class Try<Val> implements TryType<Val> {
     }
 
     /**
-     * Get {@link Failure<Val>}.
+     * Get {@link Failure}.
      * @param error {@link String} value.
      * @param <Val> Generics parameter.
-     * @return {@link Try<Val>} instance.
+     * @return {@link Try} instance.
      * @see #failure(Exception)
      */
     @NotNull
@@ -61,8 +59,25 @@ public abstract class Try<Val> implements TryType<Val> {
     }
 
     /**
+     * Get {@link Try} based on some {@link Supplier}.
+     * @param supplier {@link Supplier} instance.
+     * @param <Val> Generics parameter.
+     * @return {@link Try} instance.
+     */
+    @NotNull
+    public static <Val> Try<Val> from(@NotNull Supplier<Val> supplier) {
+        try {
+            return success(supplier.supply());
+        } catch (Exception e) {
+            return failure(e);
+        }
+    }
+
+    Try() {}
+
+    /**
      * Override this method to provide default implementation.
-     * @return {@link Try<Val>} instance.
+     * @return {@link Try} instance.
      * @see TryConvertibleType#asTry()
      */
     @NotNull
@@ -90,7 +105,7 @@ public abstract class Try<Val> implements TryType<Val> {
     }
 
     /**
-     * Represent success {@link Try<Val>}.
+     * Represent success {@link Try}.
      * @param <Val> Generics parameter.
      */
     private static final class Success<Val> extends Try<Val> {
@@ -108,7 +123,7 @@ public abstract class Try<Val> implements TryType<Val> {
 
         /**
          * Override this method to provide default implementation.
-         * @return {@link Option<Val>} instance.
+         * @return {@link Option} instance.
          */
         @NotNull
         @Override
@@ -173,7 +188,7 @@ public abstract class Try<Val> implements TryType<Val> {
          * Override this method to provide default implementation.
          * @param transform Transform {@link Function} from {@link Val} to {@link Val1}.
          * @param <Val1> Generics parameter.
-         * @return {@link Try<Val1>} instance.
+         * @return {@link Try} instance.
          */
         @NotNull
         @Override
@@ -189,7 +204,7 @@ public abstract class Try<Val> implements TryType<Val> {
          * Override this method to provide default implementation.
          * @param transform {@link TryConvertibleType} of transform {@link Function}.
          * @param <Val1> Generics parameter.
-         * @return {@link Try<Val1>} instance.
+         * @return {@link Try} instance.
          */
         @NotNull
         @Override
@@ -211,9 +226,9 @@ public abstract class Try<Val> implements TryType<Val> {
 
         /**
          * Override this method to provide default implementation.
-         * @param transform Transform {@link Function} from {@link Val} to {@link Try<Val1>}.
+         * @param transform Transform {@link Function} from {@link Val} to {@link Try}.
          * @param <Val1> Generics parameter.
-         * @return {@link Try<Val1>} instance.
+         * @return {@link Try} instance.
          */
         @NotNull
         @Override
@@ -227,7 +242,7 @@ public abstract class Try<Val> implements TryType<Val> {
     }
 
     /**
-     * Represent failure {@link Try<Val>}.
+     * Represent failure {@link Try}.
      * @param <Val> Generics parameter.
      */
     private static final class Failure<Val> extends Try<Val> {
@@ -243,7 +258,7 @@ public abstract class Try<Val> implements TryType<Val> {
 
         /**
          * Override this method to provide default implementation.
-         * @return {@link Option<Val>} instance.
+         * @return {@link Option} instance.
          */
         @NotNull
         @Override
@@ -307,7 +322,7 @@ public abstract class Try<Val> implements TryType<Val> {
          * Override this method to provide default implementation.
          * @param transform Transform {@link Function} from {@link Val} to {@link Val1}.
          * @param <Val1> Generics parameter.
-         * @return {@link Try<Val1>} instance.
+         * @return {@link Try} instance.
          */
         @NotNull
         @Override
@@ -319,7 +334,7 @@ public abstract class Try<Val> implements TryType<Val> {
          * Override this method to provide default implementation.
          * @param transform {@link TryConvertibleType} of transform {@link Function}.
          * @param <Val1> Generics parameter.
-         * @return {@link Try<Val1>} instance.
+         * @return {@link Try} instance.
          */
         @NotNull
         @Override
@@ -329,9 +344,9 @@ public abstract class Try<Val> implements TryType<Val> {
 
         /**
          * Override this method to provide default implementation.
-         * @param transform Transform {@link Function} from {@link Val} to {@link Try<Val1>}.
+         * @param transform Transform {@link Function} from {@link Val} to {@link Try}.
          * @param <Val1> Generics parameter.
-         * @return {@link Try<Val1>} instance.
+         * @return {@link Try} instance.
          */
         @NotNull
         @Override

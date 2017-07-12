@@ -1,4 +1,4 @@
-package org.swiften.javautilities.functional.optionf;
+package org.swiften.javautilities.functional;
 
 /**
  * Created by haipham on 7/12/17.
@@ -6,9 +6,6 @@ package org.swiften.javautilities.functional.optionf;
 
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.swiften.javautilities.functional.maybef.MaybeType;
-import org.swiften.javautilities.functional.tryf.TryConvertibleType;
 
 /**
  * Option monad interface.
@@ -31,7 +28,7 @@ public interface OptionType<Val> extends OptionConvertibleType<Val>, TryConverti
      * Functor.
      * @param transform Transform {@link Function} from {@link Val} to {@link Val1}.
      * @param <Val1> Generics parameter.
-     * @return {@link Option<Val1>} instance.
+     * @return {@link Option} instance.
      */
     @NotNull
     <Val1> Option<Val1> map(@NotNull Function<? super Val, ? extends Val1> transform);
@@ -40,16 +37,16 @@ public interface OptionType<Val> extends OptionConvertibleType<Val>, TryConverti
      * Applicative.
      * @param transform {@link OptionConvertibleType} of transform {@link Function}.
      * @param <Val1> Generics parameter.
-     * @return {@link Option<Val1>}
+     * @return {@link Option}
      */
     @NotNull
     <Val1> Option<Val1> apply(@NotNull OptionConvertibleType<Function<? super Val, ? extends Val1>> transform);
 
     /**
      * Monad.
-     * @param transform Transform {@link Function} from {@link Val} to {@link Option<Val1>}.
+     * @param transform Transform {@link Function} from {@link Val} to {@link Option}.
      * @param <Val1> Generics parameter.
-     * @return {@link Option<Val1>} instance.
+     * @return {@link Option} instance.
      */
     @NotNull
     <Val1> Option<Val1> flatMap(@NotNull Function<? super Val, ? extends OptionConvertibleType<Val1>> transform);

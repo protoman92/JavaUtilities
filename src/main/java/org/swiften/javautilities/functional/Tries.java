@@ -1,4 +1,4 @@
-package org.swiften.javautilities.functional.tryf;
+package org.swiften.javautilities.functional;
 
 /**
  * Created by haipham on 7/12/17.
@@ -16,7 +16,7 @@ import org.reactivestreams.Publisher;
  */
 public final class Tries {
     /**
-     * Get {@link Function} to convert {@link Val} instance to {@link Try<Val>}.
+     * Get {@link Function} to convert {@link Val} instance to {@link Try}.
      * @param <Val> Generics parameter.
      * @return {@link Function} instance.
      * @see Try#success(Object)
@@ -33,7 +33,7 @@ public final class Tries {
     }
 
     /**
-     * Get {@link Function} to convert from {@link Throwable} to {@link Try<Val>}.
+     * Get {@link Function} to convert from {@link Throwable} to {@link Try}.
      * @param <Val> Generics parameter.
      * @return {@link Function} instance.
      * @see Try#failure(Throwable)

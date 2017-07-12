@@ -103,5 +103,20 @@ public final class NumberUtil {
         return n1.doubleValue() + n2.doubleValue();
     }
 
+    /**
+     * Get the sum of all {@link Number}.
+     * @param numbers {@link Iterable} of {@link Number}.
+     * @return {@link Double} value.
+     */
+    public static double sum(@NotNull Iterable<? extends Number> numbers) {
+        double sum = 0;
+
+        for (Number n : numbers) {
+            sum = NumberUtil.sum(sum, n);
+        }
+
+        return sum;
+    }
+
     private NumberUtil() {}
 }
