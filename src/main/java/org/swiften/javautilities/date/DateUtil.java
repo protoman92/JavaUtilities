@@ -2,8 +2,8 @@ package org.swiften.javautilities.date;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.swiften.javautilities.number.NumberUtil;
-import org.swiften.javautilities.object.ObjectUtil;
+import org.swiften.javautilities.number.HPNumbers;
+import org.swiften.javautilities.object.HPObjects;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -30,18 +30,18 @@ public final class DateUtil {
      * Produce a random {@link Calendar}.
      * @return {@link Calendar} instance.
      * @see DateUtil#getCalendar(int, int, int, int, int, int, int)
-     * @see NumberUtil#randomBetween(int, int)
+     * @see HPNumbers#randomBetween(int, int)
      */
     @NotNull
     public static Calendar randomCalendar() {
         return DateUtil.getCalendar(
-            NumberUtil.randomBetween(2000, 2016),
-            NumberUtil.randomBetween(1, 11),
-            NumberUtil.randomBetween(1, 31),
-            NumberUtil.randomBetween(1, 23),
-            NumberUtil.randomBetween(1, 59),
-            NumberUtil.randomBetween(1, 59),
-            NumberUtil.randomBetween(1, 999)
+            HPNumbers.randomBetween(2000, 2016),
+            HPNumbers.randomBetween(1, 11),
+            HPNumbers.randomBetween(1, 31),
+            HPNumbers.randomBetween(1, 23),
+            HPNumbers.randomBetween(1, 59),
+            HPNumbers.randomBetween(1, 59),
+            HPNumbers.randomBetween(1, 999)
         );
     }
 
@@ -127,7 +127,7 @@ public final class DateUtil {
             for (int i = 0; i < index; i++) {
                 Integer field;
 
-                if (ObjectUtil.nonNull(field = components.get(i))) {
+                if (HPObjects.nonNull(field = components.get(i))) {
                     calendar.set(field, 1);
                 }
             }

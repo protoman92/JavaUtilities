@@ -1,7 +1,7 @@
 package org.swiften.javautilities.functional;
 
-import org.swiften.javautilities.collection.CollectionUtil;
-import org.swiften.javautilities.number.NumberUtil;
+import org.swiften.javautilities.collection.HPIterables;
+import org.swiften.javautilities.number.HPNumbers;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -25,7 +25,7 @@ public final class ReaderTest {
         });
 
         Reader<Integer, Integer> r1_zw_r2 = r1.zipWith(r2, (a, b) -> a + b);
-        Reader<Integer, Double> z_r1_r2 = Reader.zip(CollectionUtil.asList(r1, r2), NumberUtil::sum);
+        Reader<Integer, Double> z_r1_r2 = Reader.zip(HPIterables.asList(r1, r2), HPNumbers::sum);
 
         // When & Then
         try {

@@ -15,9 +15,9 @@ import org.swiften.javautilities.util.Constants;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Parameter object for {@link RxUtil#repeatWhile(Flowable, DelayProviderType)}.
+ * Parameter object for {@link HPReactives#repeatWhile(Flowable, DelayProviderType)}.
  */
-public final class RxUtilParam implements DelayProviderType, SchedulerProviderType {
+public final class RxParam implements DelayProviderType, SchedulerProviderType {
     /**
      * Get {@link Builder} instance.
      * @return {@link Builder} instance.
@@ -28,13 +28,13 @@ public final class RxUtilParam implements DelayProviderType, SchedulerProviderTy
     }
 
     /**
-     * Get default {@link RxUtilParam}.
-     * @return {@link RxUtilParam} instance.
+     * Get default {@link RxParam}.
+     * @return {@link RxParam} instance.
      * @see Builder#withDelay(long)
      * @see Builder#withTimeUnit(TimeUnit)
      */
     @NotNull
-    public static RxUtilParam defaultInstance() {
+    public static RxParam defaultInstance() {
         return builder()
             .withDelay(0)
             .withTimeUnit(TimeUnit.MILLISECONDS)
@@ -46,7 +46,7 @@ public final class RxUtilParam implements DelayProviderType, SchedulerProviderTy
     @NotNull private Scheduler scheduler;
     private long delay;
 
-    RxUtilParam() {
+    RxParam() {
         delay = Constants.DEFAULT_DELAY;
         scheduler = Constants.DEFAULT_SCHEDULER;
         unit = Constants.DEFAULT_TIME_UNIT;
@@ -85,14 +85,14 @@ public final class RxUtilParam implements DelayProviderType, SchedulerProviderTy
     }
 
     /**
-     * Builder class for {@link RxUtilParam}.
+     * Builder class for {@link RxParam}.
      */
     public static final class Builder {
         @NotNull
-        RxUtilParam PARAM;
+        RxParam PARAM;
 
         Builder() {
-            PARAM = new RxUtilParam();
+            PARAM = new RxParam();
         }
 
         /**
@@ -133,10 +133,10 @@ public final class RxUtilParam implements DelayProviderType, SchedulerProviderTy
 
         /**
          * Get {@link #PARAM}.
-         * @return {@link RxUtilParam} instance.
+         * @return {@link RxParam} instance.
          * @see #PARAM
          */
-        public RxUtilParam build() {
+        public RxParam build() {
             return PARAM;
         }
     }

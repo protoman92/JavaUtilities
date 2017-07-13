@@ -1,16 +1,13 @@
 package org.swiften.javautilities.localizer;
 
 import io.reactivex.Flowable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.subscribers.TestSubscriber;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.reactivestreams.Publisher;
-import org.swiften.javautilities.collection.CollectionUtil;
-import org.swiften.javautilities.object.ObjectUtil;
+import org.swiften.javautilities.collection.HPIterables;
+import org.swiften.javautilities.object.HPObjects;
 import org.swiften.javautilities.rx.CustomTestSubscriber;
-import org.swiften.javautilities.rx.RxUtil;
+import org.swiften.javautilities.rx.HPReactives;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -55,7 +52,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
         }
 
         for (ResourceBundle bundle : BUNDLES) {
-            Locale locale = CollectionUtil.randomElement(LOCALES);
+            Locale locale = HPIterables.randomElement(LOCALES);
             doReturn(locale).when(bundle).getLocale();
         }
 
@@ -97,7 +94,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
      * @see ResourceBundle#getLocale()
      */
     private int bundleCount(@Nullable Locale locale) {
-        if (ObjectUtil.isNull(locale)) {
+        if (HPObjects.isNull(locale)) {
             return BUNDLES.size();
         } else {
             int included = 0;
@@ -134,7 +131,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
             subscriber.assertSubscribed();
             subscriber.assertNoErrors();
             subscriber.assertComplete();
-            assertEquals(RxUtil.nextEventsCount(subscriber), included);
+            assertEquals(HPReactives.nextEventsCount(subscriber), included);
         }
     }
 
@@ -299,7 +296,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 //
 //            LogUtil.println("Args for fmt", format, arguments);
 //
-//            doReturn(CollectionUtil.toArray(arguments)).when(format).arguments();
+//            doReturn(HPIterables.toArray(arguments)).when(format).arguments();
 //        }
 //
 //        TestSubscriber subscriber = CustomTestSubscriber.create();
@@ -320,7 +317,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
 //        subscriber.assertSubscribed();
 //        subscriber.assertNoErrors();
 //        subscriber.assertComplete();
-//        LogUtil.println(RxUtil.firstNextEvent(subscriber));
+//        LogUtil.println(HPReactives.firstNextEvent(subscriber));
 //        verify(LC, times(totalNestedCount)).bundles();
 //        verify(LC, times(FMT.size())).rxe_resources(eq(LOCALE));
 //        verify(LC, times(FMT.size())).rxa_localize(any(LCFormat.class), eq(LOCALE));

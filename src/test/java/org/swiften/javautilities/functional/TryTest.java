@@ -2,10 +2,8 @@ package org.swiften.javautilities.functional;
 
 import io.reactivex.Flowable;
 import io.reactivex.subscribers.TestSubscriber;
-import org.swiften.javautilities.functional.Tries;
-import org.swiften.javautilities.functional.Try;
 import org.swiften.javautilities.rx.CustomTestSubscriber;
-import org.swiften.javautilities.rx.RxUtil;
+import org.swiften.javautilities.rx.HPReactives;
 import org.testng.annotations.Test;
 
 import static org.mockito.Mockito.mock;
@@ -57,7 +55,7 @@ public final class TryTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        Try first = RxUtil.firstNextEvent(subscriber);
+        Try first = HPReactives.firstNextEvent(subscriber);
         assertTrue(first.isFailure());
     }
 }

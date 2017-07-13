@@ -3,9 +3,9 @@ package org.swiften.javautilities.localizer;
 import io.reactivex.annotations.NonNull;
 import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
-import org.swiften.javautilities.collection.CollectionUtil;
-import org.swiften.javautilities.object.ObjectUtil;
-import org.swiften.javautilities.string.StringUtil;
+import org.swiften.javautilities.collection.HPIterables;
+import org.swiften.javautilities.object.HPObjects;
+import org.swiften.javautilities.string.HPStrings;
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
@@ -52,7 +52,7 @@ public class Localizer implements LocalizerType {
         for (ResourceBundle bundle : bundles) {
             Locale locale;
 
-            if (ObjectUtil.nonNull(bundle, (locale = bundle.getLocale()))) {
+            if (HPObjects.nonNull(bundle, (locale = bundle.getLocale()))) {
                 locales.add(locale);
             }
         }
@@ -74,7 +74,7 @@ public class Localizer implements LocalizerType {
                 @Override
                 public boolean test(@NonNull ResourceBundle bundle) throws Exception {
                     Locale lc = bundle.getLocale();
-                    return ObjectUtil.isNull(LC, lc) || lc.equals(LC);
+                    return HPObjects.isNull(LC, lc) || lc.equals(LC);
                 }
             });
     }
@@ -105,7 +105,7 @@ public class Localizer implements LocalizerType {
             .filter(new Predicate<String>() {
                 @Override
                 public boolean test(@NotNull String s) throws Exception {
-                    return StringUtil.isNotNullOrEmpty(s);
+                    return HPStrings.isNotNullOrEmpty(s);
                 }
             })
             .firstElement()
@@ -129,13 +129,13 @@ public class Localizer implements LocalizerType {
      * @param text The {@link String} to be localized.
      * @param locale {@link Locale} instance.
      * @return {@link String} value.
-     * @see StringUtil#isNotNullOrEmpty(String)
+     * @see HPStrings#isNotNullOrEmpty(String)
      * @see #rxa_localize(String, Locale)
      */
     @NotNull
     public String localize(@NotNull String text, @Nullable Locale locale) {
         String result = rxa_localize(text, locale).blockingFirst();
-        return StringUtil.isNotNullOrEmpty(result) ? result : text;
+        return HPStrings.isNotNullOrEmpty(result) ? result : text;
     }
 
     /**
@@ -209,7 +209,7 @@ public class Localizer implements LocalizerType {
             .filter(new Predicate<String>() {
                 @Override
                 public boolean test(@NonNull String s) throws Exception {
-                    return StringUtil.isNotNullOrEmpty(s);
+                    return HPStrings.isNotNullOrEmpty(s);
                 }
             })
             .firstElement()
@@ -239,7 +239,7 @@ public class Localizer implements LocalizerType {
     public String localize(@NotNull LCFormat format,
                            @Nullable Locale locale) {
         String result = rxa_localize(format, locale).blockingFirst();
-        return StringUtil.isNotNullOrEmpty(result) ? result : format.pattern();
+        return HPStrings.isNotNullOrEmpty(result) ? result : format.pattern();
     }
 
     /**
@@ -368,7 +368,7 @@ public class Localizer implements LocalizerType {
             .map(new Function<List<Object>,Object[]>() {
                 @Override
                 public Object[] apply(@NonNull List<Object> o) throws Exception {
-                    return CollectionUtil.toArray(o);
+                    return HPIterables.toArray(o);
                 }
             });
     }
@@ -420,7 +420,7 @@ public class Localizer implements LocalizerType {
             ResourceBundle.Control control = ResourceBundle.Control.getNoFallbackControl(prop);
             ResourceBundle bundle = ResourceBundle.getBundle(name, locale, control);
 
-            if (ObjectUtil.nonNull(bundle)) {
+            if (HPObjects.nonNull(bundle)) {
                 LOCALIZER.BUNDLES.add(bundle);
             }
 

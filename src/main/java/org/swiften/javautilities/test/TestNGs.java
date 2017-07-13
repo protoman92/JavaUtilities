@@ -1,7 +1,7 @@
 package org.swiften.javautilities.test;
 
 import org.jetbrains.annotations.NotNull;
-import org.swiften.javautilities.collection.CollectionUtil;
+import org.swiften.javautilities.collection.HPIterables;
 
 import java.util.*;
 
@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * Utility methods to use with TestNG.
  */
-public final class TestNGUtil {
+public final class TestNGs {
     /**
      * Produce {@link List} of {@link Object} array from {@link List} of
      * {@link Collection}, taking an element from each {@link Collection} for
@@ -27,7 +27,7 @@ public final class TestNGUtil {
 
         if (size > 0) {
             Collection<?> first = objects.get(0);
-            List<Collection<?>> second = CollectionUtil.subList(objects, 1, size);
+            List<Collection<?>> second = HPIterables.subList(objects, 1, size);
             List<Object[]> secondResults = oneFromEach(second);
 
             if (secondResults.size() > 0) {
@@ -59,7 +59,7 @@ public final class TestNGUtil {
      */
     @NotNull
     public static List<Object[]> oneFromEach(@NotNull Collection<?>...objects) {
-        return oneFromEach(CollectionUtil.asList(objects));
+        return oneFromEach(HPIterables.asList(objects));
     }
 
     /**
@@ -74,7 +74,7 @@ public final class TestNGUtil {
         List<Collection<?>> copy = new LinkedList<Collection<?>>();
 
         for (Object[] object : objects) {
-            copy.add(CollectionUtil.asList(object));
+            copy.add(HPIterables.asList(object));
         }
 
         return oneFromEach(copy);
@@ -88,7 +88,7 @@ public final class TestNGUtil {
      */
     @NotNull
     public static <T> List<Object[]> oneFromEach(@NotNull T[]...objects) {
-        return oneFromEach(CollectionUtil.asList(objects));
+        return oneFromEach(HPIterables.asList(objects));
     }
 
     /**
@@ -100,8 +100,8 @@ public final class TestNGUtil {
      */
     @NotNull
     public static List<Object[]> oneFromEach(@NotNull Object...objects) {
-        return oneFromEach(CollectionUtil.asList(objects));
+        return oneFromEach(HPIterables.asList(objects));
     }
 
-    private TestNGUtil() {}
+    private TestNGs() {}
 }

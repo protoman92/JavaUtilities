@@ -3,28 +3,23 @@ package org.swiften.javautilities.rx;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subscribers.TestSubscriber;
 import org.jetbrains.annotations.NotNull;
 import org.reactivestreams.Publisher;
-import org.swiften.javautilities.collection.Zip;
+import org.swiften.javautilities.functional.Tuple;
 import org.swiften.javautilities.localizer.Localizer;
 import org.swiften.javautilities.localizer.LocalizerType;
 import org.swiften.javautilities.util.LogUtil;
-import org.swiften.javautilities.number.NumberUtil;
+import org.swiften.javautilities.number.HPNumbers;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,8 +40,8 @@ public final class RxTest {
     }
 
     @NotNull
-    public RxUtilParam defaultRPParam() {
-        return RxUtilParam.builder()
+    public RxParam defaultRPParam() {
+        return RxParam.builder()
             .withDelay(500)
             .withTimeUnit(TimeUnit.MILLISECONDS)
             .build();
@@ -60,17 +55,17 @@ public final class RxTest {
         List<Integer> collection = Arrays.asList(1, 2, 3, 4);
 
         // When
-        RxUtil.from(collection).subscribe(observer);
+        HPReactives.from(collection).subscribe(observer);
         observer.awaitTerminalEvent();
 
         // Then
-        List nextEvents = RxUtil.nextEvents(observer);
+        List nextEvents = HPReactives.nextEvents(observer);
         Assert.assertEquals(collection.size(), nextEvents.size());
 
         for (int i = 0, length = collection.size(); i < length; i++) {
             Index index = (Index)nextEvents.get(i);
-            Zip zip = Zip.of(i, collection.get(i));
-            Assert.assertEquals(index.toZipped(), zip);
+            Tuple tuple = Tuple.of(i, collection.get(i));
+            Assert.assertEquals(index.toZipped(), tuple);
         }
     }
 
@@ -98,7 +93,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.println(RxUtil.nextEvents(subscriber));
+        LogUtil.println(HPReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -122,7 +117,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.println(RxUtil.nextEvents(subscriber));
+        LogUtil.println(HPReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -141,7 +136,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.println(RxUtil.nextEvents(subscriber));
+        LogUtil.println(HPReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -165,14 +160,14 @@ public final class RxTest {
             .map(s -> 2);
 
         // When
-        RxUtil.concatDelayEach(1000, f1, f2)
+        HPReactives.concatDelayEach(1000, f1, f2)
             .doOnNext(a -> LogUtil.printft("Post-delay: %s", a))
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.printlnt(RxUtil.nextEvents(subscriber));
+        LogUtil.printlnt(HPReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -184,7 +179,7 @@ public final class RxTest {
         // When
         Flowable.range(0, 10)
             .concatMap((Function<Integer, Publisher<?>>) integer -> {
-                long delay = NumberUtil.randomBetween(100, 500);
+                long delay = HPNumbers.randomBetween(100, 500);
                 TimeUnit unit = TimeUnit.MILLISECONDS;
                 return Flowable.just(integer).delay(delay, unit);
             })
@@ -195,7 +190,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.printlnt(RxUtil.nextEvents(subscriber));
+        LogUtil.printlnt(HPReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -208,7 +203,7 @@ public final class RxTest {
         Flowable.just(true)
             .repeatWhen(a -> a
                 .doOnNext(LogUtil::println)
-                .flatMap(b -> RxUtil.error())
+                .flatMap(b -> HPReactives.error())
                 .onErrorReturnItem(true))
             .repeat(3)
             .subscribe(subscriber);
@@ -216,7 +211,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.println(RxUtil.nextEvents(subscriber));
+        LogUtil.println(HPReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -224,12 +219,12 @@ public final class RxTest {
     public void test_repeatWhile() {
         // Setup
         Flowable<Boolean> predicate = predicateFlowable();
-        RxUtilParam param = defaultRPParam();
+        RxParam param = defaultRPParam();
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When
         Flowable.just(1)
-            .compose(RxUtil.repeatWhile(predicate, param))
+            .compose(HPReactives.repeatWhile(predicate, param))
             .doOnNext(LogUtil::printlnt)
             .count().toFlowable()
             .subscribe(subscriber);
@@ -237,7 +232,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.println(RxUtil.nextEvents(subscriber));
+        LogUtil.println(HPReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -245,12 +240,12 @@ public final class RxTest {
     public void test_repeatUntil() {
         // Setup
         Flowable<Boolean> predicate = predicateFlowable();
-        RxUtilParam param = defaultRPParam();
+        RxParam param = defaultRPParam();
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When
         Flowable.just(1)
-            .compose(RxUtil.repeatUntil(predicate, param))
+            .compose(HPReactives.repeatUntil(predicate, param))
             .doOnNext(LogUtil::printlnt)
             .count().toFlowable()
             .subscribe(subscriber);
@@ -258,7 +253,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.println(RxUtil.nextEvents(subscriber));
+        LogUtil.println(HPReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -269,15 +264,15 @@ public final class RxTest {
 
         // When
         Flowable.just(1)
-            .flatMap(i -> RxUtil.error("Error!"))
+            .flatMap(i -> HPReactives.error("Error!"))
             .doOnError(a -> LogUtil.println(a.getMessage()))
-            .compose(RxUtil.delayRetry(3, i -> i * 500L, TimeUnit.MILLISECONDS))
+            .compose(HPReactives.delayRetry(3, i -> i * 500L, TimeUnit.MILLISECONDS))
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.printlnt(RxUtil.nextEvents(subscriber));
+        LogUtil.printlnt(HPReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -289,13 +284,13 @@ public final class RxTest {
 
         // When
         Flowable.just("ABC DEF GHJ")
-            .compose(RxUtil.removeFromString(localizer, "A", "E", "H"))
+            .compose(HPReactives.removeFromString(localizer, "A", "E", "H"))
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.printlnt(RxUtil.nextEvents(subscriber));
+        LogUtil.printlnt(HPReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -303,19 +298,19 @@ public final class RxTest {
     public void test_retryWhile() {
         // Setup
         Flowable<Boolean> predicate = predicateFlowable();
-        RxUtilParam param = defaultRPParam();
+        RxParam param = defaultRPParam();
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When
-        RxUtil.error("Error!")
+        HPReactives.error("Error!")
             .doOnError(a -> LogUtil.printlnt(a.getMessage()))
-            .compose(RxUtil.retryWhile(predicate, param))
+            .compose(HPReactives.retryWhile(predicate, param))
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.printlnt(RxUtil.nextEvents(subscriber));
+        LogUtil.printlnt(HPReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -323,13 +318,13 @@ public final class RxTest {
     public void test_doWhile_doUntil() {
         // Setup
         Flowable<Boolean> predicate = predicateFlowable();
-        RxUtilParam param = defaultRPParam();
+        RxParam param = defaultRPParam();
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When
         Flowable.concatArray(
-            RxUtil.<Integer, RxUtilParam>doWhile(Flowable.just(1), predicate, param),
-            RxUtil.<Integer, RxUtilParam>doUntil(Flowable.just(2), predicate, param)
+            HPReactives.<Integer, RxParam>doWhile(Flowable.just(1), predicate, param),
+            HPReactives.<Integer, RxParam>doUntil(Flowable.just(2), predicate, param)
         ).doOnNext(i -> {
             if (i == 1) {
                 LogUtil.printlnt("doWhile running");
@@ -341,6 +336,6 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        LogUtil.printlnt(RxUtil.nextEvents(subscriber));
+        LogUtil.printlnt(HPReactives.nextEvents(subscriber));
     }
 }

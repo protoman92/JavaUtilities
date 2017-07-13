@@ -1,7 +1,7 @@
 package org.swiften.javautilities.date;
 
 import org.swiften.javautilities.util.LogUtil;
-import org.swiften.javautilities.number.NumberUtil;
+import org.swiften.javautilities.number.HPNumbers;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -66,7 +66,7 @@ public final class DateUtilTest {
             Date date = DateUtil.randomDate();
             calendar.setTime(date);
             int component = components.get(rand.nextInt(components.size()));
-            int random = NumberUtil.randomBetween(1, 10);
+            int random = HPNumbers.randomBetween(1, 10);
 
             calendar.add(component, random);
             Date endDate = calendar.getTime();

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created by haipham on 4/7/17.
  */
-public final class BoxUtil {
+public final class HPBoxes {
     /**
      * Box an Array of {@link Integer}.
      * @param integers An Array of {@link Integer} primitives.
@@ -23,5 +23,5 @@ public final class BoxUtil {
         return boxed;
     }
 
-    private BoxUtil() {}
+    private HPBoxes() {}
 }

@@ -1,8 +1,8 @@
 package org.swiften.javautilities.localizer;
 
 import org.jetbrains.annotations.Nullable;
+import org.swiften.javautilities.string.HPStrings;
 import org.swiften.javautilities.util.LogUtil;
-import org.swiften.javautilities.string.StringUtil;
 import org.swiften.javautilities.rx.CustomTestSubscriber;
 import io.reactivex.Flowable;
 import io.reactivex.annotations.NonNull;
@@ -99,7 +99,7 @@ public final class ActualLocalizerTest implements LocalizeErrorType {
             .doOnNext(new Consumer<String>() {
                 @Override
                 public void accept(@NonNull String s) throws Exception {
-                    Assert.assertTrue(StringUtil.isNotNullOrEmpty(s));
+                    Assert.assertTrue(HPStrings.isNotNullOrEmpty(s));
                 }
             })
             .subscribe(subscriber);

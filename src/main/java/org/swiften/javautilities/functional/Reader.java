@@ -1,12 +1,10 @@
 package org.swiften.javautilities.functional;
 
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
-import org.swiften.javautilities.object.ObjectUtil;
+import org.swiften.javautilities.object.HPObjects;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,7 +19,7 @@ public final class Reader<Env, Val> implements ReaderType<Env, Val> {
      */
     @NotNull
     public static <Env> Reader<Env, Env> eq() {
-        return from(ObjectUtil.<Env>eqFn());
+        return from(HPObjects.<Env>eqFn());
     }
 
     /**

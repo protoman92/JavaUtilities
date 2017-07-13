@@ -5,7 +5,7 @@ import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
 import org.reactivestreams.Publisher;
-import org.swiften.javautilities.collection.CollectionUtil;
+import org.swiften.javautilities.collection.HPIterables;
 import org.testng.annotations.Test;
 
 import java.util.Collection;
@@ -22,10 +22,10 @@ public final class TestUtilTest {
     @SuppressWarnings({"MessageMissingOnTestNGAssertion", "unchecked"})
     public void test_oneFromEach() {
         // Setup
-        List<Collection<?>> enums = CollectionUtil.<Collection<?>>asList(
-            CollectionUtil.asList(Enum1.values()),
-            CollectionUtil.asList(Enum2.values()),
-            CollectionUtil.asList(Enum3.values())
+        List<Collection<?>> enums = HPIterables.<Collection<?>>asList(
+            HPIterables.asList(Enum1.values()),
+            HPIterables.asList(Enum2.values()),
+            HPIterables.asList(Enum3.values())
         );
 
         int totalCount = 1;
@@ -35,7 +35,7 @@ public final class TestUtilTest {
         }
 
         // When
-        List<Object[]> data = TestNGUtil.oneFromEach(enums);
+        List<Object[]> data = TestNGs.oneFromEach(enums);
 
         // Then
         for (Object[] object : data) {
