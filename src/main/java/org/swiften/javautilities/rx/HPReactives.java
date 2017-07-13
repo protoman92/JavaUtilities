@@ -3,7 +3,6 @@ package org.swiften.javautilities.rx;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableTransformer;
 import io.reactivex.Scheduler;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.exceptions.Exceptions;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
@@ -176,8 +175,8 @@ public final class HPReactives {
             Flowable.range(0, collection.size()),
 
             new BiFunction<T, Integer, Index<T>>() {
-                @NonNull
-                public Index<T> apply(@NonNull T t, @NonNull Integer integer)
+                @NotNull
+                public Index<T> apply(@NotNull T t, @NotNull Integer integer)
                     throws Exception
                 {
                     return new Index<T>(t, integer);
@@ -918,7 +917,7 @@ public final class HPReactives {
     ) {
         return new FlowableTransformer<String,String>() {
             @Override
-            public Publisher<String> apply(@NonNull Flowable<String> source) {
+            public Publisher<String> apply(@NotNull Flowable<String> source) {
                 return source.flatMap(new Function<String,Publisher<String>>() {
                     @NotNull
                     @Override

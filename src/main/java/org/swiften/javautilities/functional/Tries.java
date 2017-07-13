@@ -6,7 +6,6 @@ package org.swiften.javautilities.functional;
 
 import io.reactivex.Flowable;
 import io.reactivex.FlowableTransformer;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
 import org.reactivestreams.Publisher;
@@ -76,7 +75,7 @@ public final class Tries {
         return new FlowableTransformer<T, Try<T>>() {
             @NotNull
             @Override
-            public Publisher<Try<T>> apply(@NonNull Flowable<T> upstream) {
+            public Publisher<Try<T>> apply(@NotNull Flowable<T> upstream) {
                 return upstream
                     .map(Tries.<T>successFn())
                     .onErrorReturn(Tries.<T>failureFn());

@@ -13,6 +13,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.text.MessageFormat;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -255,9 +256,12 @@ public final class MockLocalizerTest implements LocalizeErrorType {
         subscriber.assertSubscribed();
         subscriber.assertNoErrors();
         subscriber.assertComplete();
-        verify(LC, times(FMT.size())).bundles();
-        verify(LC, times(FMT.size())).rxe_resources(eq(LOCALE));
+        verify(LC, times(FMT.size() * 2)).bundles();
+        verify(LC, times(FMT.size() * 2)).rxe_resources(eq(LOCALE));
         verify(LC, times(FMT.size())).rxa_localize(any(LCFormat.class), eq(LOCALE));
+        verify(LC, times(FMT.size())).rxa_localize(anyString(), eq(LOCALE));
+        verify(LC, times(FMT.size() * 2)).rxa_getString(any(ResourceBundle.class), anyString());
+        verify(LC, times(FMT.size() * 2)).getString(any(ResourceBundle.class), anyString());
         verify(LC, times(times)).rxa_getString(any(ResourceBundle.class), any(LCFormat.class));
         verify(LC, times(times)).rxa_getTemplate(any(ResourceBundle.class), anyString());
         verify(LC, times(times)).rxa_formatArguments(any(Locale.class), any(LCFormat.class));

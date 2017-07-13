@@ -5,7 +5,6 @@ import org.swiften.javautilities.string.HPStrings;
 import org.swiften.javautilities.util.LogUtil;
 import org.swiften.javautilities.rx.CustomTestSubscriber;
 import io.reactivex.Flowable;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.subscribers.TestSubscriber;
@@ -86,19 +85,19 @@ public final class ActualLocalizerTest implements LocalizeErrorType {
         Flowable.fromArray(STRINGS)
             .flatMap(new Function<String,Publisher<String>>() {
                 @Override
-                public Publisher<String> apply(@NonNull String s) throws Exception {
+                public Publisher<String> apply(@NotNull String s) throws Exception {
                     return LOCALIZER.rxa_localize(s, LOCALE);
                 }
             })
             .doOnNext(new Consumer<String>() {
                 @Override
-                public void accept(@NonNull String s) throws Exception {
+                public void accept(@NotNull String s) throws Exception {
                     LogUtil.println(s);
                 }
             })
             .doOnNext(new Consumer<String>() {
                 @Override
-                public void accept(@NonNull String s) throws Exception {
+                public void accept(@NotNull String s) throws Exception {
                     Assert.assertTrue(HPStrings.isNotNullOrEmpty(s));
                 }
             })
@@ -121,17 +120,17 @@ public final class ActualLocalizerTest implements LocalizeErrorType {
         // When
         Flowable.fromArray(FORMATS)
             .flatMap(new Function<LCFormat,Publisher<String>>() {
-                @NonNull
+                @NotNull
                 @Override
                 public Publisher<String> apply(
-                    @NonNull LCFormat format
+                    @NotNull LCFormat format
                 ) throws Exception {
                     return LOCALIZER.rxa_localize(format, LOCALE);
                 }
             })
             .doOnNext(new Consumer<String>() {
                 @Override
-                public void accept(@NonNull String s) throws Exception {
+                public void accept(@NotNull String s) throws Exception {
                     LogUtil.println(s);
                 }
             })

@@ -1,6 +1,5 @@
 package org.swiften.javautilities.localizer;
 
-import io.reactivex.annotations.NonNull;
 import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
 import org.swiften.javautilities.collection.HPIterables;
@@ -72,7 +71,7 @@ public class Localizer implements LocalizerType {
         return Flowable.fromIterable(bundles())
             .filter(new Predicate<ResourceBundle>() {
                 @Override
-                public boolean test(@NonNull ResourceBundle bundle) throws Exception {
+                public boolean test(@NotNull ResourceBundle bundle) throws Exception {
                     Locale lc = bundle.getLocale();
                     return HPObjects.isNull(LC, lc) || lc.equals(LC);
                 }
@@ -96,7 +95,7 @@ public class Localizer implements LocalizerType {
                                          @Nullable Locale locale) {
         return rxe_resources(locale)
             .flatMap(new Function<ResourceBundle,Publisher<String>>() {
-                @NonNull
+                @NotNull
                 @Override
                 public Publisher<String> apply(@NotNull ResourceBundle bundle) throws Exception {
                     return rxa_getString(bundle, TEXT);
@@ -159,11 +158,9 @@ public class Localizer implements LocalizerType {
      */
     @NotNull
     @SuppressWarnings("WeakerAccess")
-    Flowable<String> rxa_getString(@NotNull ResourceBundle bundle,
-                                   @NotNull String text) {
+    Flowable<String> rxa_getString(@NotNull ResourceBundle bundle, @NotNull String text) {
         try {
-            String string = getString(bundle, text);
-            return Flowable.just(string);
+            return Flowable.just(getString(bundle, text));
         } catch (Exception e) {
             return Flowable.empty();
         }
@@ -200,15 +197,15 @@ public class Localizer implements LocalizerType {
 
         return rxe_resources(LOCALE)
             .flatMap(new Function<ResourceBundle,Publisher<String>>() {
-                @NonNull
+                @NotNull
                 @Override
-                public Publisher<String> apply(@NonNull ResourceBundle bundle) throws Exception {
+                public Publisher<String> apply(@NotNull ResourceBundle bundle) throws Exception {
                     return THIS.rxa_getString(bundle, FORMAT);
                 }
             })
             .filter(new Predicate<String>() {
                 @Override
-                public boolean test(@NonNull String s) throws Exception {
+                public boolean test(@NotNull String s) throws Exception {
                     return HPStrings.isNotNullOrEmpty(s);
                 }
             })
@@ -272,21 +269,21 @@ public class Localizer implements LocalizerType {
         final Locale LOCALE = BUNDLE.getLocale();
 
         return rxa_formatArguments(LOCALE, FORMAT).flatMap(new Function<Object[],Publisher<String>>() {
-            @NonNull
+            @NotNull
             @Override
-            public Publisher<String> apply(@NonNull final Object[] ARGS) throws Exception {
+            public Publisher<String> apply(@NotNull final Object[] ARGS) throws Exception {
                 return rxa_getTemplate(BUNDLE, FORMAT.pattern())
                     .map(new Function<String, MessageFormat>() {
-                        @NonNull
+                        @NotNull
                         @Override
-                        public MessageFormat apply(@NonNull String s) throws Exception {
+                        public MessageFormat apply(@NotNull String s) throws Exception {
                             return new MessageFormat(s, LOCALE);
                         }
                     })
                     .flatMap(new Function<MessageFormat,Publisher<String>>() {
-                        @NonNull
+                        @NotNull
                         @Override
-                        public Publisher<String> apply(@NonNull MessageFormat mf) throws Exception {
+                        public Publisher<String> apply(@NotNull MessageFormat mf) throws Exception {
                             return rxa_getString(mf, ARGS);
                         }
                     });
@@ -322,8 +319,7 @@ public class Localizer implements LocalizerType {
     Flowable<String> rxa_getString(@NotNull MessageFormat format,
                                    @NotNull Object[] args) {
         try {
-            String localized = getString(format, args);
-            return Flowable.just(localized);
+            return Flowable.just(getString(format, args));
         } catch (MissingResourceException e) {
             return Flowable.empty();
         }
@@ -354,12 +350,12 @@ public class Localizer implements LocalizerType {
      */
     @NotNull
     @SuppressWarnings("WeakerAccess")
-    Flowable<Object[]> rxa_formatArguments(@NonNull final Locale LOCALE,
+    Flowable<Object[]> rxa_formatArguments(@NotNull final Locale LOCALE,
                                            @NotNull LCFormat format) {
         return Flowable.fromArray(format.arguments())
             .flatMap(new Function<Object,Publisher<?>>() {
                 @Override
-                public Publisher<?> apply(@NonNull Object o) throws Exception {
+                public Publisher<?> apply(@NotNull Object o) throws Exception {
                     return rxa_prepareArgument(LOCALE, o);
                 }
             })
@@ -367,7 +363,7 @@ public class Localizer implements LocalizerType {
             .toFlowable()
             .map(new Function<List<Object>,Object[]>() {
                 @Override
-                public Object[] apply(@NonNull List<Object> o) throws Exception {
+                public Object[] apply(@NotNull List<Object> o) throws Exception {
                     return HPIterables.toArray(o);
                 }
             });
@@ -385,7 +381,7 @@ public class Localizer implements LocalizerType {
      */
     @NotNull
     @SuppressWarnings("WeakerAccess")
-    Flowable<?> rxa_prepareArgument(@NonNull Locale locale, @NotNull Object argument) {
+    Flowable<?> rxa_prepareArgument(@NotNull Locale locale, @NotNull Object argument) {
         if (argument instanceof LCFormat) {
             return rxa_localize((LCFormat)argument, locale);
         } else if (argument instanceof String) {

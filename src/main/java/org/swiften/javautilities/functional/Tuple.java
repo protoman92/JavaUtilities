@@ -1,6 +1,5 @@
 package org.swiften.javautilities.functional;
 
-import io.reactivex.annotations.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,14 +22,14 @@ public final class Tuple<A, B> {
      * @return {@link Tuple} instance.
      */
     @NotNull
-    public static <A, B> Tuple<A, B> of(@NonNull A a, @NotNull B b) {
+    public static <A, B> Tuple<A, B> of(@NotNull A a, @NotNull B b) {
         return new Tuple<A, B>(a, b);
     }
 
-    @NonNull public final A A;
+    @NotNull public final A A;
     @NotNull public final B B;
 
-    private Tuple(@NonNull A a, @NotNull B b) {
+    private Tuple(@NotNull A a, @NotNull B b) {
         A = a;
         B = b;
     }

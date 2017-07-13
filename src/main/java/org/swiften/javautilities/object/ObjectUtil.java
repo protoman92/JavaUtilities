@@ -1,6 +1,5 @@
 package org.swiften.javautilities.object;
 
-import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
