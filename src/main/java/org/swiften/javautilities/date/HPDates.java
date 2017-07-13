@@ -14,7 +14,7 @@ import java.util.List;
  * Created by haipham on 5/10/17.
  */
 
-public final class DateUtil {
+public final class HPDates {
     @NotNull
     static final List<Integer> DATE_COMPONENTS_FIELDS = Arrays.asList(
         Calendar.MILLISECOND,
@@ -29,12 +29,12 @@ public final class DateUtil {
     /**
      * Produce a random {@link Calendar}.
      * @return {@link Calendar} instance.
-     * @see DateUtil#getCalendar(int, int, int, int, int, int, int)
+     * @see HPDates#getCalendar(int, int, int, int, int, int, int)
      * @see HPNumbers#randomBetween(int, int)
      */
     @NotNull
     public static Calendar randomCalendar() {
-        return DateUtil.getCalendar(
+        return HPDates.getCalendar(
             HPNumbers.randomBetween(2000, 2016),
             HPNumbers.randomBetween(1, 11),
             HPNumbers.randomBetween(1, 31),
@@ -271,5 +271,5 @@ public final class DateUtil {
         return calendar1.get(granularity) - calendar2.get(granularity);
     }
 
-    private DateUtil() {}
+    private HPDates() {}
 }

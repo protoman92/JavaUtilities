@@ -1,6 +1,6 @@
 package org.swiften.javautilities.date;
 
-import org.swiften.javautilities.util.LogUtil;
+import org.swiften.javautilities.util.HPLog;
 import org.swiften.javautilities.number.HPNumbers;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -17,17 +17,17 @@ import static org.testng.Assert.assertNotNull;
  * Created by haipham on 5/10/17.
  */
 @SuppressWarnings("MessageMissingOnTestNGAssertion")
-public final class DateUtilTest {
+public final class HPDatesTest {
     @Test
     public void test_dateTrimming_scrap() {
         // Setup
         Date date = Calendar.getInstance().getTime();
 
         // When & Then
-        LogUtil.println(DateUtil.trimDate(date, Calendar.HOUR_OF_DAY));
-        LogUtil.println(DateUtil.trimDate(date, Calendar.DAY_OF_MONTH));
-        LogUtil.println(DateUtil.trimDate(date, Calendar.MONTH));
-        LogUtil.println(DateUtil.trimDate(date, Calendar.YEAR));
+        HPLog.println(HPDates.trimDate(date, Calendar.HOUR_OF_DAY));
+        HPLog.println(HPDates.trimDate(date, Calendar.DAY_OF_MONTH));
+        HPLog.println(HPDates.trimDate(date, Calendar.MONTH));
+        HPLog.println(HPDates.trimDate(date, Calendar.YEAR));
     }
 
     @Test
@@ -35,16 +35,16 @@ public final class DateUtilTest {
     public void test_dateTrimming_shouldWork() {
         // Setup
         Calendar calendar = Calendar.getInstance();
-        List<Integer> components = DateUtil.DATE_COMPONENTS_FIELDS;
+        List<Integer> components = HPDates.DATE_COMPONENTS_FIELDS;
         Random rand = new Random();
 
         for (int i = 0; i < 100000; i++) {
-            Date date = DateUtil.randomDate();
+            Date date = HPDates.randomDate();
             calendar.setTime(date);
             int component = components.get(rand.nextInt(components.size()));
 
             // When
-            Date trimmed = DateUtil.trimDate(date, component);
+            Date trimmed = HPDates.trimDate(date, component);
 
             // Then
             assertNotNull(trimmed);
@@ -58,12 +58,12 @@ public final class DateUtilTest {
     public void test_dateComparison_shouldWork() {
         // Setup
         Calendar calendar = Calendar.getInstance();
-        List<Integer> components = DateUtil.DATE_COMPONENTS_FIELDS;
+        List<Integer> components = HPDates.DATE_COMPONENTS_FIELDS;
         Random rand = new Random();
 
         for (int i = 1; i < 100000; i++) {
             // When
-            Date date = DateUtil.randomDate();
+            Date date = HPDates.randomDate();
             calendar.setTime(date);
             int component = components.get(rand.nextInt(components.size()));
             int random = HPNumbers.randomBetween(1, 10);
@@ -76,13 +76,13 @@ public final class DateUtilTest {
             Date startDate = calendar.getTime();
 
             // Then
-            Assert.assertTrue(DateUtil.sameAs(date, date, component));
-            Assert.assertTrue(DateUtil.notLaterThan(date, date, component));
-            Assert.assertTrue(DateUtil.notEarlierThan(date, date, component));
-            Assert.assertTrue(DateUtil.notEarlierThan(date, startDate, component));
-            Assert.assertTrue(DateUtil.laterThan(date, startDate, component));
-            Assert.assertTrue(DateUtil.notLaterThan(date, endDate, component));
-            Assert.assertTrue(DateUtil.earlierThan(date, endDate, component));
+            Assert.assertTrue(HPDates.sameAs(date, date, component));
+            Assert.assertTrue(HPDates.notLaterThan(date, date, component));
+            Assert.assertTrue(HPDates.notEarlierThan(date, date, component));
+            Assert.assertTrue(HPDates.notEarlierThan(date, startDate, component));
+            Assert.assertTrue(HPDates.laterThan(date, startDate, component));
+            Assert.assertTrue(HPDates.notLaterThan(date, endDate, component));
+            Assert.assertTrue(HPDates.earlierThan(date, endDate, component));
         }
     }
 }

@@ -13,7 +13,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.text.MessageFormat;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -267,70 +266,4 @@ public final class MockLocalizerTest implements LocalizeErrorType {
         verify(LC, times(times)).rxa_formatArguments(any(Locale.class), any(LCFormat.class));
         verifyNoMoreInteractions(LC);
     }
-
-//    @SuppressWarnings("unchecked")
-//    @Test(dataProvider = "localeProvider")
-//    public void test_rxLocalizeWithNestedFormat_shouldSucceed(@Nullable final Locale LOCALE) {
-//        // Setup
-//        int bundleCount = bundleCount(LOCALE);
-//        LogUtil.println("Current locale", LOCALE);
-//        LogUtil.println("Bundle count", bundleCount);
-//        int fmtCount = FMT.size();
-//        int nestedFormatCount = 2;
-//        int nestedStringCount = 1;
-//        int totalNestedFormatCount = ((nestedFormatCount + 1) * fmtCount) * bundleCount;
-//        int totalNestedCount = ((nestedFormatCount + nestedStringCount) * fmtCount) * bundleCount + fmtCount;
-//        int totalGetStringCount = (nestedStringCount * 2 * fmtCount) * bundleCount;
-//        doReturn(Flowable.just("Template")).when(LC).rxa_getTemplate(any(ResourceBundle.class), anyString());
-//        doThrow(mre()).when(LC).getString(any(MessageFormat.class), any(Object[].class));
-//
-//        for (LCFormat format : FMT) {
-//            List<Object> arguments = new ArrayList<Object>();
-//
-//            for (int i = 0; i < nestedFormatCount; i++) {
-//                LCFormat nested = mock(LCFormat.class);
-//                doReturn("template2").when(nested).pattern();
-//                doReturn(new Object[0]).when(nested).arguments();
-//                arguments.add(nested);
-//            }
-//
-////            for (int i = 0; i < nestedStringCount; i++) {
-////                arguments.add("localizable string");
-////            }
-//
-//            LogUtil.println("Args for fmt", format, arguments);
-//
-//            doReturn(HPIterables.toArray(arguments)).when(format).arguments();
-//        }
-//
-//        TestSubscriber subscriber = CustomTestSubscriber.create();
-//
-//        // When
-//        Flowable.fromIterable(FMT)
-//            .flatMap(new Function<LCFormat,Publisher<String>>() {
-//                @Override
-//                public Publisher<String> apply(@NotNull LCFormat format) throws Exception {
-//                    return LC.rxa_localize(format, LOCALE);
-//                }
-//            })
-//            .subscribe(subscriber);
-//
-//        subscriber.awaitTerminalEvent();
-//
-//        // Then
-//        subscriber.assertSubscribed();
-//        subscriber.assertNoErrors();
-//        subscriber.assertComplete();
-//        LogUtil.println(HPReactives.firstNextEvent(subscriber));
-//        verify(LC, times(totalNestedCount)).bundles();
-//        verify(LC, times(FMT.size())).rxe_resources(eq(LOCALE));
-//        verify(LC, times(FMT.size())).rxa_localize(any(LCFormat.class), eq(LOCALE));
-//        verify(LC, times(totalNestedFormatCount)).rxa_getTemplate(any(ResourceBundle.class), anyString());
-//        verify(LC, times(totalNestedFormatCount)).rxa_getString(any(ResourceBundle.class), any(LCFormat.class));
-//        verify(LC, times(totalGetStringCount)).rxa_getString(any(ResourceBundle.class), anyString());
-//        verify(LC, times(totalGetStringCount)).getString(any(ResourceBundle.class), anyString());
-//        verify(LC, times(totalNestedFormatCount)).rxa_formatArguments(any(Locale.class), any(LCFormat.class));
-//        verify(LC, times(totalNestedFormatCount)).rxa_prepareArgument(any(Locale.class), any());
-//        verifyNoMoreInteractions(LC);
-//    }
 }

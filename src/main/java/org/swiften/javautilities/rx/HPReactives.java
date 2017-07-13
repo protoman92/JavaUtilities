@@ -18,7 +18,7 @@ import org.swiften.javautilities.object.HPObjects;
 import org.swiften.javautilities.protocol.DelayProviderType;
 import org.swiften.javautilities.protocol.SchedulerProviderType;
 import org.swiften.javautilities.string.HPStrings;
-import org.swiften.javautilities.util.LogUtil;
+import org.swiften.javautilities.util.HPLog;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -79,7 +79,7 @@ public final class HPReactives {
      * @see #nextEvents(List)
      */
     public static void logNextEvents(@NotNull TestSubscriber subscriber) {
-        LogUtil.printlnt(nextEvents(subscriber));
+        HPLog.printlnt(nextEvents(subscriber));
     }
 
     /**
@@ -116,7 +116,7 @@ public final class HPReactives {
      * @see #firstNextEvent(TestSubscriber)
      */
     public static void logFirstNextEvent(@NotNull TestSubscriber subscriber) {
-        LogUtil.printlnt(firstNextEvent(subscriber));
+        HPLog.printlnt(firstNextEvent(subscriber));
     }
 
     /**
@@ -135,7 +135,7 @@ public final class HPReactives {
                 return upstream.doOnNext(new Consumer<T>() {
                     @Override
                     public void accept(@NotNull T t) throws Exception {
-                        LogUtil.printlnt(TRANSFORMER.apply(t));
+                        HPLog.printlnt(TRANSFORMER.apply(t));
                     }
                 });
             }

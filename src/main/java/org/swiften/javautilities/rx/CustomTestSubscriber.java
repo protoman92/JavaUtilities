@@ -1,6 +1,6 @@
 package org.swiften.javautilities.rx;
 
-import org.swiften.javautilities.util.LogUtil;
+import org.swiften.javautilities.util.HPLog;
 import io.reactivex.subscribers.TestSubscriber;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,6 +25,6 @@ public class CustomTestSubscriber<T> extends TestSubscriber<T> {
     @Override
     public void onError(@NotNull Throwable t) {
         super.onError(t);
-        LogUtil.printft("Error encountered: %s", t.getMessage());
+        HPLog.printft("Error encountered: %s", t.getMessage());
     }
 }
