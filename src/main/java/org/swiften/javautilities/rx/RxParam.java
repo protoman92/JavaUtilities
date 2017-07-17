@@ -30,8 +30,6 @@ public final class RxParam implements DelayProviderType, SchedulerProviderType {
     /**
      * Get default {@link RxParam}.
      * @return {@link RxParam} instance.
-     * @see Builder#withDelay(long)
-     * @see Builder#withTimeUnit(TimeUnit)
      */
     @NotNull
     public static RxParam defaultInstance() {
@@ -99,7 +97,6 @@ public final class RxParam implements DelayProviderType, SchedulerProviderType {
          * Set {@link #delay}.
          * @param delay {@link Long} value.
          * @return {@link Builder} instance.
-         * @see #delay
          */
         @NotNull
         public Builder withDelay(long delay) {
@@ -111,7 +108,6 @@ public final class RxParam implements DelayProviderType, SchedulerProviderType {
          * Set the {@link #unit} instance.
          * @param unit {@link TimeUnit} instance.
          * @return {@link Builder} instance.
-         * @see #unit
          */
         @NotNull
         public Builder withTimeUnit(@NotNull TimeUnit unit) {
@@ -123,7 +119,6 @@ public final class RxParam implements DelayProviderType, SchedulerProviderType {
          * Set the {@link #scheduler} instance.
          * @param scheduler {@link Scheduler} instance.
          * @return {@link Builder} instance.
-         * @see #scheduler
          */
         @NotNull
         public Builder withScheduler(@NotNull Scheduler scheduler) {
@@ -134,7 +129,6 @@ public final class RxParam implements DelayProviderType, SchedulerProviderType {
         /**
          * Get {@link #PARAM}.
          * @return {@link RxParam} instance.
-         * @see #PARAM
          */
         public RxParam build() {
             return PARAM;

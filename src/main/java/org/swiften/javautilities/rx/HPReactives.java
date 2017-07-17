@@ -1,9 +1,8 @@
 package org.swiften.javautilities.rx;
 
-import io.reactivex.Flowable;
-import io.reactivex.FlowableTransformer;
-import io.reactivex.Scheduler;
+import io.reactivex.*;
 import io.reactivex.exceptions.Exceptions;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -127,7 +126,7 @@ public final class HPReactives {
      * @return {@link FlowableTransformer} instance.
      */
     @NotNull
-    public static <T,U> FlowableTransformer<T,T> logNext(@NotNull final Function<T,U> TRANSFORMER) {
+    public static <T, U> FlowableTransformer<T,T> logNext(@NotNull final Function<T,U> TRANSFORMER) {
         return new FlowableTransformer<T,T>() {
             @NotNull
             @Override
@@ -324,7 +323,7 @@ public final class HPReactives {
      * @see #error()
      */
     @NotNull
-    public static <T,P extends
+    public static <T, P extends
         DelayProviderType &
         SchedulerProviderType> FlowableTransformer<T,T> repeatWhile(
             @NotNull final Flowable<Boolean> WHEN_FL,
@@ -393,7 +392,7 @@ public final class HPReactives {
      * @see #repeatWhile(Flowable, DelayProviderType)
      */
     @NotNull
-    public static <T,P extends
+    public static <T, P extends
         DelayProviderType &
         SchedulerProviderType> FlowableTransformer<T,T> repeatUntil(
             @NotNull Flowable<Boolean> whenFl,
@@ -434,7 +433,7 @@ public final class HPReactives {
      * @see #repeatWhile(Flowable)
      */
     @NotNull
-    public static <T,P extends
+    public static <T, P extends
         DelayProviderType &
         SchedulerProviderType> Flowable<T> doWhile(
             @NotNull final Flowable<T> SOURCE,
@@ -483,7 +482,7 @@ public final class HPReactives {
      * @see #doWhile(Flowable, Flowable, Publisher, DelayProviderType)
      */
     @NotNull
-    public static <T,P extends
+    public static <T, P extends
         DelayProviderType &
         SchedulerProviderType> Flowable<T> doWhile(
             @NotNull Flowable<T> source,
@@ -519,7 +518,7 @@ public final class HPReactives {
      * @see #doWhile(Flowable, Flowable, Publisher)
      */
     @NotNull
-    public static <T,P extends
+    public static <T, P extends
         DelayProviderType &
         SchedulerProviderType> Flowable<T> doWhile(
             @NotNull Flowable<T> source,
@@ -558,7 +557,7 @@ public final class HPReactives {
      * @see #doWhile(Flowable, Flowable, Publisher, DelayProviderType)
      */
     @NotNull
-    public static <T,P extends
+    public static <T, P extends
         DelayProviderType &
         SchedulerProviderType> Flowable<T> doUntil(
             @NotNull Flowable<T> source,
@@ -603,7 +602,7 @@ public final class HPReactives {
      * @see #doUntil(Flowable, Flowable, Publisher, DelayProviderType)
      */
     @NotNull
-    public static <T,P extends
+    public static <T, P extends
         DelayProviderType &
         SchedulerProviderType> Flowable<T> doUntil(
             @NotNull Flowable<T> source,
@@ -639,7 +638,7 @@ public final class HPReactives {
      * @see #doUntil(Flowable, Flowable, Publisher, DelayProviderType)
      */
     @NotNull
-    public static <T,P extends
+    public static <T, P extends
         DelayProviderType &
         SchedulerProviderType> Flowable<T> doUntil(
             @NotNull Flowable<T> source,
@@ -677,7 +676,7 @@ public final class HPReactives {
      * @return {@link FlowableTransformer} instance.
      */
     @NotNull
-    public static <T,P extends
+    public static <T, P extends
         DelayProviderType &
         SchedulerProviderType> FlowableTransformer<T,T> retryWhile(
             @NotNull final Function<Throwable,Flowable<Boolean>> WHEN_FN,
@@ -727,7 +726,7 @@ public final class HPReactives {
      * @see #retryWhile(Function, DelayProviderType)
      */
     @NotNull
-    public static <T> FlowableTransformer<T,T> retryWhile(
+    public static <T> FlowableTransformer<T, T> retryWhile(
         @NotNull Function<Throwable,Flowable<Boolean>> whenFn
     ) {
         return retryWhile(whenFn, RxParam.defaultInstance());
@@ -746,7 +745,7 @@ public final class HPReactives {
     @NotNull
     public static <T,P extends
         DelayProviderType &
-        SchedulerProviderType> FlowableTransformer<T,T> retryWhile(
+        SchedulerProviderType> FlowableTransformer<T, T> retryWhile(
             @NotNull final Flowable<Boolean> WHEN_FL,
             @NotNull P param
     ) {
@@ -767,7 +766,7 @@ public final class HPReactives {
      * @see #retryWhile(Flowable, DelayProviderType)
      */
     @NotNull
-    public static <T> FlowableTransformer<T,T> retryWhile(
+    public static <T> FlowableTransformer<T, T> retryWhile(
         @NotNull Flowable<Boolean> whenFl
     ) {
         return retryWhile(whenFl, RxParam.defaultInstance());
@@ -783,7 +782,7 @@ public final class HPReactives {
      * @return {@link FlowableTransformer} instance.
      */
     @NotNull
-    public static <T> FlowableTransformer<T,T> timeout(
+    public static <T> FlowableTransformer<T, T> timeout(
         final long DURATION,
         @NotNull final TimeUnit UNIT,
         @NotNull final T VALUE
@@ -806,7 +805,7 @@ public final class HPReactives {
      * @return {@link FlowableTransformer} instance.
      */
     @NotNull
-    public static <T> FlowableTransformer<T,T> delayRetry(
+    public static <T> FlowableTransformer<T, T> delayRetry(
         final int TIMES,
         @NotNull final Function<Integer,Long> DELAY_FN,
         @NotNull final TimeUnit UNIT
@@ -858,7 +857,7 @@ public final class HPReactives {
      * @see #delayRetry(int, Function, TimeUnit)
      */
     @NotNull
-    public static <T> FlowableTransformer<T,T> delayRetry(
+    public static <T> FlowableTransformer<T, T> delayRetry(
         int times,
         final long DELAY,
         @NotNull TimeUnit unit
@@ -883,7 +882,7 @@ public final class HPReactives {
      * @see #delayRetry(int, Function, TimeUnit)
      */
     @NotNull
-    public static <T> FlowableTransformer<T,T> delayRetry(int times, long delay) {
+    public static <T> FlowableTransformer<T, T> delayRetry(int times, long delay) {
         return delayRetry(times, delay, TimeUnit.MILLISECONDS);
     }
 
@@ -896,7 +895,7 @@ public final class HPReactives {
      * @see #timeout(long, TimeUnit, Object)
      */
     @NotNull
-    public static <T> FlowableTransformer<T,T> timeout(long duration, @NotNull T value) {
+    public static <T> FlowableTransformer<T, T> timeout(long duration, @NotNull T value) {
         return timeout(duration, TimeUnit.MILLISECONDS, value);
     }
 
@@ -911,7 +910,7 @@ public final class HPReactives {
      * @see HPStrings#removeAll(String, String)
      */
     @NotNull
-    public static FlowableTransformer<String,String> removeFromString(
+    public static FlowableTransformer<String, String> removeFromString(
         @NotNull final LocalizerType LOCALIZER,
         @NotNull final String...REMOVABLES
     ) {
@@ -941,6 +940,36 @@ public final class HPReactives {
                             .toFlowable();
                     }
                 });
+            }
+        };
+    }
+
+    /**
+     * Compose with {@link Completable} to minimize use of
+     * {@link Completable#fromAction(Action)}. Be aware that the resulting
+     * {@link Flowable} is empty after {@link Completable#toFlowable()}.
+     * @param CS {@link Consumer} instance.
+     * @param <T> Generics parameter.
+     * @return {@link FlowableTransformer} instance.
+     */
+    @NotNull
+    public static <T> FlowableTransformer<T, T> completableFn(@NotNull final Consumer<T> CS) {
+        return new FlowableTransformer<T, T>() {
+            @NotNull
+            @Override
+            public Publisher<T> apply(@NotNull Flowable<T> upstream) {
+                return upstream.flatMapCompletable(new Function<T, CompletableSource>() {
+                    @NotNull
+                    @Override
+                    public CompletableSource apply(@NotNull final T t) throws Exception {
+                        return Completable.fromAction(new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                CS.accept(t);
+                            }
+                        });
+                    }
+                }).toFlowable();
             }
         };
     }
