@@ -118,5 +118,14 @@ public final class HPNumbers {
         return sum;
     }
 
+    /**
+     * Increment some {@link Integer} by 1.
+     * @param number {@link Integer} value.
+     * @return {@link Integer} value.
+     */
+    public static int incrementByOne(int number) {
+        return number + 1;
+    }
+
     private HPNumbers() {}
 }
