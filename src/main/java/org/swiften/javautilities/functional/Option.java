@@ -11,7 +11,7 @@ public abstract class Option<Val> implements OptionType<Val> {
     @NotNull static final String VALUE_UNAVAILABLE = "Value unavailable";
 
     /**
-     * Get {@link Option}.
+     * Get {@link Some}.
      * @param value {@link Val} instance.
      * @param <Val> Generics parameter.
      * @return {@link Option} instance.
@@ -22,7 +22,7 @@ public abstract class Option<Val> implements OptionType<Val> {
     }
 
     /**
-     * Get {@link Nothing<Val>}.
+     * Get {@link Nothing}.
      * @param <Val> Generics parameter.
      * @return {@link Option} instance.
      */

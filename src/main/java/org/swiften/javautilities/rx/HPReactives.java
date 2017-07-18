@@ -44,6 +44,7 @@ public final class HPReactives {
     /**
      * Get next events from {@link TestSubscriber}.
      * @param subscriber {@link TestSubscriber} instance.
+     * @param <T> Generics parameter.
      * @return {@link List} instance.
      */
     @NotNull

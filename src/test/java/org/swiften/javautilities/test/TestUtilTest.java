@@ -35,7 +35,7 @@ public final class TestUtilTest {
         }
 
         // When
-        List<Object[]> data = TestNGs.oneFromEach(enums);
+        List<Object[]> data = HPTestNGs.oneFromEach(enums);
 
         // Then
         for (Object[] object : data) {

@@ -49,7 +49,7 @@ public final class Tries {
     }
 
     /**
-     * Get {@link Function} to force-get value from {@link TryConvertibleType<Val>}.
+     * Get {@link Function} to force-get value from {@link TryConvertibleType}.
      * @param <Val> Generics parameter.
      * @return {@link Function} instance.
      * @see TryType#getOrThrow()

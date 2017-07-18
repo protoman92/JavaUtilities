@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface TryConvertibleType<Val> {
     /**
-     * Convert the current {@link TryConvertibleType<Val>} into {@link Try}.
+     * Convert the current {@link TryConvertibleType} into {@link Try}.
      * @return {@link Try} instance.
      */
     @NotNull Try<Val> asTry();

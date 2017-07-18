@@ -7,14 +7,14 @@ package org.swiften.javautilities.functional;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Convertible to {@link Reader<Env,Val>}.
+ * Convertible to {@link Reader}.
  * @param <Env> Generics parameter.
  * @param <Val> Generics parameter.
  */
 public interface ReaderConvertibleType<Env,Val> {
     /**
-     * Convert the current {@link ReaderConvertibleType<Env,Val>} to {@link Reader<Env,Val>}.
-     * @return {@link Reader<Env,Val>} instance.
+     * Convert the current {@link ReaderConvertibleType} to {@link Reader}.
+     * @return {@link Reader} instance.
      */
     @NotNull Reader<Env,Val> asReader();
 }

@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * Utility methods to use with TestNG.
  */
-public final class TestNGs {
+public final class HPTestNGs {
     /**
      * Produce {@link List} of {@link Object} array from {@link List} of
      * {@link Collection}, taking an element from each {@link Collection} for
@@ -83,6 +83,7 @@ public final class TestNGs {
     /**
      * Same as above, but uses varargs of {@link Object} array.
      * @param objects {@link Object} array varargs.
+     * @param <T> Generics parameter.
      * @return {@link List} of {@link Object} array.
      * @see #oneFromEach(Collection)
      */
@@ -103,5 +104,5 @@ public final class TestNGs {
         return oneFromEach(HPIterables.asList(objects));
     }
 
-    private TestNGs() {}
+    private HPTestNGs() {}
 }
