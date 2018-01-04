@@ -1,5 +1,6 @@
 package org.swiften.javautilities.functional;
 
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -102,6 +103,27 @@ public abstract class Try<Val> implements TryType<Val> {
     @Override
     public boolean isFailure() {
         return this instanceof Failure;
+    }
+
+    /**
+     * Override this method to provide default implementation.
+     * @param try2 {@link TryConvertibleType} instance.
+     * @param transform Transform {@link BiFunction} from {@link Val} and {@link Val2} to {@link Val3}.
+     * @param <Val2> Generics parameter.
+     * @param <Val3> Generics parameter.
+     * @return {@link Try} instance.
+     */
+    @NotNull
+    @Override
+    public <Val2,Val3> Try<Val3> zipWith(@NotNull TryConvertibleType<Val2> try2,
+                                         @NotNull BiFunction<? super Val,? super Val2,? extends Val3> transform) {
+        try {
+            Val a = getOrThrow();
+            Val2 b = try2.asTry().getOrThrow();
+            return Try.success(transform.apply(a, b));
+        } catch (Exception e) {
+            return Try.failure(e);
+        }
     }
 
     /**

@@ -1,5 +1,6 @@
 package org.swiften.javautilities.functional;
 
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -62,6 +63,21 @@ public abstract class Option<Val> implements OptionType<Val> {
     }
 
     /**
+     * Override this method to provide default implementation.
+     * @param option2 {@link OptionConvertibleType} instance.
+     * @param transform Transform {@link BiFunction} from {@link Val} and {@link Val2} to {@link Val3}.
+     * @param <Val2> Generics parameter.
+     * @param <Val3> Generics parameter.
+     * @return {@link Option} instance.
+     */
+    @NotNull
+    @Override
+    public <Val2,Val3> Option<Val3> zipWith(@NotNull OptionConvertibleType<Val2> option2,
+                                            @NotNull BiFunction<? super Val,? super Val2,? extends Val3> transform) {
+        return asTry().zipWith(option2.asOption(), transform).asOption();
+    }
+
+    /**
      * Represent some {@link Val} instance.
      * @param <Val> Generics parameter.
      */
@@ -92,7 +108,6 @@ public abstract class Option<Val> implements OptionType<Val> {
          * Override this method to provide default implementation.
          * @return {@link Val} instance.
          */
-        @Nullable
         @Override
         public Val get() {
             return VALUE;

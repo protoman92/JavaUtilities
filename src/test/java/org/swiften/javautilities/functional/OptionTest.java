@@ -1,6 +1,8 @@
 package org.swiften.javautilities.functional;
 
+import io.reactivex.functions.BiFunction;
 import org.swiften.javautilities.functional.Option;
+import org.swiften.javautilities.object.HPObjects;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -29,5 +31,22 @@ public final class OptionTest {
         assertTrue(o2a.asTry().isFailure());
         assertEquals(o1.get(), Integer.valueOf(1));
         assertEquals(o1a.get(), Integer.valueOf(100));
+    }
+
+    @Test
+    public void test_optionZipWith_shouldWork() {
+        // Setup
+        Option<Integer> o1 = Option.nothing();
+        Option<Integer> o2 = Option.some(1);
+        Option<Integer> o3 = Option.some(2);
+        BiFunction<Integer,Integer,Integer> transform = (a, b) -> a + b;
+
+        // When
+        Option<Integer> o12 = o1.zipWith(o2, transform);
+        Option<Integer> o23 = o2.zipWith(o3, transform);
+
+        // Then
+        assertTrue(o12.isNothing());
+        assertEquals(HPObjects.requireNotNull(o23.get()).intValue(), 3);
     }
 }

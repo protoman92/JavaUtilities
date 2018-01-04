@@ -93,25 +93,31 @@ public final class HPObjects {
     }
 
     /**
-     * Check if an {@link Object} is not null, and throw {@link RuntimeException}
+     * Check if an {@link T} is not null, and throw {@link RuntimeException}
      * otherwise.
-     * @param object {@link Object} instance.
+     * @param object {@link T} instance.
      * @param message {@link String} value.
+     * @param <T> Generics parameter.
+     * @return T instance.
      */
-    public static void requireNotNull(@Nullable Object object,
-                                      @NotNull String message) {
+    public static <T> T requireNotNull(@Nullable T object,
+                                       @NotNull String message) {
         if (object == null) {
             throw new RuntimeException(message);
+        } else {
+            return object;
         }
     }
 
     /**
      * Same as above, but uses a default message.
-     * @param object {@link Object} instance.
+     * @param object {@link T} instance.
+     * @param <T> Generics parameter.
+     * @return T instance.
      * @see #requireNotNull(Object, String)
      */
-    public static void requireNotNull(@Nullable Object object) {
-        requireNotNull(object, "");
+    public static <T> T requireNotNull(@Nullable T object) {
+        return requireNotNull(object, "");
     }
 
     /**
