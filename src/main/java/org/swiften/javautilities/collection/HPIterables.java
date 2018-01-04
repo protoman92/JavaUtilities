@@ -1,6 +1,7 @@
 package org.swiften.javautilities.collection;
 
 import org.jetbrains.annotations.NotNull;
+import org.swiften.javautilities.functional.TryConvertibleType;
 import org.swiften.javautilities.functional.Tuple;
 import org.swiften.javautilities.number.HPNumbers;
 import org.swiften.javautilities.object.HPObjects;
@@ -182,13 +183,34 @@ public final class HPIterables {
      *                 produced.
      * @param <T> Generics.
      * @return {@link T} element.
-     * @throws RuntimeException If the produced element is null, or the
-     * Array is empty.
+     * @throws RuntimeException If the produced element is null, or the Array
+     * is empty.
      * @see HPIterables#randomElement(List)
      */
     @NotNull
     public static <T> T randomElement(@NotNull T...elements) {
         return randomElement(Arrays.asList(elements));
+    }
+
+    /**
+     * Flatten an {@link Iterable} of {@link TryConvertibleType} to only include
+     * valid {@link T}.
+     * @param iterable {@link Iterable} instance.
+     * @param <T> Generics parameter.
+     * @param <E> Generics parameter.
+     * @return {@link List} instance.
+     */
+    public static <T,E extends TryConvertibleType<T>> List<T> flatMap(@NotNull Iterable<E> iterable) {
+        List<T> result = new ArrayList<T>();
+
+        for (E element : iterable) {
+            try {
+                T inner = element.asTry().getOrThrow();
+                result.add(inner);
+            } catch (Exception ignored) {}
+        }
+
+        return result;
     }
 
     /**

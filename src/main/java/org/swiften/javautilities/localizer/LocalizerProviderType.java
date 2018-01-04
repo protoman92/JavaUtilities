@@ -7,8 +7,7 @@ import org.jetbrains.annotations.NotNull;
  */
 
 /**
- * This interface provides {@link LocalizerType} instance for text
- * localization.
+ * This interface provides {@link LocalizerType} instance for text localization.
  */
 public interface LocalizerProviderType {
     /**

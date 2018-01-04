@@ -50,13 +50,16 @@ public interface OptionType<Val> extends OptionConvertibleType<Val>, TryConverti
     @NotNull <Val1> Option<Val1> flatMap(@NotNull Function<? super Val, ? extends OptionConvertibleType<Val1>> transform);
 
     /**
-     * Zip with another {@link OptionConvertibleType} and a {@link BiFunction} to create a {@link Option}.
+     * Zip with another {@link OptionConvertibleType} and a {@link BiFunction}
+     * to create a {@link Option}.
      * @param option2 {@link OptionConvertibleType} instance.
-     * @param transform Transform {@link BiFunction} from {@link Val} and {@link Val2} to {@link Val3}.
+     * @param transform Transform {@link BiFunction} from {@link Val} and
+     * {@link Val2} to {@link Val3}.
      * @param <Val2> Generics parameter.
      * @param <Val3> Generics parameter.
      * @return {@link Option} instance.
      */
-    @NotNull <Val2,Val3> Option<Val3> zipWith(@NotNull OptionConvertibleType<Val2> option2,
-                                              @NotNull BiFunction<? super Val,? super Val2,? extends Val3> transform);
+    @NotNull <Val2,Val3> Option<Val3> zipWith(
+        @NotNull OptionConvertibleType<Val2> option2,
+        @NotNull BiFunction<? super Val,? super Val2,? extends Val3> transform);
 }
