@@ -18,11 +18,9 @@ public interface BuildableType<Builder extends BuilderType> {
     @NotNull Builder builder();
 
     /**
-     * Get {@link Builder} instance that has called
-     * {@link Builder#withBuildable(BuildableType)} to copy all properties from
-     * the current {@link BuildableType}.
+     * Get {@link Builder} instance that has copied all properties from the
+     * current {@link BuildableType}.
      * @return {@link Builder} instance.
-     * @see BuilderType#withBuildable(BuildableType).
      */
     @NotNull Builder cloneBuilder();
 }
