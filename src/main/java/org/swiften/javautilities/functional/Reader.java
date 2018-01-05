@@ -3,7 +3,7 @@ package org.swiften.javautilities.functional;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Function;
 import org.jetbrains.annotations.NotNull;
-import org.swiften.javautilities.object.HPObjects;
+import org.swiften.javautilities.object.HObjects;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +19,7 @@ public final class Reader<Env, Val> implements ReaderType<Env, Val> {
      */
     @NotNull
     public static <Env> Reader<Env, Env> eq() {
-        return from(HPObjects.<Env>eqFn());
+        return from(HObjects.<Env>eqFn());
     }
 
     /**

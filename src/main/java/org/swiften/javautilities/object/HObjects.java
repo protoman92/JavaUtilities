@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * Created by haipham on 5/5/17.
  */
-public final class HPObjects {
+public final class HObjects {
     /**
      * Check if {@link Object} is not null.
      * @param object {@link Nullable} {@link Object}.
@@ -147,5 +147,5 @@ public final class HPObjects {
         };
     }
 
-    private HPObjects() {}
+    private HObjects() {}
 }

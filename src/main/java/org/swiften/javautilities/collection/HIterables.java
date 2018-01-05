@@ -3,15 +3,15 @@ package org.swiften.javautilities.collection;
 import org.jetbrains.annotations.NotNull;
 import org.swiften.javautilities.functional.TryConvertibleType;
 import org.swiften.javautilities.functional.Tuple;
-import org.swiften.javautilities.number.HPNumbers;
-import org.swiften.javautilities.object.HPObjects;
+import org.swiften.javautilities.number.HNumbers;
+import org.swiften.javautilities.object.HObjects;
 
 import java.util.*;
 
 /**
  * Created by haipham on 3/20/17.
  */
-public final class HPIterables {
+public final class HIterables {
     /**
      * Check if a {@link Collection} is empty.
      * @param collection {@link Collection} instance.
@@ -45,12 +45,12 @@ public final class HPIterables {
     public static <E,T extends Collection<E>> T unify(@NotNull T...cls) throws Exception {
         int length = cls.length;
 
-        if (length > 0 && HPObjects.nonNull(cls[0])) {
+        if (length > 0 && HObjects.nonNull(cls[0])) {
             T first = cls[0];
 
             for (int i = 1; i < length; i++) {
                 if (i < length) {
-                    if (HPObjects.nonNull(cls[i])) {
+                    if (HObjects.nonNull(cls[i])) {
                         first.addAll(cls[i]);
                     }
                 } else {
@@ -83,7 +83,7 @@ public final class HPIterables {
             A aItem = a.get(i);
             B bItem = b.get(i);
 
-            if (HPObjects.nonNull(aItem, bItem)) {
+            if (HObjects.nonNull(aItem, bItem)) {
                 zList.add(Tuple.of(aItem, bItem));
             }
         }
@@ -185,7 +185,7 @@ public final class HPIterables {
      * @return {@link T} element.
      * @throws RuntimeException If the produced element is null, or the Array
      * is empty.
-     * @see HPIterables#randomElement(List)
+     * @see HIterables#randomElement(List)
      */
     @NotNull
     public static <T> T randomElement(@NotNull T...elements) {
@@ -225,7 +225,7 @@ public final class HPIterables {
     @NotNull
     public static <T> T randomElement(@NotNull List<T> elements) {
         if (!elements.isEmpty()) {
-            int index = HPNumbers.randomBetween(0, elements.size());
+            int index = HNumbers.randomBetween(0, elements.size());
             T element = elements.get(index);
 
             if (element != null) {
@@ -238,5 +238,5 @@ public final class HPIterables {
         }
     }
 
-    private HPIterables() {}
+    private HIterables() {}
 }

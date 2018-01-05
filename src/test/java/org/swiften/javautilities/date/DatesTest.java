@@ -1,7 +1,7 @@
 package org.swiften.javautilities.date;
 
-import org.swiften.javautilities.util.HPLog;
-import org.swiften.javautilities.number.HPNumbers;
+import org.swiften.javautilities.util.HLogs;
+import org.swiften.javautilities.number.HNumbers;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -17,17 +17,17 @@ import static org.testng.Assert.assertNotNull;
  * Created by haipham on 5/10/17.
  */
 @SuppressWarnings("MessageMissingOnTestNGAssertion")
-public final class HPDatesTest {
+public final class DatesTest {
     @Test
     public void test_dateTrimming_scrap() {
         // Setup
         Date date = Calendar.getInstance().getTime();
 
         // When & Then
-        HPLog.println(HPDates.trimDate(date, Calendar.HOUR_OF_DAY));
-        HPLog.println(HPDates.trimDate(date, Calendar.DAY_OF_MONTH));
-        HPLog.println(HPDates.trimDate(date, Calendar.MONTH));
-        HPLog.println(HPDates.trimDate(date, Calendar.YEAR));
+        HLogs.println(HDates.trimDate(date, Calendar.HOUR_OF_DAY));
+        HLogs.println(HDates.trimDate(date, Calendar.DAY_OF_MONTH));
+        HLogs.println(HDates.trimDate(date, Calendar.MONTH));
+        HLogs.println(HDates.trimDate(date, Calendar.YEAR));
     }
 
     @Test
@@ -35,16 +35,16 @@ public final class HPDatesTest {
     public void test_dateTrimming_shouldWork() {
         // Setup
         Calendar calendar = Calendar.getInstance();
-        List<Integer> components = HPDates.DATE_COMPONENTS_FIELDS;
+        List<Integer> components = HDates.DATE_COMPONENTS_FIELDS;
         Random rand = new Random();
 
         for (int i = 0; i < 100000; i++) {
-            Date date = HPDates.randomDate();
+            Date date = HDates.randomDate();
             calendar.setTime(date);
             int component = components.get(rand.nextInt(components.size()));
 
             // When
-            Date trimmed = HPDates.trimDate(date, component);
+            Date trimmed = HDates.trimDate(date, component);
 
             // Then
             assertNotNull(trimmed);
@@ -58,15 +58,15 @@ public final class HPDatesTest {
     public void test_dateComparison_shouldWork() {
         // Setup
         Calendar calendar = Calendar.getInstance();
-        List<Integer> components = HPDates.DATE_COMPONENTS_FIELDS;
+        List<Integer> components = HDates.DATE_COMPONENTS_FIELDS;
         Random rand = new Random();
 
         for (int i = 1; i < 100000; i++) {
             // When
-            Date date = HPDates.randomDate();
+            Date date = HDates.randomDate();
             calendar.setTime(date);
             int component = components.get(rand.nextInt(components.size()));
-            int random = HPNumbers.randomBetween(1, 10);
+            int random = HNumbers.randomBetween(1, 10);
 
             calendar.add(component, random);
             Date endDate = calendar.getTime();
@@ -76,13 +76,13 @@ public final class HPDatesTest {
             Date startDate = calendar.getTime();
 
             // Then
-            Assert.assertTrue(HPDates.sameAs(date, date, component));
-            Assert.assertTrue(HPDates.notLaterThan(date, date, component));
-            Assert.assertTrue(HPDates.notEarlierThan(date, date, component));
-            Assert.assertTrue(HPDates.notEarlierThan(date, startDate, component));
-            Assert.assertTrue(HPDates.laterThan(date, startDate, component));
-            Assert.assertTrue(HPDates.notLaterThan(date, endDate, component));
-            Assert.assertTrue(HPDates.earlierThan(date, endDate, component));
+            Assert.assertTrue(HDates.sameAs(date, date, component));
+            Assert.assertTrue(HDates.notLaterThan(date, date, component));
+            Assert.assertTrue(HDates.notEarlierThan(date, date, component));
+            Assert.assertTrue(HDates.notEarlierThan(date, startDate, component));
+            Assert.assertTrue(HDates.laterThan(date, startDate, component));
+            Assert.assertTrue(HDates.notLaterThan(date, endDate, component));
+            Assert.assertTrue(HDates.earlierThan(date, endDate, component));
         }
     }
 }

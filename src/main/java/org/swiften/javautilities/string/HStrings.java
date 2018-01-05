@@ -2,22 +2,22 @@ package org.swiften.javautilities.string;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.swiften.javautilities.number.HPNumbers;
-import org.swiften.javautilities.object.HPObjects;
+import org.swiften.javautilities.number.HNumbers;
+import org.swiften.javautilities.object.HObjects;
 
 import java.util.List;
 
 /**
  * Created by haipham on 4/6/17.
  */
-public final class HPStrings {
+public final class HStrings {
     /**
      * Check if {@link String} is not null and not empty.
      * @param text {@link String} value.
      * @return {@link Boolean} value.
      */
     public static boolean isNotNullOrEmpty(@Nullable String text) {
-        return HPObjects.nonNull(text) && !text.isEmpty();
+        return HObjects.nonNull(text) && !text.isEmpty();
     }
 
     /**
@@ -26,21 +26,21 @@ public final class HPStrings {
      * @return {@link Boolean} value.
      */
     public static boolean isNullOrEmpty(@Nullable String text) {
-        return HPObjects.isNull(text) || text.isEmpty();
+        return HObjects.isNull(text) || text.isEmpty();
     }
 
     /**
      * Get a {@link String} with a random length.
      * @param length {@link Integer} value.
      * @return {@link String} value.
-     * @see HPNumbers#randomBetween(int, int)
+     * @see HNumbers#randomBetween(int, int)
      */
     @NotNull
     public static String randomString(int length) {
         StringBuilder builder = new StringBuilder();
 
         for (int i = 0; i < length; i++) {
-            char character = (char) HPNumbers.randomBetween(97, 123);
+            char character = (char) HNumbers.randomBetween(97, 123);
             builder.append(character);
         }
 
@@ -51,11 +51,11 @@ public final class HPStrings {
      * Get a {@link String} of random digits.
      * @param length {@link Integer} value.
      * @return {@link String} value.
-     * @see HPNumbers#randomDigits(int)
+     * @see HNumbers#randomDigits(int)
      */
     @NotNull
     public static String randomDigitString(int length) {
-        List<Integer> numbers = HPNumbers.randomDigits(length);
+        List<Integer> numbers = HNumbers.randomDigits(length);
         StringBuilder builder = new StringBuilder();
 
         for (int i = 0; i < length; i++) {
@@ -100,5 +100,5 @@ public final class HPStrings {
         return original.replaceAll(removable, "");
     }
 
-    private HPStrings() {}
+    private HStrings() {}
 }

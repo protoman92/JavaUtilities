@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by haipham on 5/6/17.
  */
-public final class HPIterablesTest {
+public final class IterablesTest {
     @Test
     @SuppressWarnings("unchecked")
     public void test_zipList_shouldSucceed() {
@@ -18,7 +18,7 @@ public final class HPIterablesTest {
         List list2 = Arrays.asList(1, 2, 3, 4, 5, 6);
 
         // When
-        List list3 = HPIterables.zip(list1, list2);
+        List list3 = HIterables.zip(list1, list2);
 
         // Then
         Assert.assertEquals(list3.size(), list1.size());

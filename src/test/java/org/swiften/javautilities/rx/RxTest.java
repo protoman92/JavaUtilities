@@ -12,8 +12,8 @@ import org.reactivestreams.Publisher;
 import org.swiften.javautilities.functional.Tuple;
 import org.swiften.javautilities.localizer.Localizer;
 import org.swiften.javautilities.localizer.LocalizerType;
-import org.swiften.javautilities.util.HPLog;
-import org.swiften.javautilities.number.HPNumbers;
+import org.swiften.javautilities.util.HLogs;
+import org.swiften.javautilities.number.HNumbers;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -34,7 +34,7 @@ public final class RxTest {
         return Flowable.just(1)
             .map(a -> RAND.nextInt(100))
             .map(a -> {
-                HPLog.printft("Current predicate: %s", a);
+                HLogs.printft("Current predicate: %s", a);
                 return a > 50;
             });
     }
@@ -55,11 +55,11 @@ public final class RxTest {
         List<Integer> collection = Arrays.asList(1, 2, 3, 4);
 
         // When
-        HPReactives.from(collection).subscribe(observer);
+        HReactives.from(collection).subscribe(observer);
         observer.awaitTerminalEvent();
 
         // Then
-        List nextEvents = HPReactives.nextEvents(observer);
+        List nextEvents = HReactives.nextEvents(observer);
         Assert.assertEquals(collection.size(), nextEvents.size());
 
         for (int i = 0, length = collection.size(); i < length; i++) {
@@ -93,7 +93,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        HPLog.println(HPReactives.nextEvents(subscriber));
+        HLogs.println(HReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -111,13 +111,13 @@ public final class RxTest {
                 .timer(RAND.nextInt(10), TimeUnit.MILLISECONDS)
                 .map(b -> a))
             .flatMap(Flowable::just)
-            .doOnNext(a -> HPLog.printft("Number %d", a))
+            .doOnNext(a -> HLogs.printft("Number %d", a))
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
         // Then
-        HPLog.println(HPReactives.nextEvents(subscriber));
+        HLogs.println(HReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -130,13 +130,13 @@ public final class RxTest {
         Flowable.range(0, 10)
             .flatMap(a -> Flowable.just(a * 2))
             .flatMap(Flowable::just, t -> Flowable.just(1), () -> Flowable.just(2))
-            .doOnNext(HPLog::println)
+            .doOnNext(HLogs::println)
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
         // Then
-        HPLog.println(HPReactives.nextEvents(subscriber));
+        HLogs.println(HReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -147,27 +147,27 @@ public final class RxTest {
 
         final Flowable<Object> f1 = Flowable
             .just("Starting first stream")
-            .doOnNext(HPLog::printlnt)
+            .doOnNext(HLogs::printlnt)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .map(s -> 1);
 
         Flowable<Object> f2 = Flowable
             .just("Starting second stream")
-            .doOnNext(HPLog::printlnt)
+            .doOnNext(HLogs::printlnt)
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .map(s -> 2);
 
         // When
-        HPReactives.concatDelayEach(1000, f1, f2)
-            .doOnNext(a -> HPLog.printft("Post-delay: %s", a))
+        HReactives.concatDelayEach(1000, f1, f2)
+            .doOnNext(a -> HLogs.printft("Post-delay: %s", a))
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
         // Then
-        HPLog.printlnt(HPReactives.nextEvents(subscriber));
+        HLogs.printlnt(HReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -179,18 +179,18 @@ public final class RxTest {
         // When
         Flowable.range(0, 10)
             .concatMap((Function<Integer, Publisher<?>>) integer -> {
-                long delay = HPNumbers.randomBetween(100, 500);
+                long delay = HNumbers.randomBetween(100, 500);
                 TimeUnit unit = TimeUnit.MILLISECONDS;
                 return Flowable.just(integer).delay(delay, unit);
             })
             .flatMap(a -> Flowable.just(((Integer)a) * 2))
-            .doOnNext(HPLog::printlnt)
+            .doOnNext(HLogs::printlnt)
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
         // Then
-        HPLog.printlnt(HPReactives.nextEvents(subscriber));
+        HLogs.printlnt(HReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -202,8 +202,8 @@ public final class RxTest {
         // When
         Flowable.just(true)
             .repeatWhen(a -> a
-                .doOnNext(HPLog::println)
-                .flatMap(b -> HPReactives.error())
+                .doOnNext(HLogs::println)
+                .flatMap(b -> HReactives.error())
                 .onErrorReturnItem(true))
             .repeat(3)
             .subscribe(subscriber);
@@ -211,7 +211,7 @@ public final class RxTest {
         subscriber.awaitTerminalEvent();
 
         // Then
-        HPLog.println(HPReactives.nextEvents(subscriber));
+        HLogs.println(HReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -224,15 +224,15 @@ public final class RxTest {
 
         // When
         Flowable.just(1)
-            .compose(HPReactives.repeatWhile(predicate, param))
-            .doOnNext(HPLog::printlnt)
+            .compose(HReactives.repeatWhile(predicate, param))
+            .doOnNext(HLogs::printlnt)
             .count().toFlowable()
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
         // Then
-        HPLog.println(HPReactives.nextEvents(subscriber));
+        HLogs.println(HReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -245,15 +245,15 @@ public final class RxTest {
 
         // When
         Flowable.just(1)
-            .compose(HPReactives.repeatUntil(predicate, param))
-            .doOnNext(HPLog::printlnt)
+            .compose(HReactives.repeatUntil(predicate, param))
+            .doOnNext(HLogs::printlnt)
             .count().toFlowable()
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
         // Then
-        HPLog.println(HPReactives.nextEvents(subscriber));
+        HLogs.println(HReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -264,15 +264,15 @@ public final class RxTest {
 
         // When
         Flowable.just(1)
-            .flatMap(i -> HPReactives.error("Error!"))
-            .doOnError(a -> HPLog.println(a.getMessage()))
-            .compose(HPReactives.delayRetry(3, i -> i * 500L, TimeUnit.MILLISECONDS))
+            .flatMap(i -> HReactives.error("Error!"))
+            .doOnError(a -> HLogs.println(a.getMessage()))
+            .compose(HReactives.delayRetry(3, i -> i * 500L, TimeUnit.MILLISECONDS))
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
         // Then
-        HPLog.printlnt(HPReactives.nextEvents(subscriber));
+        HLogs.printlnt(HReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -284,13 +284,13 @@ public final class RxTest {
 
         // When
         Flowable.just("ABC DEF GHJ")
-            .compose(HPReactives.removeFromString(localizer, "A", "E", "H"))
+            .compose(HReactives.removeFromString(localizer, "A", "E", "H"))
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
         // Then
-        HPLog.printlnt(HPReactives.nextEvents(subscriber));
+        HLogs.printlnt(HReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -302,15 +302,15 @@ public final class RxTest {
         TestSubscriber subscriber = CustomTestSubscriber.create();
 
         // When
-        HPReactives.error("Error!")
-            .doOnError(a -> HPLog.printlnt(a.getMessage()))
-            .compose(HPReactives.retryWhile(predicate, param))
+        HReactives.error("Error!")
+            .doOnError(a -> HLogs.printlnt(a.getMessage()))
+            .compose(HReactives.retryWhile(predicate, param))
             .subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
         // Then
-        HPLog.printlnt(HPReactives.nextEvents(subscriber));
+        HLogs.printlnt(HReactives.nextEvents(subscriber));
     }
 
     @Test
@@ -323,19 +323,19 @@ public final class RxTest {
 
         // When
         Flowable.concatArray(
-            HPReactives.<Integer, RxParam>doWhile(Flowable.just(1), predicate, param),
-            HPReactives.<Integer, RxParam>doUntil(Flowable.just(2), predicate, param)
+            HReactives.<Integer, RxParam>doWhile(Flowable.just(1), predicate, param),
+            HReactives.<Integer, RxParam>doUntil(Flowable.just(2), predicate, param)
         ).doOnNext(i -> {
             if (i == 1) {
-                HPLog.printlnt("doWhile running");
+                HLogs.printlnt("doWhile running");
             } else if (i == 2) {
-                HPLog.printlnt("doUntil running");
+                HLogs.printlnt("doUntil running");
             }
         }).count().toFlowable().subscribe(subscriber);
 
         subscriber.awaitTerminalEvent();
 
         // Then
-        HPLog.printlnt(HPReactives.nextEvents(subscriber));
+        HLogs.printlnt(HReactives.nextEvents(subscriber));
     }
 }

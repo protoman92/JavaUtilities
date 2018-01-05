@@ -15,7 +15,7 @@ import org.swiften.javautilities.util.Constants;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Parameter object for {@link HPReactives#repeatWhile(Flowable, DelayProviderType)}.
+ * Parameter object for {@link HReactives#repeatWhile(Flowable, DelayProviderType)}.
  */
 public final class RxParam implements DelayProviderType, SchedulerProviderType {
     /**

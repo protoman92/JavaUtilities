@@ -10,14 +10,14 @@ import io.reactivex.subscribers.TestSubscriber;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
-import org.swiften.javautilities.bool.HPBooleans;
-import org.swiften.javautilities.collection.HPIterables;
+import org.swiften.javautilities.bool.HBooleans;
+import org.swiften.javautilities.collection.HIterables;
 import org.swiften.javautilities.localizer.LocalizerType;
-import org.swiften.javautilities.object.HPObjects;
+import org.swiften.javautilities.object.HObjects;
 import org.swiften.javautilities.protocol.DelayProviderType;
 import org.swiften.javautilities.protocol.SchedulerProviderType;
-import org.swiften.javautilities.string.HPStrings;
-import org.swiften.javautilities.util.HPLog;
+import org.swiften.javautilities.string.HStrings;
+import org.swiften.javautilities.util.HLogs;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  * Created by haipham on 3/31/17.
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public final class HPReactives {
+public final class HReactives {
     /**
      * Get next events from {@link List} of {@link Object}.
      * @param events {@link List} of all rx events.
@@ -79,7 +79,7 @@ public final class HPReactives {
      * @see #nextEvents(List)
      */
     public static void logNextEvents(@NotNull TestSubscriber subscriber) {
-        HPLog.printlnt(nextEvents(subscriber));
+        HLogs.printlnt(nextEvents(subscriber));
     }
 
     /**
@@ -116,7 +116,7 @@ public final class HPReactives {
      * @see #firstNextEvent(TestSubscriber)
      */
     public static void logFirstNextEvent(@NotNull TestSubscriber subscriber) {
-        HPLog.printlnt(firstNextEvent(subscriber));
+        HLogs.printlnt(firstNextEvent(subscriber));
     }
 
     /**
@@ -135,7 +135,7 @@ public final class HPReactives {
                 return upstream.doOnNext(new Consumer<T>() {
                     @Override
                     public void accept(@NotNull T t) throws Exception {
-                        HPLog.printlnt(TRANSFORMER.apply(t));
+                        HLogs.printlnt(TRANSFORMER.apply(t));
                     }
                 });
             }
@@ -207,7 +207,7 @@ public final class HPReactives {
      */
     @NotNull
     public static <T> Flowable<T> error(@Nullable String error) {
-        if (HPObjects.nonNull(error)) {
+        if (HObjects.nonNull(error)) {
             return Flowable.error(new RuntimeException(error));
         } else {
             return error();
@@ -294,7 +294,7 @@ public final class HPReactives {
         @NotNull TimeUnit unit,
         @NotNull Flowable<T>...flowables
     ) {
-        Iterable<Flowable<T>> iterable = HPIterables.asList(flowables);
+        Iterable<Flowable<T>> iterable = HIterables.asList(flowables);
         return concatDelayEach(duration, unit, iterable);
     }
 
@@ -353,7 +353,7 @@ public final class HPReactives {
                                 @NotNull
                                 @Override
                                 public Publisher<?> apply(@NotNull Boolean b) throws Exception {
-                                    if (HPBooleans.isFalse(b)) {
+                                    if (HBooleans.isFalse(b)) {
                                         return error();
                                     } else {
                                         return Flowable.just(b);
@@ -403,7 +403,7 @@ public final class HPReactives {
             @NotNull
             @Override
             public Boolean apply(@NotNull Boolean b) throws Exception {
-                return HPBooleans.isFalse(b);
+                return HBooleans.isFalse(b);
             }
         }), param);
     }
@@ -446,8 +446,8 @@ public final class HPReactives {
             @NotNull
             @Override
             public Publisher<T> apply(@NotNull Boolean b) throws Exception {
-                if (HPBooleans.isTrue(b)) {
-                    return SOURCE.compose(HPReactives.<T,P>repeatWhile(WHEN_FL, PARAM));
+                if (HBooleans.isTrue(b)) {
+                    return SOURCE.compose(HReactives.<T,P>repeatWhile(WHEN_FL, PARAM));
                 } else {
                     return DEFAULT;
                 }
@@ -570,7 +570,7 @@ public final class HPReactives {
             @NotNull
             @Override
             public Boolean apply(@NotNull Boolean b) throws Exception {
-                return HPBooleans.isFalse(b);
+                return HBooleans.isFalse(b);
             }
         }), defPublisher, param);
     }
@@ -704,7 +704,7 @@ public final class HPReactives {
                                         @NotNull
                                         @Override
                                         public Publisher<?> apply(@NotNull Boolean b) throws Exception {
-                                            if (HPBooleans.isFalse(b)) {
+                                            if (HBooleans.isFalse(b)) {
                                                 return error();
                                             } else {
                                                 return Flowable.just(b);
@@ -908,7 +908,7 @@ public final class HPReactives {
      * @param REMOVABLES {@link String} varargs.
      * @return {@link FlowableTransformer} instance.
      * @see LocalizerType#rxa_localize(String)
-     * @see HPStrings#removeAll(String, String)
+     * @see HStrings#removeAll(String, String)
      */
     @NotNull
     public static FlowableTransformer<String, String> removeFromString(
@@ -935,7 +935,7 @@ public final class HPReactives {
                                 @Override
                                 public String apply(@NotNull String s,
                                                     @NotNull String s2) throws Exception {
-                                    return HPStrings.removeAll(s, s2);
+                                    return HStrings.removeAll(s, s2);
                                 }
                             })
                             .toFlowable();
@@ -975,5 +975,5 @@ public final class HPReactives {
         };
     }
 
-    private HPReactives() {}
+    private HReactives() {}
 }

@@ -2,9 +2,9 @@ package org.swiften.javautilities.localizer;
 
 import org.jetbrains.annotations.Nullable;
 import org.reactivestreams.Publisher;
-import org.swiften.javautilities.collection.HPIterables;
-import org.swiften.javautilities.object.HPObjects;
-import org.swiften.javautilities.string.HPStrings;
+import org.swiften.javautilities.collection.HIterables;
+import org.swiften.javautilities.object.HObjects;
+import org.swiften.javautilities.string.HStrings;
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
@@ -51,7 +51,7 @@ public class Localizer implements LocalizerType {
         for (ResourceBundle bundle : bundles) {
             Locale locale;
 
-            if (HPObjects.nonNull(bundle, (locale = bundle.getLocale()))) {
+            if (HObjects.nonNull(bundle, (locale = bundle.getLocale()))) {
                 locales.add(locale);
             }
         }
@@ -73,7 +73,7 @@ public class Localizer implements LocalizerType {
                 @Override
                 public boolean test(@NotNull ResourceBundle bundle) throws Exception {
                     Locale lc = bundle.getLocale();
-                    return HPObjects.isNull(LC, lc) || lc.equals(LC);
+                    return HObjects.isNull(LC, lc) || lc.equals(LC);
                 }
             });
     }
@@ -104,7 +104,7 @@ public class Localizer implements LocalizerType {
             .filter(new Predicate<String>() {
                 @Override
                 public boolean test(@NotNull String s) throws Exception {
-                    return HPStrings.isNotNullOrEmpty(s);
+                    return HStrings.isNotNullOrEmpty(s);
                 }
             })
             .firstElement()
@@ -128,13 +128,13 @@ public class Localizer implements LocalizerType {
      * @param text The {@link String} to be localized.
      * @param locale {@link Locale} instance.
      * @return {@link String} value.
-     * @see HPStrings#isNotNullOrEmpty(String)
+     * @see HStrings#isNotNullOrEmpty(String)
      * @see #rxa_localize(String, Locale)
      */
     @NotNull
     public String localize(@NotNull String text, @Nullable Locale locale) {
         String result = rxa_localize(text, locale).blockingFirst();
-        return HPStrings.isNotNullOrEmpty(result) ? result : text;
+        return HStrings.isNotNullOrEmpty(result) ? result : text;
     }
 
     /**
@@ -206,7 +206,7 @@ public class Localizer implements LocalizerType {
             .filter(new Predicate<String>() {
                 @Override
                 public boolean test(@NotNull String s) throws Exception {
-                    return HPStrings.isNotNullOrEmpty(s);
+                    return HStrings.isNotNullOrEmpty(s);
                 }
             })
             .firstElement()
@@ -236,7 +236,7 @@ public class Localizer implements LocalizerType {
     public String localize(@NotNull LCFormat format,
                            @Nullable Locale locale) {
         String result = rxa_localize(format, locale).blockingFirst();
-        return HPStrings.isNotNullOrEmpty(result) ? result : format.pattern();
+        return HStrings.isNotNullOrEmpty(result) ? result : format.pattern();
     }
 
     /**
@@ -364,7 +364,7 @@ public class Localizer implements LocalizerType {
             .map(new Function<List<Object>,Object[]>() {
                 @Override
                 public Object[] apply(@NotNull List<Object> o) throws Exception {
-                    return HPIterables.toArray(o);
+                    return HIterables.toArray(o);
                 }
             });
     }
@@ -416,7 +416,7 @@ public class Localizer implements LocalizerType {
             ResourceBundle.Control control = ResourceBundle.Control.getNoFallbackControl(prop);
             ResourceBundle bundle = ResourceBundle.getBundle(name, locale, control);
 
-            if (HPObjects.nonNull(bundle)) {
+            if (HObjects.nonNull(bundle)) {
                 LOCALIZER.BUNDLES.add(bundle);
             }
 

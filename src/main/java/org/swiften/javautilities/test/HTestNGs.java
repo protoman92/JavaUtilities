@@ -1,7 +1,7 @@
 package org.swiften.javautilities.test;
 
 import org.jetbrains.annotations.NotNull;
-import org.swiften.javautilities.collection.HPIterables;
+import org.swiften.javautilities.collection.HIterables;
 
 import java.util.*;
 
@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * Utility methods to use with TestNG.
  */
-public final class HPTestNGs {
+public final class HTestNGs {
     /**
      * Produce {@link List} of {@link Object} array from {@link List} of
      * {@link Collection}, taking an element from each {@link Collection} for
@@ -27,7 +27,7 @@ public final class HPTestNGs {
 
         if (size > 0) {
             Collection<?> first = objects.get(0);
-            List<Collection<?>> second = HPIterables.subList(objects, 1, size);
+            List<Collection<?>> second = HIterables.subList(objects, 1, size);
             List<Object[]> secondResults = oneFromEach(second);
 
             if (secondResults.size() > 0) {
@@ -59,7 +59,7 @@ public final class HPTestNGs {
      */
     @NotNull
     public static List<Object[]> oneFromEach(@NotNull Collection<?>...objects) {
-        return oneFromEach(HPIterables.asList(objects));
+        return oneFromEach(HIterables.asList(objects));
     }
 
     /**
@@ -74,7 +74,7 @@ public final class HPTestNGs {
         List<Collection<?>> copy = new LinkedList<Collection<?>>();
 
         for (Object[] object : objects) {
-            copy.add(HPIterables.asList(object));
+            copy.add(HIterables.asList(object));
         }
 
         return oneFromEach(copy);
@@ -89,7 +89,7 @@ public final class HPTestNGs {
      */
     @NotNull
     public static <T> List<Object[]> oneFromEach(@NotNull T[]...objects) {
-        return oneFromEach(HPIterables.asList(objects));
+        return oneFromEach(HIterables.asList(objects));
     }
 
     /**
@@ -101,8 +101,8 @@ public final class HPTestNGs {
      */
     @NotNull
     public static List<Object[]> oneFromEach(@NotNull Object...objects) {
-        return oneFromEach(HPIterables.asList(objects));
+        return oneFromEach(HIterables.asList(objects));
     }
 
-    private HPTestNGs() {}
+    private HTestNGs() {}
 }

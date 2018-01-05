@@ -1,8 +1,7 @@
 package org.swiften.javautilities.functional;
 
 import io.reactivex.functions.BiFunction;
-import org.swiften.javautilities.functional.Option;
-import org.swiften.javautilities.object.HPObjects;
+import org.swiften.javautilities.object.HObjects;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
@@ -47,6 +46,6 @@ public final class OptionTest {
 
         // Then
         assertTrue(o12.isNothing());
-        assertEquals(HPObjects.requireNotNull(o23.get()).intValue(), 3);
+        assertEquals(HObjects.requireNotNull(o23.get()).intValue(), 3);
     }
 }

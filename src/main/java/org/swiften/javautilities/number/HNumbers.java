@@ -9,7 +9,7 @@ import java.util.Random;
 /**
  * Created by haipham on 4/9/17.
  */
-public final class HPNumbers {
+public final class HNumbers {
     /**
      * Check if a number is even.
      * @param number {@link Integer} value.
@@ -112,7 +112,7 @@ public final class HPNumbers {
         double sum = 0;
 
         for (Number n : numbers) {
-            sum = HPNumbers.sum(sum, n);
+            sum = HNumbers.sum(sum, n);
         }
 
         return sum;
@@ -127,5 +127,5 @@ public final class HPNumbers {
         return number + 1;
     }
 
-    private HPNumbers() {}
+    private HNumbers() {}
 }

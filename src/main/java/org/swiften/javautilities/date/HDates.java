@@ -2,8 +2,8 @@ package org.swiften.javautilities.date;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.swiften.javautilities.number.HPNumbers;
-import org.swiften.javautilities.object.HPObjects;
+import org.swiften.javautilities.number.HNumbers;
+import org.swiften.javautilities.object.HObjects;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -13,8 +13,7 @@ import java.util.List;
 /**
  * Created by haipham on 5/10/17.
  */
-
-public final class HPDates {
+public final class HDates {
     @NotNull
     static final List<Integer> DATE_COMPONENTS_FIELDS = Arrays.asList(
         Calendar.MILLISECOND,
@@ -29,19 +28,19 @@ public final class HPDates {
     /**
      * Produce a random {@link Calendar}.
      * @return {@link Calendar} instance.
-     * @see HPDates#getCalendar(int, int, int, int, int, int, int)
-     * @see HPNumbers#randomBetween(int, int)
+     * @see HDates#getCalendar(int, int, int, int, int, int, int)
+     * @see HNumbers#randomBetween(int, int)
      */
     @NotNull
     public static Calendar randomCalendar() {
-        return HPDates.getCalendar(
-            HPNumbers.randomBetween(2000, 2016),
-            HPNumbers.randomBetween(1, 11),
-            HPNumbers.randomBetween(1, 31),
-            HPNumbers.randomBetween(1, 23),
-            HPNumbers.randomBetween(1, 59),
-            HPNumbers.randomBetween(1, 59),
-            HPNumbers.randomBetween(1, 999)
+        return HDates.getCalendar(
+            HNumbers.randomBetween(2000, 2016),
+            HNumbers.randomBetween(1, 11),
+            HNumbers.randomBetween(1, 31),
+            HNumbers.randomBetween(1, 23),
+            HNumbers.randomBetween(1, 59),
+            HNumbers.randomBetween(1, 59),
+            HNumbers.randomBetween(1, 999)
         );
     }
 
@@ -127,7 +126,7 @@ public final class HPDates {
             for (int i = 0; i < index; i++) {
                 Integer field;
 
-                if (HPObjects.nonNull(field = components.get(i))) {
+                if (HObjects.nonNull(field = components.get(i))) {
                     calendar.set(field, 1);
                 }
             }
@@ -139,12 +138,12 @@ public final class HPDates {
     }
 
     /**
-     * Check if {@link Date} is earlier than, or the same as, another
-     * {@link Date}, based on a granularity level.
+     * Check if {@link Date} is earlier than, or the same as, another {@link Date},
+     * based on a granularity level.
      * @param firstDate {@link Date} instance.
      * @param secondDate {@link Date} instance.
-     * @param granularity The level of granularity to be applied when
-     *                    comparing. {@link Integer} value.
+     * @param granularity The level of granularity to be applied when comparing.
+     * {@link Integer} value.
      * @return {@link Boolean} value.
      * @see #trimDate(Date, int)
      */
@@ -157,12 +156,12 @@ public final class HPDates {
     }
 
     /**
-     * Check if {@link Date} is earlier than another {@link Date}, based on
-     * a granularity level.
+     * Check if {@link Date} is earlier than another {@link Date}, based on a
+     * granularity level.
      * @param firstDate {@link Date} instance.
      * @param secondDate {@link Date} instance.
-     * @param granularity The level of granularity to be applied when
-     *                    comparing. {@link Integer} value.
+     * @param granularity The level of granularity to be applied when comparing.
+     * {@link Integer} value.
      * @return {@link Boolean} value.
      * @see #trimDate(Date, int)
      */
@@ -175,12 +174,12 @@ public final class HPDates {
     }
 
     /**
-     * Check if {@link Date} is later than, or the same as, another
-     * {@link Date}, based on a granularity level.
+     * Check if {@link Date} is later than, or the same as, another {@link Date},
+     * based on a granularity level.
      * @param firstDate {@link Date} instance.
      * @param secondDate {@link Date} instance.
-     * @param granularity The level of granularity to be applied when
-     *                    comparing. {@link Integer} value.
+     * @param granularity The level of granularity to be applied when comparing.
+     * {@link Integer} value.
      * @return {@link Boolean} value.
      * @see #trimDate(Date, int)
      */
@@ -193,12 +192,12 @@ public final class HPDates {
     }
 
     /**
-     * Check if {@link Date} is later than another {@link Date}, based on
-     * a granularity level.
+     * Check if {@link Date} is later than another {@link Date}, based on a
+     * granularity level.
      * @param firstDate {@link Date} instance.
      * @param secondDate {@link Date} instance.
-     * @param granularity The level of granularity to be applied when
-     *                    comparing. {@link Integer} value.
+     * @param granularity The level of granularity to be applied when comparing.
+     * {@link Integer} value.
      * @return {@link Boolean} value.
      * @see #trimDate(Date, int)
      */
@@ -211,12 +210,12 @@ public final class HPDates {
     }
 
     /**
-     * Check if {@link Date} is the same as another {@link Date}, based on
-     * a granularity level.
+     * Check if {@link Date} is the same as another {@link Date}, based on a
+     * granularity level.
      * @param firstDate {@link Date} instance.
      * @param secondDate {@link Date} instance.
-     * @param granularity The level of granularity to be applied when
-     *                    comparing. {@link Integer} value.
+     * @param granularity The level of granularity to be applied when comparing.
+     * {@link Integer} value.
      * @return {@link Boolean} value.
      * @see #trimDate(Date, int)
      */
@@ -229,8 +228,7 @@ public final class HPDates {
     }
 
     /**
-     * Check if {@link Date} is earlier than, or the same as, another
-     * {@link Date}.
+     * Check if {@link Date} is earlier than, or the same as, another {@link Date}.
      * @param firstDate {@link Date} instance.
      * @param secondDate {@link Date} instance.
      * @return {@link Boolean} value.
@@ -241,8 +239,7 @@ public final class HPDates {
     }
 
     /**
-     * Check if {@link Date} is later than, or the same as, another
-     * {@link Date}.
+     * Check if {@link Date} is later than, or the same as, another {@link Date}.
      * @param firstDate {@link Date} instance.
      * @param secondDate {@link Date} instance.
      * @return {@link Boolean} value.
@@ -271,5 +268,5 @@ public final class HPDates {
         return calendar1.get(granularity) - calendar2.get(granularity);
     }
 
-    private HPDates() {}
+    private HDates() {}
 }

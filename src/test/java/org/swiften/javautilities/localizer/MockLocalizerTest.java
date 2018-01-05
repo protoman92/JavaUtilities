@@ -4,10 +4,10 @@ import io.reactivex.Flowable;
 import io.reactivex.subscribers.TestSubscriber;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.swiften.javautilities.collection.HPIterables;
-import org.swiften.javautilities.object.HPObjects;
+import org.swiften.javautilities.collection.HIterables;
+import org.swiften.javautilities.object.HObjects;
 import org.swiften.javautilities.rx.CustomTestSubscriber;
-import org.swiften.javautilities.rx.HPReactives;
+import org.swiften.javautilities.rx.HReactives;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -52,7 +52,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
         }
 
         for (ResourceBundle bundle : BUNDLES) {
-            Locale locale = HPIterables.randomElement(LOCALES);
+            Locale locale = HIterables.randomElement(LOCALES);
             doReturn(locale).when(bundle).getLocale();
         }
 
@@ -94,7 +94,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
      * @see ResourceBundle#getLocale()
      */
     private int bundleCount(@Nullable Locale locale) {
-        if (HPObjects.isNull(locale)) {
+        if (HObjects.isNull(locale)) {
             return BUNDLES.size();
         } else {
             int included = 0;
@@ -131,7 +131,7 @@ public final class MockLocalizerTest implements LocalizeErrorType {
             subscriber.assertSubscribed();
             subscriber.assertNoErrors();
             subscriber.assertComplete();
-            assertEquals(HPReactives.nextEventsCount(subscriber), included);
+            assertEquals(HReactives.nextEventsCount(subscriber), included);
         }
     }
 

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Created by haipham on 4/7/17.
  */
-public final class HPBooleans {
+public final class HBooleans {
     /**
      * Check if {@link Boolean} value is true.
      * @param value The {@link Boolean} value to be checked.
@@ -78,5 +78,5 @@ public final class HPBooleans {
         return !b;
     }
 
-    private HPBooleans() {}
+    private HBooleans() {}
 }

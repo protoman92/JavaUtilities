@@ -8,7 +8,7 @@ import java.util.Arrays;
 /**
  * Created by haipham on 3/19/17.
  */
-public final class HPLog {
+public final class HLogs {
     private static boolean loggingEnabled = true;
 
     /**
@@ -108,5 +108,5 @@ public final class HPLog {
         }
     }
 
-    private HPLog() {}
+    private HLogs() {}
 }
